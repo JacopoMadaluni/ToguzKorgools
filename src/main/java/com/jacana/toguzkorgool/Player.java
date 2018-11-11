@@ -22,6 +22,23 @@ public class Player {
         return kazan;
     }
 
+    public boolean haveTuz(){
+        for (Hole hole : holes){
+            if (hole.isTuz()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void setTuz(int holeNumber){
+        if (haveTuz()){
+            // ... display error message, can't have more than 1 tuz
+            return;
+        }
+        holes[holeNumber].setTuz();
+    }
+
     public void makeMove(int holeNumber){
         // ...
     }
