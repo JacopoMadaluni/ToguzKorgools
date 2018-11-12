@@ -4,12 +4,12 @@ public class Hole {
     private int korgools;
     private boolean tuz;
 
-    public Hole(){
+    public Hole() {
         this.korgools = 9;
         this.tuz = false;
     }
 
-    public int getKorgols() {
+    public int getKorgools() {
         return korgools;
     }
 
@@ -17,15 +17,15 @@ public class Hole {
         return tuz;
     }
 
-    public void add(int korgoolsIn){
+    public void add(int korgoolsIn) {
         this.korgools += korgoolsIn;
     }
 
-    public void clear(){
+    public void clear() {
         korgools = 0;
     }
 
-    public void setTuz(){
+    public void setTuz() {
         tuz = true;
     }
 }

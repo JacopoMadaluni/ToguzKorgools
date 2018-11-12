@@ -1,6 +1,7 @@
 package com.jacana.toguzkorgool;
 import org.junit.Test;
-public class TestHole {
+
+public class BoardTest {
 
     @Test
     public void sampleTest(){
