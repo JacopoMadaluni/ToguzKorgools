@@ -1,32 +1,32 @@
 package com.jacana.toguzkorgool;
 
 public class Board {
-    private Player playerOne;
-    private Player playerTwo;
+    private Player player;
+    private Player bot;
     private Player currentPlayer;
 
-    public Board(){
-        this.playerOne = new Player();
-        this.playerTwo = new Player();
-        this.currentPlayer = playerOne;
+    public Board() {
+        this.player = new Player(this);
+        this.bot = new Player(this);
+        this.currentPlayer = player;
     }
 
-    public Player getCurrentPlayer(){
+    public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
-    public Player getNextPlayer(){
-        if (currentPlayer == playerOne){
-            return playerTwo;
+    public Player getNextPlayer() {
+        if (currentPlayer == player){
+            return bot;
         }
-        return playerOne;
+        return player;
     }
 
-    public void changePlayer(){
-        if (currentPlayer == playerOne){
-            currentPlayer = playerTwo;
+    public void changePlayer() {
+        if (currentPlayer == player){
+            currentPlayer = bot;
         } else {
-            currentPlayer = playerOne;
+            currentPlayer = player;
         }
     }
 }
