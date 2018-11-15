@@ -72,6 +72,10 @@ public class Player {
             --korgools;
             ++holeNumber;
         }
+        if (korgools == 0 && board.getNextPlayer().holes[holeNumber-2].getKorgools() % 2 == 0){
+            kazan += board.getNextPlayer().holes[holeNumber-2].getKorgools();
+            board.getNextPlayer().holes[holeNumber-2].clear();
+        }
         return korgools;
     }
 }
