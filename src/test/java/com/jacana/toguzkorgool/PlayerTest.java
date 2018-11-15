@@ -26,16 +26,22 @@ public class PlayerTest {
             // holes three to nine have eleven korgools each
             assertEquals(11, player.getHole(i).getKorgools());
         }
-        for (int i = 0; i < 3; ++i) {
-            // opponent holes one to three have ten korgools each
+        for (int i = 0; i < 2; ++i) {
+            // opponent holes one to two have ten korgools each
             assertEquals(10, bot.getHole(i).getKorgools());
         }
+        // opponent hole three has been emptied
+        assertEquals (0,bot.getHole(2).getKorgools());
+        // ten korgools have been added to the player's kazan
+        assertEquals(10, player.getKazan());
         player.makeMove(9);
         assertEquals(1, player.getHole(8).getKorgools()); // hole nine has one korgool
-        for (int i = 0; i < 3; ++i) {
-            // opponent holes one to three have eleven korgools each
+        for (int i = 0; i < 2; ++i) {
+            // opponent holes one to two have eleven korgools each
             assertEquals(11, bot.getHole(i).getKorgools());
         }
+        // opponent hole three has one korgool
+        assertEquals (1,bot.getHole(2).getKorgools());
         for (int i = 3; i < 9; ++i) {
             // opponent holes four to nine have ten korgools each
             assertEquals(10, bot.getHole(i).getKorgools());
