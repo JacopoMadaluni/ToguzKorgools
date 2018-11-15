@@ -82,6 +82,9 @@ public class Player {
         if (korgools == 0 && lastHole.getKorgools() == 3){
             if (!opponent.hasTuz()){
                 opponent.setTuz(holeNumber-2);
+                int korgolsToPlayer = lastHole.getKorgools();
+                lastHole.clear();
+                kazan += korgolsToPlayer;
             }
         }
         return korgools;
