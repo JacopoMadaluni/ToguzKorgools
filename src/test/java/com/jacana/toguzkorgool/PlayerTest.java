@@ -71,6 +71,7 @@ public class PlayerTest {
 
         assertEquals(true, bot.hasTuz());
         assertEquals(false, player.hasTuz());
+        assertEquals(3, player.getKazan());
         assertEquals(true, tuz.isTuz());
         assertEquals(false, notTuz.isTuz());
         assertEquals(false, notTuz2.isTuz());
@@ -88,6 +89,7 @@ public class PlayerTest {
 
         assertEquals(true, bot.hasTuz());
         assertEquals(false, player.hasTuz());
+        assertEquals(3, player.getKazan());
         assertEquals(true, tuz.isTuz());
         assertEquals(false, notTuz.isTuz());
         assertEquals(false, notTuz2.isTuz());
