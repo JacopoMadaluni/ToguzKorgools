@@ -24,7 +24,7 @@ public class Player {
         return kazan;
     }
 
-    public boolean haveTuz() {
+    public boolean hasTuz() {
         for (Hole hole : holes){
             if (hole.isTuz()){
                 return true;
@@ -34,7 +34,7 @@ public class Player {
     }
 
     public void setTuz(int holeNumber) {
-        if (haveTuz()){
+        if (hasTuz()){
             // ... display error message, can't have more than 1 tuz
             return;
         }
@@ -67,14 +67,22 @@ public class Player {
 
     private int moveOpponent(int korgools) {
         int holeNumber = 1;
+        Player opponent = board.getNextPlayer();
         while (holeNumber <= 9 && korgools > 0) {
-            board.getNextPlayer().holes[holeNumber-1].add(1);
+            opponent.holes[holeNumber-1].add(1);
             --korgools;
             ++holeNumber;
         }
-        if (korgools == 0 && board.getNextPlayer().holes[holeNumber-2].getKorgools() % 2 == 0){
-            kazan += board.getNextPlayer().holes[holeNumber-2].getKorgools();
-            board.getNextPlayer().holes[holeNumber-2].clear();
+        if (korgools == 0 && opponent.holes[holeNumber-2].getKorgools() % 2 == 0){
+            kazan += opponent.holes[holeNumber-2].getKorgools();
+            opponent.holes[holeNumber-2].clear();
+        }
+
+        Hole lastHole = board.getNextPlayer().holes[holeNumber-2];
+        if (korgools == 0 && lastHole.getKorgools() == 3){
+            if (!opponent.hasTuz()){
+                opponent.setTuz(holeNumber-2);
+            }
         }
         return korgools;
     }
