@@ -93,8 +93,23 @@ public class PlayerTest {
         assertEquals(true, tuz.isTuz());
         assertEquals(false, notTuz.isTuz());
         assertEquals(false, notTuz2.isTuz());
-
-
     }
+
+    @Test
+    public void testSetTuzConditions(){
+        Board board = new Board();
+        Player player = board.getCurrentPlayer();
+        Player bot = board.getNextPlayer();
+
+        bot.setTuz(3);
+        player.setTuz(3);
+        assertEquals(false, player.getHole(3).isTuz());
+        assertEquals(false, player.hasTuz());
+
+        player.setTuz(8);
+        assertEquals(false, player.getHole(8).isTuz());
+        assertEquals(false, player.hasTuz());
+    }
+
 
 }

@@ -22,6 +22,13 @@ public class Board {
         return player;
     }
 
+    public Player getOpponentOf(Player other){
+        if (player.equals(other)){
+            return bot;
+        }
+        return player;
+    }
+
     public void changePlayer() {
         if (currentPlayer == player){
             currentPlayer = bot;
