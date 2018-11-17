@@ -33,12 +33,21 @@ public class Player {
         return false;
     }
 
-    public void setTuz(int holeNumber) {
-        if (hasTuz()){
-            // ... display error message, can't have more than 1 tuz
-            return;
+    public int getTuzIndex(){
+        for (int i = 0; i < holes.length; ++i){
+            if (holes[i].isTuz()){
+                return i;
+            }
         }
-        holes[holeNumber].setTuz();
+        return -1;
+    }
+
+    public void setTuz(int holeNumber) {
+        Player opponent = board.getOpponentOf(this);
+        if (holeNumber != 8 && !hasTuz() && opponent.getTuzIndex() != holeNumber){
+            holes[holeNumber].setTuz();
+        }
+        // ... cannot set tuz
     }
 
     public void makeMove(int holeNumber) {
