@@ -98,4 +98,11 @@ public class Player {
         }
         return korgools;
     }
+
+    private boolean hasWon(){
+        if (kazan > holes.length*holes.length){
+            return true;
+        }
+        return false;
+    }
 }
