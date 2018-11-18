@@ -1,5 +1,6 @@
 package com.jacana.toguzkorgool.gui;
 
+import com.jacana.toguzkorgool.Player;
 import com.jacana.toguzkorgool.gui.components.JHole;
 
 import javax.swing.Box;
@@ -15,17 +16,14 @@ import java.util.List;
 
 public class GamePane extends JPanel {
 
-    private final GUI gui;
-
     private JPanel botPanel = null;
     private JPanel playerPanel = null;
 
     private List<JHole> botHoles = new ArrayList<>();
     private List<JHole> playerHoles = new ArrayList<>();
 
-    public GamePane(GUI gui) {
+    public GamePane() {
         super();
-        this.gui = gui;
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -34,76 +32,69 @@ public class GamePane extends JPanel {
     }
 
     private void populatePane() {
-        this.botHoles.clear();
-        this.playerHoles.clear();
+        botHoles.clear();
+        playerHoles.clear();
 
         JPanel kazanPanel = new JPanel();
         kazanPanel.setLayout(new BoxLayout(kazanPanel, BoxLayout.X_AXIS));
         kazanPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
         kazanPanel.setAlignmentX(CENTER_ALIGNMENT);
 
-        JPanel botKazanPanel = this.createKazanPanel();
-        JPanel userKazanPanel = this.createKazanPanel();
+        JPanel botKazanPanel = createKazanPanel();
+        JPanel userKazanPanel = createKazanPanel();
 
         kazanPanel.add(botKazanPanel);
         kazanPanel.add(Box.createRigidArea(new Dimension(5, 0)));
         kazanPanel.add(userKazanPanel);
 
-        this.botPanel = new JPanel();
-        this.botPanel.setLayout(new BoxLayout(botPanel, BoxLayout.X_AXIS));
-        this.botPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-        this.botPanel.setAlignmentX(CENTER_ALIGNMENT);
-        this.initialiseBotPanel();
+        botPanel = new JPanel();
+        botPanel.setLayout(new BoxLayout(botPanel, BoxLayout.X_AXIS));
+        botPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        botPanel.setAlignmentX(CENTER_ALIGNMENT);
 
-        this.playerPanel = new JPanel();
-        this.playerPanel.setLayout(new BoxLayout(playerPanel, BoxLayout.X_AXIS));
-        this.playerPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-        this.playerPanel.setAlignmentX(CENTER_ALIGNMENT);
-        this.initialisePlayerPanel();
+        playerPanel = new JPanel();
+        playerPanel.setLayout(new BoxLayout(playerPanel, BoxLayout.X_AXIS));
+        playerPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        playerPanel.setAlignmentX(CENTER_ALIGNMENT);
 
-        this.add(botPanel);
-        this.add(kazanPanel);
-        this.add(playerPanel);
+        add(botPanel);
+        add(kazanPanel);
+        add(playerPanel);
     }
 
     private JPanel createKazanPanel() {
         JPanel kazanPanel = new JPanel();
         kazanPanel.setLayout(new GridLayout(3, 27));
         kazanPanel.setBorder(new LineBorder(Color.black, 1, true));
-
         return kazanPanel;
     }
 
-    private void initialiseBotPanel() {
-        if (this.botHoles.isEmpty()) {
+    public List<JHole> getBotHoles() {
+        return botHoles;
+    }
+
+    public List<JHole> getPlayerHoles() {
+        return playerHoles;
+    }
+
+    public void initialisePanel(boolean isPlayer, Player player) {
+        List<JHole> holes = isPlayer ? playerHoles : botHoles;
+        JPanel panel = isPlayer ? playerPanel : botPanel;
+        if (holes.isEmpty()) {
+            // TODO: Change to use the number of holes in the player instance rather than '9'.
             for (int i = 0; i < 9; ++i) {
-                JHole holePanel = new JHole();
-                botPanel.add(holePanel);
-                if (i != 8) {
-                    botPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+                JHole holePanel = new JHole(player.getHole(i));
+                panel.add(holePanel);
+                if (i != 9 - 1) {
+                    panel.add(Box.createRigidArea(new Dimension(5, 0)));
                 }
-                this.botHoles.add(holePanel);
+                holes.add(holePanel);
             }
         }
     }
 
-    private void initialisePlayerPanel() {
-        if (this.playerHoles.isEmpty()) {
-            for (int i = 0; i < 9; ++i) {
-                JHole holePanel = new JHole();
-                playerPanel.add(holePanel);
-                if (i != 8) {
-                    playerPanel.add(Box.createRigidArea(new Dimension(5, 0)));
-                }
-                this.playerHoles.add(holePanel);
-            }
-        }
-    }
-
-    private void updateHoles(boolean isPlayer) {
-        List<JHole> holePanels = null;
-        if (isPlayer) holePanels = this.playerHoles;
-        else holePanels = this.botHoles;
+    public void updateHoles(boolean isPlayer) {
+        List<JHole> holePanels = isPlayer ? playerHoles : botHoles;
         for (JHole holePanel : holePanels) {
             holePanel.updateHole();
         }

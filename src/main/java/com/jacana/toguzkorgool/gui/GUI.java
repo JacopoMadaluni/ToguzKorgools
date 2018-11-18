@@ -10,6 +10,8 @@ import java.awt.Dimension;
 
 public class GUI extends JFrame {
 
+    private GamePane gamePane;
+
     public GUI() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -19,22 +21,26 @@ public class GUI extends JFrame {
 
         setTitle("Toguz Korgool");
         setResizable(true);
-        setPreferredSize(new Dimension(640, 380));
+        setPreferredSize(new Dimension(800, 400));
         setMinimumSize(new Dimension(400, 200));
         pack();
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         populatePane();
-
-        setVisible(true);
     }
 
     private void populatePane() {
         JPanel contentPane = (JPanel) getContentPane();
         contentPane.setLayout(new BorderLayout(5, 5));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        contentPane.add(new GamePane(this), BorderLayout.CENTER);
+
+        this.gamePane = new GamePane();
+        contentPane.add(this.gamePane, BorderLayout.CENTER);
+    }
+
+    public GamePane getGamePane() {
+        return this.gamePane;
     }
 
 }

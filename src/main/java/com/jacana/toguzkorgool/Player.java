@@ -20,6 +20,14 @@ public class Player {
         return holes[index];
     }
 
+    public int getHoleCount() {
+        return holes.length;
+    }
+
+    public Hole[] getHoles() {
+        return holes;
+    }
+
     public int getKazan() {
         return kazan;
     }
