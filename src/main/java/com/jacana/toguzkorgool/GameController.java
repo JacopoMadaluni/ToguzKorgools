@@ -6,11 +6,12 @@ import com.jacana.toguzkorgool.gui.components.JHole;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.Random;
 
 public class GameController {
 
-    private GUI gui;
-    private Board board;
+    private GUI gui; //front-end
+    private Board board; //back-end
 
     public GameController() {
         this.board = new Board();
@@ -24,20 +25,20 @@ public class GameController {
         this.gui.getGamePane().initialisePanel(true, this.board.getCurrentPlayer());
         this.gui.getGamePane().initialisePanel(false, this.board.getNextPlayer());
 
-        this.initialiseHoles(this.gui.getGamePane().getPlayerHoles());
-        this.initialiseHoles(this.gui.getGamePane().getBotHoles());
+        this.initialiseHoles();
     }
 
-    private void initialiseHoles(List<JHole> jHoles) {
-        for (JHole playerHole : this.gui.getGamePane().getPlayerHoles()) {
-            final Hole hole = playerHole.getHole();
-            playerHole.addMouseListener(new MouseAdapter() {
+    private void initialiseHoles() {
+        for (int j = 0; j < this.board.getCurrentPlayer().getHoleCount(); j++) {
+            int finalJ = j;
+            final JHole currentJHole = this.gui.getGamePane().getPlayerHoles().get(j);
+           currentJHole.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseReleased(MouseEvent e) {
-                    // TODO: Call makeMove on the player
-                    // TODO: Call updateHoles on the player in GamePane
-                    // TODO: Call makeMove on the bot
-                    // TODO: Call updateHoles on the bot in GamePane
+                    board.getCurrentPlayer().makeMove(finalJ + 1);
+                    board.getNextPlayer().makeMove(new Random().nextInt(9)+1);
+                    gui.getGamePane().updateHoles(true);
+                    gui.getGamePane().updateHoles(false);
                 }
             });
         }

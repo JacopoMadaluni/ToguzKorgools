@@ -1,6 +1,6 @@
 package com.jacana.toguzkorgool;
 
-
+//TODO: #Refactor make Player the parent class of Bot class which in turn should override the makeMove() method for the bot.
 public class Player {
     private int kazan;
     private Hole[] holes;

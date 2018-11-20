@@ -24,10 +24,13 @@ public class JHole extends JPanel {
     public Hole getHole() {
         return hole;
     }
-
+    
+    /**
+     * Update front-end of holes after every move. Ie the number of korgools after each move.
+     *
+     */
     private void internalUpdate() {
-        // TODO: Change variable to use number of korgools in the actual hole.
-        int numberOfKorgools = 9;
+        int numberOfKorgools = hole.getKorgools();
         GridLayout layout = (GridLayout) getLayout();
         layout.setRows((int) Math.max(3, Math.ceil((double) numberOfKorgools / layout.getColumns())));
         for (int j = 0; j < numberOfKorgools; ++j) {
