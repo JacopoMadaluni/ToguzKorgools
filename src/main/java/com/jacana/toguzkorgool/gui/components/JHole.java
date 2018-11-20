@@ -27,7 +27,6 @@ public class JHole extends JPanel {
     
     /**
      * Update front-end of holes after every move. Ie the number of korgools after each move.
-     *
      */
     private void internalUpdate() {
         int numberOfKorgools = hole.getKorgools();
