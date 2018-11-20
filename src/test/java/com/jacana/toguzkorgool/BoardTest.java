@@ -1,8 +1,6 @@
 package com.jacana.toguzkorgool;
-import javafx.application.Platform;
-import org.junit.Test;
 
-import javax.management.DescriptorKey;
+import org.junit.Test;
 
 public class BoardTest {
 

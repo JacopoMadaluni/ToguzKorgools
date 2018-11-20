@@ -81,11 +81,10 @@ public class GamePane extends JPanel {
         List<JHole> holes = isPlayer ? playerHoles : botHoles;
         JPanel panel = isPlayer ? playerPanel : botPanel;
         if (holes.isEmpty()) {
-            // TODO: Change to use the number of holes in the player instance rather than '9'.
-            for (int i = 0; i < 9; ++i) {
+            for (int i = 0; i < player.getHoleCount(); ++i) {
                 JHole holePanel = new JHole(player.getHole(i));
                 panel.add(holePanel);
-                if (i != 9 - 1) {
+                if (i != player.getHoleCount()-1) {
                     panel.add(Box.createRigidArea(new Dimension(5, 0)));
                 }
                 holes.add(holePanel);
