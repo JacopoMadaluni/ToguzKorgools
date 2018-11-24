@@ -22,21 +22,21 @@ public class GameController {
     }
 
     private void initialiseGUI() {
-        this.gui.getGamePane().initialisePanel(true, this.board.getCurrentPlayer());
-        this.gui.getGamePane().initialisePanel(false, this.board.getNextPlayer());
+        this.gui.getGamePane().initialisePanel(true, this.board.getPlayer());
+        this.gui.getGamePane().initialisePanel(false, this.board.getOpponent());
 
         this.initialiseHoles();
     }
 
     private void initialiseHoles() {
-        for (int j = 0; j < this.board.getCurrentPlayer().getHoleCount(); j++) {
+        for (int j = 0; j < this.board.getPlayer().getHoleCount(); j++) {
             int finalJ = j;
             final JHole currentJHole = this.gui.getGamePane().getPlayerHoles().get(j);
            currentJHole.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseReleased(MouseEvent e) {
-                    board.getCurrentPlayer().makeMove(finalJ + 1);
-                    board.getNextPlayer().makeMove(new Random().nextInt(9)+1);
+                    board.getPlayer().makeMove(finalJ + 1);
+                    //board.getOpponent().makeMove(new Random().nextInt(9)+1);
                     gui.getGamePane().updateHoles(true);
                     gui.getGamePane().updateHoles(false);
                 }
