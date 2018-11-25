@@ -2,12 +2,12 @@ package com.jacana.toguzkorgool;
 
 
 public abstract class Player {
-    private int kazan;
+    private Kazan kazan;
     private Hole[] holes;
     private Board board;
 
     public Player(Board board){
-        this.kazan = 0;
+        this.kazan = new Kazan();
         this.holes = new Hole[9];
         for (int i = 0; i < 9; ++i){
             holes[i] = new Hole();
@@ -24,7 +24,7 @@ public abstract class Player {
         return holes.length;
     }
 
-    public int getKazan() {
+    public Kazan getKazan() {
         return kazan;
     }
 
@@ -61,7 +61,7 @@ public abstract class Player {
     }
 
     public void addToKazan(int amount){
-        kazan += amount;
+        kazan.add(amount);
     }
 
     public void addToHole(int index, int amount){
@@ -108,7 +108,7 @@ public abstract class Player {
         }
         int korgoolsInOpponentHole = board.getKorgoolsInOpponentHole(holeNumber-2);
         if (korgools == 0 && korgoolsInOpponentHole % 2 == 0){
-            kazan += korgoolsInOpponentHole;
+            kazan.add(korgoolsInOpponentHole);
             board.clearOpponentHole(holeNumber-2);
         }
 
@@ -117,14 +117,14 @@ public abstract class Player {
             if (!board.opponentHasTuz()){
                 board.setTuzInOpponentField(holeNumber-2);
                 board.clearOpponentHole(holeNumber-2);
-                kazan += korgoolsInLastHole;
+                kazan.add(korgoolsInLastHole);
             }
         }
         return korgools;
     }
 
     private boolean hasWon(){
-        if (kazan > holes.length*holes.length){
+        if (kazan.getKorgools() > holes.length*holes.length){
             return true;
         }
         return false;
