@@ -6,10 +6,14 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 
+/**
+ * GUI is the main class which brings all other GUI components together and
+ * constructs the main JFrame.
+ */
 public class GUI extends JFrame {
 
     private GamePane gamePane;
-
+    
     public GUI() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -27,7 +31,10 @@ public class GUI extends JFrame {
 
         populatePane();
     }
-
+    
+    /**
+     * Encapsulation method for populating the main frame with its components.
+     */
     private void populatePane() {
         JPanel contentPane = (JPanel) getContentPane();
         contentPane.setLayout(new BorderLayout(5, 5));
