@@ -39,6 +39,7 @@ public class GameController {
                     //board.getOpponent().makeMove(new Random().nextInt(9)+1);
                     gui.getGamePane().updateHoles(true);
                     gui.getGamePane().updateHoles(false);
+                    //TODO: add updateKazans();
                 }
             });
         }
