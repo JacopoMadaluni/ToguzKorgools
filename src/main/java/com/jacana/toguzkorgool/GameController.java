@@ -5,8 +5,6 @@ import com.jacana.toguzkorgool.gui.components.JHole;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
-import java.util.Random;
 
 public class GameController {
 
@@ -14,51 +12,59 @@ public class GameController {
     private Board board; //back-end
 
     public GameController() {
-        this.board = new Board();
-        this.gui = new GUI(this);
+        board = new Board();
+        gui = new GUI();
 
-        this.initialiseGUI();
-        this.gui.setVisible(true);
+        initialiseGUI();
+        gui.setVisible(true);
     }
 
     private void initialiseGUI() {
-        this.gui.getGamePane().initialisePanel(true, this.board.getPlayer());
-        this.gui.getGamePane().initialisePanel(false, this.board.getOpponent());
+        gui.getGamePane().initialisePanel(true, board.getPlayer());
+        gui.getGamePane().initialisePanel(false, board.getOpponent());
 
+        this.initialiseMenuItems();
         this.initialiseHoles();
     }
 
+    private void initialiseMenuItems() {
+        gui.getRestartMenuItem().addActionListener(e -> restartGame());
+    }
+
     private void initialiseHoles() {
-        for (int j = 0; j < this.board.getPlayer().getHoleCount(); j++) {
+        for (int j = 0; j < board.getPlayer().getHoleCount(); j++) {
             int finalJ = j;
-            final JHole currentJHole = this.gui.getGamePane().getPlayerHoles().get(j);
-           currentJHole.addMouseListener(new MouseAdapter() {
+            final JHole currentJHole = gui.getGamePane().getPlayerHoles().get(j);
+            currentJHole.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseReleased(MouseEvent e) {
                     board.getPlayer().makeMove(finalJ + 1);
-                    //board.getOpponent().makeMove(new Random().nextInt(9)+1);
                     gui.getGamePane().updateHoles(true);
-                    gui.getGamePane().updateHoles(false);
-                    //TODO: add updateKazans();
+                    board.changePlayer();
+                    if (board.getPlayer() instanceof BotPlayer) {
+                        ((BotPlayer) board.getPlayer()).act();
+                        gui.getGamePane().updateHoles(false);
+                        board.changePlayer();
+                    }
+                    // TODO: add updateKazans();
                 }
             });
         }
     }
 
     public Board getBoard() {
-        return this.board;
+        return board;
     }
 
     public GUI getGUI() {
-        return this.gui;
+        return gui;
     }
 
     public void restartGame() {
-        board.getPlayer().resetPlayer();
-        board.getOpponent().resetPlayer();
+        board.resetBoard();
         gui.getGamePane().updateHoles(true);
         gui.getGamePane().updateHoles(false);
-        //TODO: update kazan front end
+        // TODO: update kazan front end
     }
 
 }
