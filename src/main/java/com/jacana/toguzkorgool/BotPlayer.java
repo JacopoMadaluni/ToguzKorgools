@@ -10,7 +10,7 @@ public class BotPlayer extends Player {
     }
 
     public void act(){
-        int randomIndex = random.nextInt(9);
+        int randomIndex = random.nextInt(9) + 1;
         super.makeMove(randomIndex);
     }
 }
