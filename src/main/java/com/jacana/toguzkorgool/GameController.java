@@ -61,8 +61,7 @@ public class GameController {
     }
 
     public void restartGame() {
-        board.getPlayer().resetPlayer();
-        board.getOpponent().resetPlayer();
+        board.resetBoard();
         gui.getGamePane().updateHoles(true);
         gui.getGamePane().updateHoles(false);
         // TODO: update kazan front end
