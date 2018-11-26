@@ -68,4 +68,10 @@ public class Board {
             currentPlayer = player;
         }
     }
+
+    public void resetBoard() {
+        player.resetPlayer();
+        bot.resetPlayer();
+        currentPlayer = player;
+    }
 }
