@@ -1,5 +1,6 @@
 package com.jacana.toguzkorgool.gui;
 
+import com.jacana.toguzkorgool.HumanPlayer;
 import com.jacana.toguzkorgool.Player;
 import com.jacana.toguzkorgool.gui.components.JHole;
 import com.jacana.toguzkorgool.gui.components.JKazan;
@@ -8,6 +9,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,7 @@ public class GamePane extends JPanel {
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
+        this.setBackground(Color.black);
 
         this.populatePane();
     }
@@ -48,14 +51,12 @@ public class GamePane extends JPanel {
 
         JPanel kazanPanel = new JPanel();
         kazanPanel.setLayout(new BoxLayout(kazanPanel, BoxLayout.X_AXIS));
-        kazanPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
         kazanPanel.setAlignmentX(CENTER_ALIGNMENT);
 
         botKazan = createKazanPanel();
         playerKazan = createKazanPanel();
 
         kazanPanel.add(botKazan);
-        kazanPanel.add(Box.createRigidArea(new Dimension(5, 0)));
         kazanPanel.add(playerKazan);
 
         botPanel = new JPanel();
@@ -94,26 +95,35 @@ public class GamePane extends JPanel {
     }
 
     /**
-     * A construction method for initializing a players Holes on the board.
+     * A construction method for initializing the players side of the board,
+     * for example setting up the holes.
      *
      * @param isPlayer Boolean which specifies whether the player is a Bot
-     *                 or a Human.
+     * or a Human.
      * @param player the reference to the player object.
      */
     public void initialisePanel(boolean isPlayer, Player player) {
         List<JHole> holes = isPlayer ? playerHoles : botHoles;
         JPanel panel = isPlayer ? playerPanel : botPanel;
-        if (holes.isEmpty()) {
-            for (int i = 0; i < player.getHoleCount(); ++i) {
-                int k = isPlayer ? i : player.getHoleCount() - 1 - i;
-                JHole holePanel = new JHole(player.getHole(k));
-                panel.add(holePanel);
-                if (i != player.getHoleCount()-1) {
-                    panel.add(Box.createRigidArea(new Dimension(5, 0)));
-                }
-                holes.add(holePanel);
+        panel.setBackground(player.getBoardColour());
+
+        holes.clear();
+        for (int i = 0; i < player.getHoleCount(); ++i) {
+            int k = isPlayer ? i : player.getHoleCount() - 1 - i;
+            JHole holePanel = new JHole(player.getHole(k));
+            holePanel.setBackground(player.getBoardColour());
+            panel.add(holePanel);
+            if (i != player.getHoleCount() - 1) {
+                panel.add(Box.createRigidArea(new Dimension(5, 0)));
             }
+            holes.add(holePanel);
         }
+    }
+
+    public void initialiseKazan(Player player) {
+        JKazan kazan = player instanceof HumanPlayer ? playerKazan : botKazan;
+        kazan.setKazan(player.getKazan());
+        kazan.setBackground(player.getBoardColour());
     }
 
     public void updateHoles(boolean isPlayer) {
