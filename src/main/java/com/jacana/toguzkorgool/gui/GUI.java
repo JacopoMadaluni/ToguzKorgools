@@ -9,6 +9,7 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 
@@ -43,6 +44,7 @@ public class GUI extends JFrame {
      */
     private void populatePane() {
         JPanel contentPane = (JPanel) getContentPane();
+        contentPane.setBackground(Color.black);
         contentPane.setLayout(new BorderLayout(5, 5));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         this.setJMenuBar(constructMenuBar());

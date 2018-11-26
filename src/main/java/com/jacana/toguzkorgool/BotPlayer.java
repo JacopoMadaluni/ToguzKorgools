@@ -1,11 +1,12 @@
 package com.jacana.toguzkorgool;
+import java.awt.Color;
 import java.util.Random;
 public class BotPlayer extends Player {
 
     private Random random;
 
-    public BotPlayer(Board board){
-        super(board);
+    public BotPlayer(Board board, Color boardColour){
+        super(board, boardColour);
         this.random = new Random();
     }
 
