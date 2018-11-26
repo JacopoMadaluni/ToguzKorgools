@@ -100,7 +100,8 @@ public class GamePane extends JPanel {
         JPanel panel = isPlayer ? playerPanel : botPanel;
         if (holes.isEmpty()) {
             for (int i = 0; i < player.getHoleCount(); ++i) {
-                JHole holePanel = new JHole(player.getHole(i));
+                int k = isPlayer ? i : player.getHoleCount() - 1 - i;
+                JHole holePanel = new JHole(player.getHole(k));
                 panel.add(holePanel);
                 if (i != player.getHoleCount()-1) {
                     panel.add(Box.createRigidArea(new Dimension(5, 0)));
