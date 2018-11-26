@@ -52,6 +52,5 @@ public class JHole extends JPanel {
     public void updateHole() {
         removeAll();
         internalUpdate();
-        updateUI();
     }
 }
