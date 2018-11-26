@@ -26,6 +26,7 @@ public class GameController {
 
         this.initialiseMenuItems();
         this.initialiseHoles();
+        this.initialiseKazans();
     }
 
     private void initialiseMenuItems() {
@@ -42,16 +43,22 @@ public class GameController {
                 public void mouseReleased(MouseEvent e) {
                     board.getPlayer().makeMove(finalJ + 1);
                     gui.getGamePane().updateHoles(true);
+                    gui.getGamePane().updateKazan(true);
                     board.changePlayer();
                     if (board.getPlayer() instanceof BotPlayer) {
                         ((BotPlayer) board.getPlayer()).act();
                         gui.getGamePane().updateHoles(false);
+                        gui.getGamePane().updateKazan(false);
                         board.changePlayer();
                     }
-                    // TODO: add updateKazans();
                 }
             });
         }
+    }
+
+    private void initialiseKazans() {
+        this.gui.getGamePane().getPlayerKazan().setKazan(this.board.getPlayer().getKazan());
+        this.gui.getGamePane().getBotKazan().setKazan(this.board.getOpponent().getKazan());
     }
 
     public Board getBoard() {
@@ -66,7 +73,8 @@ public class GameController {
         board.resetBoard();
         gui.getGamePane().updateHoles(true);
         gui.getGamePane().updateHoles(false);
-        // TODO: update kazan front end
+        gui.getGamePane().updateKazan(true);
+        gui.getGamePane().updateKazan(false);
     }
 
 }
