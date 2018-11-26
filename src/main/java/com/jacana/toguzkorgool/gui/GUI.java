@@ -37,7 +37,7 @@ public class GUI extends JFrame {
 
         populatePane();
     }
-    
+
     /**
      * Encapsulation method for populating the main frame with its components.
      */
@@ -46,23 +46,25 @@ public class GUI extends JFrame {
         contentPane.setLayout(new BorderLayout(5, 5));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         this.setJMenuBar(constructMenuBar());
-        
+
         this.gamePane = new GamePane();
         contentPane.add(this.gamePane, BorderLayout.CENTER);
     }
 
     private JMenuItem restartMenuItem;
     private JMenuItem customMenuItem;
-    
+    private JMenuItem exitMenuItem;
+
     /**
      * Constructs the overarching menu bar for he GUI and returns it.
+     *
      * @return the JMenuBar object constructed
      */
     private JMenuBar constructMenuBar() {
         JMenuBar menuBar = new JMenuBar();
-        JMenu fileMenu, exitMenu;
 
-        fileMenu = new JMenu("File");
+        // File menu
+        JMenu fileMenu = new JMenu("File");
 
         restartMenuItem = new JMenuItem("Restart", KeyEvent.VK_R);
         restartMenuItem.getAccessibleContext().setAccessibleDescription("Restart the game");
@@ -72,19 +74,23 @@ public class GUI extends JFrame {
         restartMenuItem.getAccessibleContext().setAccessibleDescription("Create custom game");
         fileMenu.add(customMenuItem);
 
-        exitMenu = new JMenu("Exit");
-        exitMenu.setMnemonic(KeyEvent.VK_E);
-        exitMenu.getAccessibleContext().setAccessibleDescription(
-                "Exit the game");
+        // Exit menu
+        exitMenuItem = new JMenuItem("Exit");
+        exitMenuItem.setMnemonic(KeyEvent.VK_E);
+        exitMenuItem.getAccessibleContext().setAccessibleDescription("Exit the game");
 
         menuBar.add(fileMenu);
-        menuBar.add(exitMenu);
+        menuBar.add(exitMenuItem);
 
         return menuBar;
     }
 
     public JMenuItem getCustomMenuItem() {
         return customMenuItem;
+    }
+
+    public JMenuItem getExitMenuItem() {
+        return exitMenuItem;
     }
 
     public GamePane getGamePane() {
