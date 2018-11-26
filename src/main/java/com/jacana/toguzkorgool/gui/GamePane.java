@@ -2,15 +2,13 @@ package com.jacana.toguzkorgool.gui;
 
 import com.jacana.toguzkorgool.Player;
 import com.jacana.toguzkorgool.gui.components.JHole;
+import com.jacana.toguzkorgool.gui.components.JKazan;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +21,9 @@ public class GamePane extends JPanel {
 
     //the opposite sides of the board.
     private JPanel botPanel = null;
+    private JKazan botKazan = null;
     private JPanel playerPanel = null;
+    private JKazan playerKazan = null;
 
     //arrays to store object references to GUI Hole components for both
     //players.
@@ -38,7 +38,7 @@ public class GamePane extends JPanel {
 
         this.populatePane();
     }
-    
+
     /**
      * Function which encapsulates the creation of GamePane's components.
      */
@@ -51,12 +51,12 @@ public class GamePane extends JPanel {
         kazanPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
         kazanPanel.setAlignmentX(CENTER_ALIGNMENT);
 
-        JPanel botKazanPanel = createKazanPanel();
-        JPanel userKazanPanel = createKazanPanel();
+        botKazan = createKazanPanel();
+        playerKazan = createKazanPanel();
 
-        kazanPanel.add(botKazanPanel);
+        kazanPanel.add(botKazan);
         kazanPanel.add(Box.createRigidArea(new Dimension(5, 0)));
-        kazanPanel.add(userKazanPanel);
+        kazanPanel.add(playerKazan);
 
         botPanel = new JPanel();
         botPanel.setLayout(new BoxLayout(botPanel, BoxLayout.X_AXIS));
@@ -73,21 +73,26 @@ public class GamePane extends JPanel {
         add(playerPanel);
     }
 
-    private JPanel createKazanPanel() {
-        JPanel kazanPanel = new JPanel();
-        kazanPanel.setLayout(new GridLayout(3, 27));
-        kazanPanel.setBorder(new LineBorder(Color.black, 1, true));
-        return kazanPanel;
+    private JKazan createKazanPanel() {
+        return new JKazan(null);
     }
 
     public List<JHole> getBotHoles() {
         return botHoles;
     }
 
+    public JKazan getBotKazan() {
+        return botKazan;
+    }
+
     public List<JHole> getPlayerHoles() {
         return playerHoles;
     }
-    
+
+    public JKazan getPlayerKazan() {
+        return playerKazan;
+    }
+
     /**
      * A construction method for initializing a players Holes on the board.
      *
@@ -110,7 +115,7 @@ public class GamePane extends JPanel {
             }
         }
     }
-    
+
     public void updateHoles(boolean isPlayer) {
         List<JHole> holePanels = isPlayer ? playerHoles : botHoles;
         for (JHole holePanel : holePanels) {
@@ -118,6 +123,11 @@ public class GamePane extends JPanel {
         }
         if (isPlayer) playerPanel.updateUI();
         else botPanel.updateUI();
+    }
+
+    public void updateKazan(boolean isPlayer) {
+        if (isPlayer) playerKazan.updateKazan();
+        else botKazan.updateKazan();
     }
 
 }
