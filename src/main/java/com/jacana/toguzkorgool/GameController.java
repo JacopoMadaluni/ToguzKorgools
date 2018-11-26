@@ -12,24 +12,29 @@ public class GameController {
     private Board board; //back-end
 
     public GameController() {
-        this.board = new Board();
-        this.gui = new GUI(this);
+        board = new Board();
+        gui = new GUI();
 
-        this.initialiseGUI();
-        this.gui.setVisible(true);
+        initialiseGUI();
+        gui.setVisible(true);
     }
 
     private void initialiseGUI() {
-        this.gui.getGamePane().initialisePanel(true, this.board.getPlayer());
-        this.gui.getGamePane().initialisePanel(false, this.board.getOpponent());
+        gui.getGamePane().initialisePanel(true, board.getPlayer());
+        gui.getGamePane().initialisePanel(false, board.getOpponent());
 
+        this.initialiseMenuItems();
         this.initialiseHoles();
     }
 
+    private void initialiseMenuItems() {
+        gui.getRestartMenuItem().addActionListener(e -> restartGame());
+    }
+
     private void initialiseHoles() {
-        for (int j = 0; j < this.board.getPlayer().getHoleCount(); j++) {
+        for (int j = 0; j < board.getPlayer().getHoleCount(); j++) {
             int finalJ = j;
-            final JHole currentJHole = this.gui.getGamePane().getPlayerHoles().get(j);
+            final JHole currentJHole = gui.getGamePane().getPlayerHoles().get(j);
             currentJHole.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseReleased(MouseEvent e) {
@@ -48,11 +53,11 @@ public class GameController {
     }
 
     public Board getBoard() {
-        return this.board;
+        return board;
     }
 
     public GUI getGUI() {
-        return this.gui;
+        return gui;
     }
 
     public void restartGame() {
@@ -60,7 +65,7 @@ public class GameController {
         board.getOpponent().resetPlayer();
         gui.getGamePane().updateHoles(true);
         gui.getGamePane().updateHoles(false);
-        //TODO: update kazan front end
+        // TODO: update kazan front end
     }
 
 }
