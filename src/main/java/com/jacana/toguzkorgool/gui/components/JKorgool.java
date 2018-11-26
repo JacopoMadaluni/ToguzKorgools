@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 /**
- * @author Rehman, Faris (k1764099), Bass, Alexander (k1763794).
- * <p>
  * JKorgool is a graphical representation of a single Korgool in the game of
  * Toguz Korgool.
  */
