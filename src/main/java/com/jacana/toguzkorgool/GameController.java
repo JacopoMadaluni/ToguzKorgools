@@ -5,8 +5,6 @@ import com.jacana.toguzkorgool.gui.components.JHole;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
-import java.util.Random;
 
 public class GameController {
 
@@ -32,14 +30,18 @@ public class GameController {
         for (int j = 0; j < this.board.getPlayer().getHoleCount(); j++) {
             int finalJ = j;
             final JHole currentJHole = this.gui.getGamePane().getPlayerHoles().get(j);
-           currentJHole.addMouseListener(new MouseAdapter() {
+            currentJHole.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseReleased(MouseEvent e) {
                     board.getPlayer().makeMove(finalJ + 1);
-                    //board.getOpponent().makeMove(new Random().nextInt(9)+1);
                     gui.getGamePane().updateHoles(true);
-                    gui.getGamePane().updateHoles(false);
-                    //TODO: add updateKazans();
+                    board.changePlayer();
+                    if (board.getPlayer() instanceof BotPlayer) {
+                        ((BotPlayer) board.getPlayer()).act();
+                        gui.getGamePane().updateHoles(false);
+                        board.changePlayer();
+                    }
+                    // TODO: add updateKazans();
                 }
             });
         }
