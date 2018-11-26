@@ -1,5 +1,6 @@
 package com.jacana.toguzkorgool.gui;
 
+import com.jacana.toguzkorgool.GameController;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
@@ -13,14 +14,16 @@ import java.awt.event.KeyEvent;
 public class GUI extends JFrame {
 
     private GamePane gamePane;
+    private GameController gameController;
     
-    public GUI() {
+    public GUI(GameController gameController) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        this.gameController = gameController;
         setTitle("Toguz Korgool");
         setResizable(true);
         setPreferredSize(new Dimension(800, 400));
@@ -51,26 +54,31 @@ public class GUI extends JFrame {
      */
     private JMenuBar constructMenuBar() {
         JMenuBar menuBar = new JMenuBar();
-        JMenu restartMenu, customMenu, exitMenu;
-        restartMenu = new JMenu("Restart");
-        restartMenu.setMnemonic(KeyEvent.VK_R);
-        restartMenu.getAccessibleContext().setAccessibleDescription(
+        JMenu fileMenu, exitMenu;
+        JMenuItem restartMenuItem, customMenuItem;
+
+        fileMenu = new JMenu("File");
+
+        restartMenuItem = new JMenuItem("Restart", KeyEvent.VK_R);
+        restartMenuItem.getAccessibleContext().setAccessibleDescription(
                 "Restart the game");
-        
-        customMenu = new JMenu("Custom");
-        customMenu.setMnemonic(KeyEvent.VK_C);
-        customMenu.getAccessibleContext().setAccessibleDescription(
-                "Load a custom game");
-        
+        fileMenu.add(restartMenuItem);
+        restartMenuItem.addActionListener(e -> gameController.restartGame());
+
+        customMenuItem = new JMenuItem("Custom", KeyEvent.VK_C);
+        restartMenuItem.getAccessibleContext().setAccessibleDescription(
+                "Create custom game");
+        fileMenu.add(customMenuItem);
+        //customMenuItem.addActionListener(e -> );
+
         exitMenu = new JMenu("Exit");
         exitMenu.setMnemonic(KeyEvent.VK_E);
         exitMenu.getAccessibleContext().setAccessibleDescription(
                 "Exit the game");
-        
-        menuBar.add(restartMenu);
-        menuBar.add(customMenu);
+
+        menuBar.add(fileMenu);
         menuBar.add(exitMenu);
-        
+
         return menuBar;
     }
 
