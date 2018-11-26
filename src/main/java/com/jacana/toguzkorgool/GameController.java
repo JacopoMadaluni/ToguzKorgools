@@ -15,7 +15,7 @@ public class GameController {
 
     public GameController() {
         this.board = new Board();
-        this.gui = new GUI();
+        this.gui = new GUI(this);
 
         this.initialiseGUI();
         this.gui.setVisible(true);
@@ -51,6 +51,14 @@ public class GameController {
 
     public GUI getGUI() {
         return this.gui;
+    }
+
+    public void restartGame() {
+        board.getPlayer().resetPlayer();
+        board.getOpponent().resetPlayer();
+        gui.getGamePane().updateHoles(true);
+        gui.getGamePane().updateHoles(false);
+        //TODO: update kazan front end
     }
 
 }
