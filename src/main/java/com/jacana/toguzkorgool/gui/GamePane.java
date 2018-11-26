@@ -14,11 +14,19 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * GamePane is the custom GUI representation of a Toguz Korgool game board.
+ * It contains 4 distinct fields: a Kazan and a Hole field for each of the
+ * two players on the board.
+ */
 public class GamePane extends JPanel {
 
+    //the opposite sides of the board.
     private JPanel botPanel = null;
     private JPanel playerPanel = null;
 
+    //arrays to store object references to GUI Hole components for both
+    //players.
     private List<JHole> botHoles = new ArrayList<>();
     private List<JHole> playerHoles = new ArrayList<>();
 
@@ -30,7 +38,10 @@ public class GamePane extends JPanel {
 
         this.populatePane();
     }
-
+    
+    /**
+     * Function which encapsulates the creation of GamePane's components.
+     */
     private void populatePane() {
         botHoles.clear();
         playerHoles.clear();
@@ -76,13 +87,21 @@ public class GamePane extends JPanel {
     public List<JHole> getPlayerHoles() {
         return playerHoles;
     }
-
+    
+    /**
+     * A construction method for initializing a players Holes on the board.
+     *
+     * @param isPlayer Boolean which specifies whether the player is a Bot
+     *                 or a Human.
+     * @param player the reference to the player object.
+     */
     public void initialisePanel(boolean isPlayer, Player player) {
         List<JHole> holes = isPlayer ? playerHoles : botHoles;
         JPanel panel = isPlayer ? playerPanel : botPanel;
         if (holes.isEmpty()) {
             for (int i = 0; i < player.getHoleCount(); ++i) {
-                JHole holePanel = new JHole(player.getHole(i));
+                int k = isPlayer ? i : player.getHoleCount() - 1 - i;
+                JHole holePanel = new JHole(player.getHole(k));
                 panel.add(holePanel);
                 if (i != player.getHoleCount()-1) {
                     panel.add(Box.createRigidArea(new Dimension(5, 0)));
@@ -91,7 +110,7 @@ public class GamePane extends JPanel {
             }
         }
     }
-
+    
     public void updateHoles(boolean isPlayer) {
         List<JHole> holePanels = isPlayer ? playerHoles : botHoles;
         for (JHole holePanel : holePanels) {

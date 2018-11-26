@@ -13,7 +13,7 @@ public class Hole extends KorgoolContainer{
         return tuz;
     }
 
-    public void setTuz() {
-        tuz = true;
+    public void setTuz(boolean tuzValue) {
+        tuz = tuzValue;
     }
 }
