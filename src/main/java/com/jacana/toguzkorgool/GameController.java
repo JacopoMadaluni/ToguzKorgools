@@ -57,8 +57,8 @@ public class GameController {
     }
 
     private void initialiseKazans() {
-        this.gui.getGamePane().getPlayerKazan().setKazan(this.board.getPlayer().getKazan());
-        this.gui.getGamePane().getBotKazan().setKazan(this.board.getOpponent().getKazan());
+        this.gui.getGamePane().initialiseKazan(this.board.getPlayer());
+        this.gui.getGamePane().initialiseKazan(this.board.getOpponent());
     }
 
     public Board getBoard() {
