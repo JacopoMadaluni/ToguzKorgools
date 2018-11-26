@@ -3,6 +3,7 @@ package com.jacana.toguzkorgool;
 import com.jacana.toguzkorgool.gui.GUI;
 import com.jacana.toguzkorgool.gui.components.JHole;
 
+import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -25,10 +26,12 @@ public class GameController {
 
         this.initialiseMenuItems();
         this.initialiseHoles();
+        this.initialiseKazans();
     }
 
     private void initialiseMenuItems() {
         gui.getRestartMenuItem().addActionListener(e -> restartGame());
+        gui.getExitMenuItem().addActionListener(e -> EventQueue.invokeLater(() -> gui.dispose()));
     }
 
     private void initialiseHoles() {
@@ -40,16 +43,22 @@ public class GameController {
                 public void mouseReleased(MouseEvent e) {
                     board.getPlayer().makeMove(finalJ + 1);
                     gui.getGamePane().updateHoles(true);
+                    gui.getGamePane().updateKazan(true);
                     board.changePlayer();
                     if (board.getPlayer() instanceof BotPlayer) {
                         ((BotPlayer) board.getPlayer()).act();
                         gui.getGamePane().updateHoles(false);
+                        gui.getGamePane().updateKazan(false);
                         board.changePlayer();
                     }
-                    // TODO: add updateKazans();
                 }
             });
         }
+    }
+
+    private void initialiseKazans() {
+        this.gui.getGamePane().getPlayerKazan().setKazan(this.board.getPlayer().getKazan());
+        this.gui.getGamePane().getBotKazan().setKazan(this.board.getOpponent().getKazan());
     }
 
     public Board getBoard() {
@@ -64,7 +73,8 @@ public class GameController {
         board.resetBoard();
         gui.getGamePane().updateHoles(true);
         gui.getGamePane().updateHoles(false);
-        // TODO: update kazan front end
+        gui.getGamePane().updateKazan(true);
+        gui.getGamePane().updateKazan(false);
     }
 
 }
