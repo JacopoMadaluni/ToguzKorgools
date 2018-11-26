@@ -1,7 +1,12 @@
 package com.jacana.toguzkorgool.gui;
 
-import com.jacana.toguzkorgool.GameController;
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -14,16 +19,14 @@ import java.awt.event.KeyEvent;
 public class GUI extends JFrame {
 
     private GamePane gamePane;
-    private GameController gameController;
-    
-    public GUI(GameController gameController) {
+
+    public GUI() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        this.gameController = gameController;
         setTitle("Toguz Korgool");
         setResizable(true);
         setPreferredSize(new Dimension(800, 400));
@@ -47,6 +50,9 @@ public class GUI extends JFrame {
         this.gamePane = new GamePane();
         contentPane.add(this.gamePane, BorderLayout.CENTER);
     }
+
+    private JMenuItem restartMenuItem;
+    private JMenuItem customMenuItem;
     
     /**
      * Constructs the overarching menu bar for he GUI and returns it.
@@ -55,21 +61,16 @@ public class GUI extends JFrame {
     private JMenuBar constructMenuBar() {
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu, exitMenu;
-        JMenuItem restartMenuItem, customMenuItem;
 
         fileMenu = new JMenu("File");
 
         restartMenuItem = new JMenuItem("Restart", KeyEvent.VK_R);
-        restartMenuItem.getAccessibleContext().setAccessibleDescription(
-                "Restart the game");
+        restartMenuItem.getAccessibleContext().setAccessibleDescription("Restart the game");
         fileMenu.add(restartMenuItem);
-        restartMenuItem.addActionListener(e -> gameController.restartGame());
 
         customMenuItem = new JMenuItem("Custom", KeyEvent.VK_C);
-        restartMenuItem.getAccessibleContext().setAccessibleDescription(
-                "Create custom game");
+        restartMenuItem.getAccessibleContext().setAccessibleDescription("Create custom game");
         fileMenu.add(customMenuItem);
-        //customMenuItem.addActionListener(e -> );
 
         exitMenu = new JMenu("Exit");
         exitMenu.setMnemonic(KeyEvent.VK_E);
@@ -82,8 +83,16 @@ public class GUI extends JFrame {
         return menuBar;
     }
 
+    public JMenuItem getCustomMenuItem() {
+        return customMenuItem;
+    }
+
     public GamePane getGamePane() {
         return this.gamePane;
+    }
+
+    public JMenuItem getRestartMenuItem() {
+        return restartMenuItem;
     }
 
 }

@@ -116,6 +116,8 @@ public class GamePane extends JPanel {
         for (JHole holePanel : holePanels) {
             holePanel.updateHole();
         }
+        if (isPlayer) playerPanel.updateUI();
+        else botPanel.updateUI();
     }
 
 }
