@@ -1,13 +1,15 @@
 package com.jacana.toguzkorgool;
 
+import java.awt.Color;
+
 public class Board {
     private HumanPlayer player; // light and dark
     private BotPlayer bot;
     private Player currentPlayer;
 
     public Board() {
-        this.player = new HumanPlayer(this);
-        this.bot = new BotPlayer(this);
+        this.player = new HumanPlayer(this, Color.lightGray);
+        this.bot = new BotPlayer(this, Color.darkGray);
         this.currentPlayer = player;
     }
 
