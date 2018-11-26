@@ -4,6 +4,10 @@ import javax.swing.JComponent;
 import java.awt.Color;
 import java.awt.Graphics;
 
+/**
+ * JKorgool is a graphical representation of a single Korgool in the game of
+ * Toguz Korgool.
+ */
 public class JKorgool extends JComponent {
 
     @Override
@@ -12,5 +16,4 @@ public class JKorgool extends JComponent {
         g.setColor(Color.black);
         g.fillOval(0, 0, this.getWidth(), this.getHeight());
     }
-
 }
