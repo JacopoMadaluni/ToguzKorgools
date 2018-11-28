@@ -20,6 +20,7 @@ import java.awt.event.KeyEvent;
 public class GUI extends JFrame {
 
     private GamePane gamePane;
+    private EndingPane ending;
 
     public GUI() {
         try {
@@ -39,6 +40,31 @@ public class GUI extends JFrame {
         populatePane();
     }
 
+    public void loadVictoryScreen(){
+        JPanel contentPane = (JPanel) getContentPane();
+
+        ending.setWin();
+        contentPane.remove(this.gamePane);
+        contentPane.add(ending);
+        contentPane.updateUI();
+
+    }
+
+    public void loadDefeatScreen(){
+        JPanel contentPane = (JPanel) getContentPane();
+        ending.setLose();
+        contentPane.remove(this.gamePane);
+        contentPane.add(ending);
+        contentPane.updateUI();
+    }
+
+    public void restart(){
+        JPanel contentPane = (JPanel) getContentPane();
+        contentPane.remove(ending);
+        contentPane.add(this.gamePane);
+        contentPane.updateUI();
+
+    }
     /**
      * Encapsulation method for populating the main frame with its components.
      */
@@ -50,7 +76,10 @@ public class GUI extends JFrame {
         this.setJMenuBar(constructMenuBar());
 
         this.gamePane = new GamePane();
+        this.ending = new EndingPane();
         contentPane.add(this.gamePane, BorderLayout.CENTER);
+        //ending.setLose();
+        //contentPane.add(ending, BorderLayout.CENTER);
     }
 
     private JMenuItem restartMenuItem;
@@ -103,4 +132,7 @@ public class GUI extends JFrame {
         return restartMenuItem;
     }
 
+    public EndingPane getEnding() {
+        return ending;
+    }
 }
