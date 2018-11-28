@@ -28,6 +28,9 @@ public class Board {
         Player opponent = getOpponent();
         return opponent.hasTuz();
     }
+    public boolean currentPlayerHasWon(){
+        return currentPlayer.hasWon();
+    }
 
     public void setTuzInOpponentField(int index){
         Player opponent = getOpponent();

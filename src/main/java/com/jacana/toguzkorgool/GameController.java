@@ -27,6 +27,12 @@ public class GameController {
         this.initialiseMenuItems();
         this.initialiseHoles();
         this.initialiseKazans();
+        this.initializeEnding();
+    }
+
+    private void initializeEnding(){
+        gui.getEnding().getRestartButton().addActionListener(e -> restartGame());
+        gui.getEnding().getQuitButton().addActionListener(e -> EventQueue.invokeLater(() -> gui.dispose()));
     }
 
     private void initialiseMenuItems() {
@@ -44,11 +50,18 @@ public class GameController {
                     board.getPlayer().makeMove(finalJ + 1);
                     gui.getGamePane().updateHoles(true);
                     gui.getGamePane().updateKazan(true);
+                    if (board.currentPlayerHasWon()){
+                        gui.loadVictoryScreen();
+                        return;
+                    }
                     board.changePlayer();
                     if (board.getPlayer() instanceof BotPlayer) {
                         ((BotPlayer) board.getPlayer()).act();
                         gui.getGamePane().updateHoles(false);
                         gui.getGamePane().updateKazan(false);
+                        if (board.currentPlayerHasWon()){
+                            gui.loadDefeatScreen();
+                        }
                         board.changePlayer();
                     }
                 }
@@ -75,6 +88,7 @@ public class GameController {
         gui.getGamePane().updateHoles(false);
         gui.getGamePane().updateKazan(true);
         gui.getGamePane().updateKazan(false);
+        gui.restart();
     }
 
 }
