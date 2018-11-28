@@ -104,6 +104,7 @@ public abstract class Player {
                 holeNumber = 1;
             }
         }
+        System.out.println(kazan.getKorgools());
     }
 
     private int moveOpponent(int korgools) {
@@ -130,7 +131,7 @@ public abstract class Player {
         return korgools;
     }
 
-    private boolean hasWon() {
+    public boolean hasWon() {
         if (kazan.getKorgools() > holes.length * holes.length) {
             return true;
         }
