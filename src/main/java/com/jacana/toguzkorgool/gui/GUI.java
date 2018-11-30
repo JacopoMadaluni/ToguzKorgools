@@ -123,13 +123,13 @@ public class GUI extends JFrame {
     public JMenuItem getExitMenuItem() {
         return exitMenuItem;
     }
+    
+    public JMenuItem getRestartMenuItem() {
+        return restartMenuItem;
+    }
 
     public GamePane getGamePane() {
         return this.gamePane;
-    }
-
-    public JMenuItem getRestartMenuItem() {
-        return restartMenuItem;
     }
 
     public EndingPane getEnding() {
