@@ -2,87 +2,218 @@ package com.jacana.toguzkorgool.gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
-public class CustomGameDialogue extends JDialog
-{
+
+/**
+ * The CustomGameDialogue GUI allows the player to "set up" the board state
+ * to their liking during any point of the game, using the modal this class
+ * creates.
+ *
+ * Upon clicking the "Apply" button, this class send the input data to the
+ * back-end Board.
+ */
+public class CustomGameDialogue extends JDialog {
     private JPanel contentPane;
-    private JButton buttonOK;
-    private JButton buttonCancel;
-    private JSpinner lightKazan;
-    private JSpinner lightHoleSpinner1;
-    private JSpinner lightHoleSpinner2;
-    private JSpinner lightHoleSpinner3;
-    private JSpinner lightHoleSpinner4;
-    private JSpinner lightHoleSpinner5;
-    private JSpinner lightHoleSpinner6;
-    private JSpinner lightHoleSpinner7;
-    private JSpinner lightHoleSpinner8;
-    private JPanel buttonPanel;
-    private JPanel controlPanel;
-    private JPanel lightSidePanel;
-    private JPanel darkSidePanel;
-    private JPanel sideSeparatorPanel;
+    private ArrayList<JSpinner> lightHoleSpinners = new ArrayList<>();
+    private ArrayList<JSpinner> darkHoleSpinners = new ArrayList<>();
     
-    public CustomGameDialogue()
-    {
-        setContentPane(contentPane);
+    private CustomGameDialogue() {
+        setResizable(false);
         setModal(true);
-        getRootPane().setDefaultButton(buttonOK);
+        setTitle("Custom Game");
         
-        buttonOK.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                onOK();
-            }
-        });
+        contentPane = new JPanel();
+        setContentPane(contentPane);
         
-        buttonCancel.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                onCancel();
-            }
-        });
+        setUpComponents();
+        setUpComponentsInitialData();
         
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter()
-        {
-            public void windowClosing(WindowEvent e)
-            {
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
                 onCancel();
             }
         });
         
         // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                onCancel();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        contentPane.registerKeyboardAction(
+                e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT
+        );
     }
     
-    private void onOK()
-    {
-        // add your code here
-        dispose();
-    }
-    
-    private void onCancel()
-    {
-        // add your code here if necessary
-        dispose();
-    }
-    
-    public static void main(String[] args)
-    {
+    static void showCustomGameDialogue() {
         CustomGameDialogue dialog = new CustomGameDialogue();
         dialog.pack();
+        dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
+    }
+    
+    public static void main(String[] args) {
+        showCustomGameDialogue();
         System.exit(0);
+    }
+    
+    private void setUpComponents() {
+        contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        contentPane.setLayout(new BorderLayout());
+        
+        JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new GridLayout(0, 2, 5, 0));
+        
+        JPanel lightPanel = constructAndGetSidePanel("Light Player", lightHoleSpinners);
+        JPanel darkPanel = constructAndGetSidePanel("Dark Player", darkHoleSpinners);
+        
+        inputPanel.add(lightPanel);
+        inputPanel.add(darkPanel);
+        
+        JPanel controlPanel = constructAndGetControlPanel();
+        
+        contentPane.add(inputPanel, BorderLayout.CENTER);
+        contentPane.add(controlPanel, BorderLayout.PAGE_END);
+    }
+    
+    private void setUpComponentsInitialData() {
+    }
+    
+    private JPanel constructAndGetSidePanel(String panelLabel,
+                                            ArrayList<JSpinner> panelHoleSpinners) {
+        // should be "dark" or "light"
+        final String namePrefix = panelLabel.split(" ")[0].toLowerCase();
+        final String namePrefixCapitalized = namePrefix.substring(0, 1).toUpperCase()
+                + namePrefix.substring(1);
+        
+        //make the panel a vertical box layout
+        JPanel sidePanel = new JPanel();
+        sidePanel.setLayout(new BoxLayout(sidePanel, BoxLayout.Y_AXIS));
+        
+        // add name label to the top
+        JPanel sideLabelPanel = new JPanel();
+        addAndHorizontalCenterInPanel(new JLabel(panelLabel), sideLabelPanel);
+        
+        sidePanel.add(sideLabelPanel);
+        addHorizontalSeparator(sidePanel);
+        
+        // HOLE SPINNERS--------------------------
+        // create 9 numerical spinners with names and labels, each within a
+        // flow layout
+        for (int i = 1; i <= 9; i++) {
+            JPanel holeSpinnerPanel = new JPanel();
+
+            JSpinner holeSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 161, 1));
+            holeSpinner.setName(namePrefix + "HoleSpinner" + i);
+            //TODO set the spinners value with Board.getLightHoleKorgoolCount(index).
+
+            JLabel newSpinnerLabel = new JLabel("Hole " + (i) + ":");
+            
+            //add the label and the spinner to the panel
+            holeSpinnerPanel.add(newSpinnerLabel);
+            holeSpinnerPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+            holeSpinnerPanel.add(holeSpinner);
+
+            sidePanel.add(holeSpinnerPanel);
+            
+            //TODO Make a component map (component.getName() -> Component Object) instead of arrays
+            panelHoleSpinners.add(holeSpinner);
+        }
+        addHorizontalSeparator(sidePanel);
+        
+        //KAZAN SPINNER--------------------------
+        
+        JPanel kazanPanel = new JPanel();
+        
+        //TODO get the kazan count via Board.get Light/Dark KazanCount(); add it to the model.
+        SpinnerNumberModel spinnerKazanModel = new SpinnerNumberModel(0, 0, 82, 1);
+        JSpinner kazanSpinner = new JSpinner(spinnerKazanModel);
+        kazanSpinner.setName(namePrefix + "KazanSpinner");
+        JLabel kazanLabel = new JLabel(namePrefixCapitalized + " Kazan:");
+        
+        kazanPanel.add(kazanLabel);
+        kazanPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        kazanPanel.add(kazanSpinner);
+        
+        sidePanel.add(kazanPanel);
+        addHorizontalSeparator(sidePanel);
+        
+        //TUZ COMBO BOX--------------------------
+        
+        JPanel tuzPanel = new JPanel();
+        
+        JLabel tuzLabel = new JLabel(namePrefixCapitalized + " Tuz:");
+        String[] tuzOptions = {"None", "1st Hole", "2nd Hole", "3rd Hole",
+                "4th Hole", "5th Hole", "6th Hole", "7th Hole", "8th Hole"};
+        JComboBox<String> tuzComboBox = new JComboBox<>(tuzOptions);
+        tuzComboBox.setName(namePrefix + "TuzComboBox");
+        //TODO Set combobox selection to current tuz value via Board.getTuz()
+        tuzComboBox.setSelectedIndex(0);
+        
+        //add to the side panel.
+        tuzPanel.add(tuzLabel);
+        tuzPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        tuzPanel.add(tuzComboBox);
+        
+        sidePanel.add(tuzPanel);
+        
+        //done
+        return sidePanel;
+    }
+    
+    //TODO Move helper methods into a static helper methods class
+    /*Helper methods*/
+    private void addAndHorizontalCenterInPanel(JComponent component, JPanel panel) {
+        panel.add(Box.createHorizontalGlue());
+        panel.add(component);
+        panel.add(Box.createHorizontalGlue());
+    }
+    
+    private void addHorizontalSeparator(JPanel panel) {
+        panel.add(Box.createRigidArea(new Dimension(0, 5)));
+        panel.add(new JSeparator(SwingConstants.HORIZONTAL));
+        panel.add(Box.createRigidArea(new Dimension(0, 5)));
+    }
+    
+    private JPanel constructAndGetControlPanel() {
+        //make new panel
+        JPanel controlPanel = new JPanel();
+        controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
+        
+        //add top spacer
+        controlPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+        
+        //make new buttons
+        JButton buttonApply = new JButton("Apply");
+        buttonApply.setName("buttonApply");
+        
+        JButton buttonCancel = new JButton("Cancel");
+        buttonCancel.setName("buttonCancel");
+        
+        getRootPane().setDefaultButton(buttonCancel);
+        
+        // set button actions.
+        buttonApply.addActionListener(e -> onApply());
+        buttonCancel.addActionListener(e -> onCancel());
+        
+        //add the components
+        controlPanel.add(Box.createHorizontalGlue());
+        controlPanel.add(buttonApply);
+        controlPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        controlPanel.add(buttonCancel);
+        
+        return controlPanel;
+    }
+    
+    private void onApply() {
+        //TODO check data with validator
+        //TODO set up board
+        dispose();
+    }
+    
+    private void onCancel() {
+        dispose();
     }
 }

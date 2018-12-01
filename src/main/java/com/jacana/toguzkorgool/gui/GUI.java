@@ -104,6 +104,8 @@ public class GUI extends JFrame {
         customMenuItem = new JMenuItem("Custom", KeyEvent.VK_C);
         restartMenuItem.getAccessibleContext().setAccessibleDescription("Create custom game");
         fileMenu.add(customMenuItem);
+        
+        customMenuItem.addActionListener(e -> CustomGameDialogue.showCustomGameDialogue());
 
         // Exit menu
         exitMenuItem = new JMenuItem("Exit");
