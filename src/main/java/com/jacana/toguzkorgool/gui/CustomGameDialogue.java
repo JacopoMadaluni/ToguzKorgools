@@ -63,6 +63,8 @@ public class CustomGameDialogue extends JDialog {
     }
     
     private void setUpComponents() {
+        setJMenuBar(constructAndGetMenuBar());
+        
         contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         contentPane.setLayout(new BorderLayout());
         
@@ -164,6 +166,30 @@ public class CustomGameDialogue extends JDialog {
         
         //done
         return sidePanel;
+    }
+    
+    private JMenuBar constructAndGetMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+        
+        // File menu
+        JMenu fileMenu = new JMenu("File");
+        
+        JMenuItem exportMenuItem = new JMenuItem("Export Board", KeyEvent.VK_E);
+        exportMenuItem.getAccessibleContext().setAccessibleDescription("Export board state to a file");
+        fileMenu.add(exportMenuItem);
+        
+        JMenuItem importMenuItem = new JMenuItem("Import Board", KeyEvent.VK_I);
+        importMenuItem.getAccessibleContext().setAccessibleDescription("Import board state from a file");
+        fileMenu.add(importMenuItem);
+        
+        //TODO Add event listeners for Export and Import menu items.
+        
+        exportMenuItem.addActionListener(e -> placeholderActionMethod());
+        importMenuItem.addActionListener(e -> placeholderActionMethod());
+        
+        menuBar.add(fileMenu);
+        
+        return menuBar;
     }
     
     private JPanel constructAndGetControlPanel() {
