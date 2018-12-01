@@ -18,14 +18,14 @@ public class Board {
     /**
      * @return The current player
      */
-    public Player getPlayer() {
+    public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
     /**
      * @return The opponent of the current player
      */
-    public Player getOpponent() {
+    public Player getCurrentOpponent() {
         if (currentPlayer == lightPlayer){
             return darkPlayer;
         }
@@ -72,7 +72,7 @@ public class Board {
      * @param index The index of the hole.
      * @return Returns the number of korgools of the light player in the hole index
      */
-    public int getHoleKorgoolsOfLightPlayer(int index){
+    public int getLightHoleKorgoolCount(int index){
         return lightPlayer.getKorgoolsInHole(index);
     }
 
@@ -80,7 +80,7 @@ public class Board {
      * @param index The index of the hole.
      * @return Returns the number of korgools of the dark player in the hole index
      */
-    public int getHoleKorgoolsOfDarkPlayer(int index){
+    public int getDarkHoleKorgoolCount(int index){
         return darkPlayer.getKorgoolsInHole(index);
     }
 
@@ -89,8 +89,8 @@ public class Board {
      * @return The number of korgools in the index hole relative to the current
      * player's opponent.
      */
-    public int getKorgoolsInOpponentHole(int index){
-        Player opponent = getOpponent();
+    public int getOpponentHoleKorgoolCount(int index){
+        Player opponent = getCurrentOpponent();
         return opponent.getKorgoolsInHole(index);
     }
 
@@ -98,7 +98,7 @@ public class Board {
      * @return True if the current player's opponent has a tuz
      */
     public boolean opponentHasTuz(){
-        Player opponent = getOpponent();
+        Player opponent = getCurrentOpponent();
         return opponent.hasTuz();
     }
 
@@ -178,23 +178,23 @@ public class Board {
      * Sets a hole in the opponent field to be a tuz, if possible.
      * @param index The index of the hole.
      */
-    public void setTuzInOpponentField(int index){
-        Player opponent = getOpponent();
+    public void setOpponentTuz(int index){
+        Player opponent = getCurrentOpponent();
         opponent.setTuz(index);
     }
 
     public void clearOpponentHole(int index){
-        Player opponent = getOpponent();
+        Player opponent = getCurrentOpponent();
         opponent.clearHole(index);
     }
 
     public void addToOpponentHole(int index, int amount){
-        Player opponent = getOpponent();
+        Player opponent = getCurrentOpponent();
         opponent.addToHole(index, amount);
     }
 
     public void addToOpponentKazan(int amount){
-        Player opponent = getOpponent();
+        Player opponent = getCurrentOpponent();
         opponent.addToKazan(amount);
     }
 

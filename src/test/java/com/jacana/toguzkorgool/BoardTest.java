@@ -12,11 +12,11 @@ public class BoardTest {
     @Test
     public void testChangePlayer(){
         Board board = new Board();
-        Player player1 = board.getPlayer();
-        Player bot = board.getOpponent();
+        Player player1 = board.getCurrentPlayer();
+        Player bot = board.getCurrentOpponent();
         board.changePlayer();
-        assert(board.getPlayer().equals(bot));
+        assert(board.getCurrentPlayer().equals(bot));
         board.changePlayer();
-        assert(board.getPlayer().equals(player1));
+        assert(board.getCurrentPlayer().equals(player1));
     }
 }
