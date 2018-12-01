@@ -33,7 +33,7 @@ public class PlayerTest {
         // opponent hole three has been emptied
         assertEquals (0,bot.getHole(2).getKorgools());
         // ten korgools have been added to the player's kazan
-        assertEquals(10, player.getKazan());
+        assertEquals(10, player.getKazan().getKorgools());
         player.makeMove(9);
         assertEquals(1, player.getHole(8).getKorgools()); // hole nine has one korgool
         for (int i = 0; i < 2; ++i) {
@@ -72,7 +72,7 @@ public class PlayerTest {
 
         assertEquals(true, bot.hasTuz());
         assertEquals(false, player.hasTuz());
-        assertEquals(3, player.getKazan());
+        assertEquals(3, player.getKazan().getKorgools());
         assertEquals(true, tuz.isTuz());
         assertEquals(false, notTuz.isTuz());
         assertEquals(false, notTuz2.isTuz());
@@ -90,7 +90,7 @@ public class PlayerTest {
 
         assertEquals(true, bot.hasTuz());
         assertEquals(false, player.hasTuz());
-        assertEquals(3, player.getKazan());
+        assertEquals(3, player.getKazan().getKorgools());
         assertEquals(true, tuz.isTuz());
         assertEquals(false, notTuz.isTuz());
         assertEquals(false, notTuz2.isTuz());
