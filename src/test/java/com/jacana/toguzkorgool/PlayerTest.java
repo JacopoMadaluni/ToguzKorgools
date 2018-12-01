@@ -9,8 +9,8 @@ public class PlayerTest {
     @Test
     public void testMakeMove() {
         Board board = new Board();
-        Player player = board.getPlayer();
-        Player bot = board.getOpponent();
+        Player player = board.getCurrentPlayer();
+        Player bot = board.getCurrentOpponent();
         player.makeMove(1);
         assertEquals(1, player.getHole(0).getKorgools()); // hole one has one korgool
         for (int i = 1; i < 9; ++i) {
@@ -52,8 +52,8 @@ public class PlayerTest {
     @Test
     public void testTuzRule(){
         Board board = new Board();
-        Player player = board.getPlayer();
-        Player bot = board.getOpponent();
+        Player player = board.getCurrentPlayer();
+        Player bot = board.getCurrentOpponent();
         assertEquals(true, bot instanceof BotPlayer); // remove when two human players are playing
         for (int i = 0; i < 9; ++i) {
             player.getHole(i).clear();
@@ -99,8 +99,8 @@ public class PlayerTest {
     @Test
     public void testSetTuzConditions(){
         Board board = new Board();
-        Player player = board.getPlayer();
-        Player bot = board.getOpponent();
+        Player player = board.getCurrentPlayer();
+        Player bot = board.getCurrentOpponent();
 
         bot.setTuz(3);
         player.setTuz(3);

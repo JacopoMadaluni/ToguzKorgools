@@ -123,16 +123,16 @@ public abstract class Player {
             --korgools;
             ++holeNumber;
         }
-        int korgoolsInOpponentHole = board.getKorgoolsInOpponentHole(holeNumber - 2);
+        int korgoolsInOpponentHole = board.getOpponentHoleKorgoolCount(holeNumber - 2);
         if (korgools == 0 && korgoolsInOpponentHole % 2 == 0) {
             kazan.add(korgoolsInOpponentHole);
             board.clearOpponentHole(holeNumber - 2);
         }
 
-        int korgoolsInLastHole = board.getKorgoolsInOpponentHole(holeNumber - 2);
+        int korgoolsInLastHole = board.getOpponentHoleKorgoolCount(holeNumber - 2);
         if (korgools == 0 && korgoolsInLastHole == 3) {
             if (!board.opponentHasTuz()) {
-                board.setTuzInOpponentField(holeNumber - 2);
+                board.setOpponentTuz(holeNumber - 2);
                 board.clearOpponentHole(holeNumber - 2);
                 kazan.add(korgoolsInLastHole);
             }
