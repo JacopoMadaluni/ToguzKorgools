@@ -27,6 +27,9 @@ public abstract class Player {
         return holes[index];
     }
 
+    /**
+     * @return The number of holes of the player
+     */
     public int getHoleCount() {
         return holes.length;
     }
