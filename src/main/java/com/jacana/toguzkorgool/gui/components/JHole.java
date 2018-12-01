@@ -52,5 +52,12 @@ public class JHole extends JPanel {
     public void updateHole() {
         removeAll();
         internalUpdate();
+
+        final LineBorder border = (LineBorder) getBorder();
+        if (hole.isTuz()) {
+            setBorder(new LineBorder(Color.red, 2, border.getRoundedCorners()));
+        } else {
+            setBorder(new LineBorder(Color.black, 1, border.getRoundedCorners()));
+        }
     }
 }
