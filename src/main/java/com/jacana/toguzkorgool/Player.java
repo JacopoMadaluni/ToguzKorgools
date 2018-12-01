@@ -31,6 +31,10 @@ public abstract class Player {
         return holes.length;
     }
 
+    public int getKazanCount(){
+        return kazan.getKorgools();
+    }
+
     public Kazan getKazan() {
         return kazan;
     }
@@ -65,6 +69,11 @@ public abstract class Player {
             holes[holeNumber].setTuz(true);
         }
         // ... cannot set tuz
+    }
+
+    public void setKazanCount(int count){
+        kazan.clear();
+        kazan.add(count);
     }
 
     public void addToKazan(int amount) {
