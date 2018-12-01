@@ -70,8 +70,8 @@ public class PlayerTest {
         Hole notTuz = bot.getHole(1);
         Hole notTuz2 = bot.getHole(0);
 
-        assertEquals(true, bot.hasTuz());
-        assertEquals(false, player.hasTuz());
+        assertEquals(true, bot.opponentHasTuz());
+        assertEquals(false, player.opponentHasTuz());
         assertEquals(3, player.getKazan().getKorgools());
         assertEquals(true, tuz.isTuz());
         assertEquals(false, notTuz.isTuz());
@@ -88,8 +88,8 @@ public class PlayerTest {
         player.getHole(8).add(2);
         player.makeMove(9);
 
-        assertEquals(true, bot.hasTuz());
-        assertEquals(false, player.hasTuz());
+        assertEquals(true, bot.opponentHasTuz());
+        assertEquals(false, player.opponentHasTuz());
         assertEquals(3, player.getKazan().getKorgools());
         assertEquals(true, tuz.isTuz());
         assertEquals(false, notTuz.isTuz());
@@ -105,11 +105,11 @@ public class PlayerTest {
         bot.setTuz(3);
         player.setTuz(3);
         assertEquals(false, player.getHole(3).isTuz());
-        assertEquals(false, player.hasTuz());
+        assertEquals(false, player.opponentHasTuz());
 
         player.setTuz(8);
         assertEquals(false, player.getHole(8).isTuz());
-        assertEquals(false, player.hasTuz());
+        assertEquals(false, player.opponentHasTuz());
     }
 
 

@@ -43,7 +43,7 @@ public abstract class Player {
         return holes[index].getKorgools();
     }
 
-    public boolean hasTuz() {
+    public boolean opponentHasTuz() {
         for (Hole hole : holes) {
             if (hole.isTuz()) {
                 return true;
@@ -52,7 +52,7 @@ public abstract class Player {
         return false;
     }
 
-    public int getTuzIndex() {
+    public int getOpponentTuzIndex() {
         for (int i = 0; i < holes.length; ++i) {
             if (holes[i].isTuz()) {
                 return i;
@@ -65,7 +65,7 @@ public abstract class Player {
 
     public void setTuz(int holeNumber) {
         Player opponent = board.getOpponentOf(this);
-        if (holeNumber != 8 && !hasTuz() && opponent.getTuzIndex() != holeNumber) {
+        if (holeNumber != 8 && !opponentHasTuz() && opponent.getOpponentTuzIndex() != holeNumber) {
             holes[holeNumber].setTuz(true);
         }
         // ... cannot set tuz

@@ -45,25 +45,26 @@ public class Board {
     public int getDarkKazanCount(){
         return darkPlayer.getKazanCount();
     }
-
+    
+    //TODO refactor who owns their respective tuz!
     /**
-     * @return The index of the light player tuz.
+     * @return The index of the light player's tuz.
      * If he has no tuz, returns -1
      */
-    public int getLightTuzIndex(){
-        if (lightPlayer.hasTuz()){
-            return lightPlayer.getTuzIndex();
+    public int getLightPlayerTuzIndex(){
+        if (darkPlayer.opponentHasTuz()){
+            return darkPlayer.getOpponentTuzIndex();
         }
         return -1;
     }
 
     /**
-     * @return The index of the light player tuz.
+     * @return The index of the dark player's tuz.
      * If he has no tuz, returns -1
      */
-    public int getDarkTuzIndex(){
-        if (darkPlayer.hasTuz()){
-            return darkPlayer.getTuzIndex();
+    public int getDarkPlayerTuzIndex(){
+        if (lightPlayer.opponentHasTuz()){
+            return lightPlayer.getOpponentTuzIndex();
         }
         return -1;
     }
@@ -99,7 +100,7 @@ public class Board {
      */
     public boolean opponentHasTuz(){
         Player opponent = getCurrentOpponent();
-        return opponent.hasTuz();
+        return opponent.opponentHasTuz();
     }
 
     /**
@@ -152,8 +153,8 @@ public class Board {
      * @param index The hole index
      */
     public void setLightPlayerTuz(int index){
-        if (darkPlayer.hasTuz()){
-            int oldTuzIndex = darkPlayer.getTuzIndex();
+        if (darkPlayer.opponentHasTuz()){
+            int oldTuzIndex = darkPlayer.getOpponentTuzIndex();
             Hole oldTuz = darkPlayer.getHole(oldTuzIndex);
             oldTuz.setTuz(false);
         }
@@ -166,8 +167,8 @@ public class Board {
      * @param index The hole index
      */
     public void setDarkPlayerTuz(int index){
-        if (lightPlayer.hasTuz()){
-            int oldTuzIndex = lightPlayer.getTuzIndex();
+        if (lightPlayer.opponentHasTuz()){
+            int oldTuzIndex = lightPlayer.getOpponentTuzIndex();
             Hole oldTuz = lightPlayer.getHole(oldTuzIndex);
             oldTuz.setTuz(false);
         }

@@ -1,27 +1,31 @@
 package com.jacana.toguzkorgool.gui;
 
+import com.jacana.toguzkorgool.Board;
+import com.jacana.toguzkorgool.GameController;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.List;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
- * The CustomGameDialogue GUI allows the player to "set up" the board state
+ * The CustomGameDialog GUI allows the player to "set up" the board state
  * to their liking during any point of the game, using the modal this class
  * creates.
- *
+ * <p>
  * Upon clicking the "Apply" button, this class send the input data to the
  * back-end Board.
  */
-public class CustomGameDialogue extends JDialog {
+public class CustomGameDialog extends JDialog {
     private JPanel contentPane;
-    private List<JSpinner> lightHoleSpinners = new ArrayList<>();
-    private List<JSpinner> darkHoleSpinners = new ArrayList<>();
+    private Map<String, Component> componentMap = new HashMap<>();
     
-    private CustomGameDialogue() {
+    private CustomGameDialog() {
         setResizable(false);
         setModal(true);
         setTitle("Custom Game");
@@ -30,7 +34,6 @@ public class CustomGameDialogue extends JDialog {
         setContentPane(contentPane);
         
         setUpComponents();
-        setUpComponentsInitialData();
         
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -42,7 +45,7 @@ public class CustomGameDialogue extends JDialog {
         
         // call onCancel() on ESCAPE
         contentPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(
-                "released ESCAPE"),"closeWindow" );
+                "released ESCAPE"), "closeWindow");
         contentPane.getActionMap().put("closeWindow", new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
@@ -50,15 +53,15 @@ public class CustomGameDialogue extends JDialog {
         });
     }
     
-    static void showCustomGameDialogue() {
-        CustomGameDialogue dialog = new CustomGameDialogue();
+    static void showCustomGameDialog() {
+        CustomGameDialog dialog = new CustomGameDialog();
         dialog.pack();
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
     }
     
     public static void main(String[] args) {
-        showCustomGameDialogue();
+        showCustomGameDialog();
         System.exit(0);
     }
     
@@ -71,8 +74,8 @@ public class CustomGameDialogue extends JDialog {
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new GridLayout(0, 2, 5, 0));
         
-        JPanel lightPanel = constructAndGetSidePanel("Light Player", lightHoleSpinners);
-        JPanel darkPanel = constructAndGetSidePanel("Dark Player", darkHoleSpinners);
+        JPanel lightPanel = constructAndGetSidePanel("Light Player");
+        JPanel darkPanel = constructAndGetSidePanel("Dark Player");
         
         inputPanel.add(lightPanel);
         inputPanel.add(darkPanel);
@@ -83,15 +86,24 @@ public class CustomGameDialogue extends JDialog {
         contentPane.add(controlPanel, BorderLayout.PAGE_END);
     }
     
-    private void setUpComponentsInitialData() {
-    }
-    
-    private JPanel constructAndGetSidePanel(String panelLabel,
-                                            List<JSpinner> panelHoleSpinners) {
+    private JPanel constructAndGetSidePanel(String panelLabel) {
         // should be "dark" or "light"
         final String namePrefix = panelLabel.split(" ")[0].toLowerCase();
         final String namePrefixCapitalized = namePrefix.substring(0, 1).toUpperCase()
                 + namePrefix.substring(1);
+        
+        //Get Data from board--------------------------------------------
+        boolean isLightPanel = namePrefix.equals("light");
+        //TODO Refactor this with player IDs or some other way
+        int kazanKorgoolCount;
+        int tuzIndex;
+        if (isLightPanel) {
+            kazanKorgoolCount = GameController.getBoard().getLightKazanCount();
+            tuzIndex = GameController.getBoard().getLightPlayerTuzIndex();
+        } else {
+            kazanKorgoolCount = GameController.getBoard().getDarkKazanCount();
+            tuzIndex = GameController.getBoard().getDarkPlayerTuzIndex();
+        }
         
         //make the panel a vertical box layout
         JPanel sidePanel = new JPanel();
@@ -104,36 +116,41 @@ public class CustomGameDialogue extends JDialog {
         sidePanel.add(sideLabelPanel);
         addHorizontalSeparator(sidePanel);
         
-        // HOLE SPINNERS--------------------------
+        //HOLE SPINNERS--------------------------------------------------
         // create 9 numerical spinners with names and labels, each within a
         // flow layout
         for (int i = 1; i <= 9; i++) {
             JPanel holeSpinnerPanel = new JPanel();
-
-            JSpinner holeSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 161, 1));
+            
+            SpinnerNumberModel spinnerHoleModel = new SpinnerNumberModel(0, 0, 161, 1);
+            JSpinner holeSpinner = new JSpinner(spinnerHoleModel);
+            
             holeSpinner.setName(namePrefix + "HoleSpinner" + i);
-            //TODO set the spinners value with Board.getLightHoleKorgoolCount(index).
-
+            
+            //TODO Refactor this with player IDs or some other way
+            if (isLightPanel) {
+                holeSpinner.setValue(GameController.getBoard().getLightHoleKorgoolCount(i - 1));
+            } else {
+                holeSpinner.setValue(GameController.getBoard().getDarkHoleKorgoolCount(i - 1));
+            }
+            
             JLabel newSpinnerLabel = new JLabel("Hole " + (i) + ":");
             
             //add the label and the spinner to the panel
             holeSpinnerPanel.add(newSpinnerLabel);
             holeSpinnerPanel.add(Box.createRigidArea(new Dimension(10, 0)));
             holeSpinnerPanel.add(holeSpinner);
-
-            sidePanel.add(holeSpinnerPanel);
+            addToComponentMap(holeSpinner);
             
-            //TODO Make a component map (component.getName() -> Component Object) instead of arrays
-            panelHoleSpinners.add(holeSpinner);
+            sidePanel.add(holeSpinnerPanel);
         }
         addHorizontalSeparator(sidePanel);
         
-        //KAZAN SPINNER--------------------------
+        //KAZAN SPINNER--------------------------------------------------
         
         JPanel kazanPanel = new JPanel();
         
-        //TODO get the kazan count via Board.get Light/Dark KazanCount(); add it to the model.
-        SpinnerNumberModel spinnerKazanModel = new SpinnerNumberModel(0, 0, 82, 1);
+        SpinnerNumberModel spinnerKazanModel = new SpinnerNumberModel(kazanKorgoolCount, 0, 81, 1);
         JSpinner kazanSpinner = new JSpinner(spinnerKazanModel);
         kazanSpinner.setName(namePrefix + "KazanSpinner");
         JLabel kazanLabel = new JLabel(namePrefixCapitalized + " Kazan:");
@@ -141,26 +158,29 @@ public class CustomGameDialogue extends JDialog {
         kazanPanel.add(kazanLabel);
         kazanPanel.add(Box.createRigidArea(new Dimension(10, 0)));
         kazanPanel.add(kazanSpinner);
+        addToComponentMap(kazanSpinner);
         
         sidePanel.add(kazanPanel);
         addHorizontalSeparator(sidePanel);
         
-        //TUZ COMBO BOX--------------------------
+        //TUZ COMBO BOX--------------------------------------------------
         
         JPanel tuzPanel = new JPanel();
         
-        JLabel tuzLabel = new JLabel(namePrefixCapitalized + " Tuz:");
+        JLabel tuzLabel = new JLabel(namePrefixCapitalized + "'s Tuz:");
         String[] tuzOptions = {"None", "1st Hole", "2nd Hole", "3rd Hole",
                 "4th Hole", "5th Hole", "6th Hole", "7th Hole", "8th Hole"};
         JComboBox<String> tuzComboBox = new JComboBox<>(tuzOptions);
         tuzComboBox.setName(namePrefix + "TuzComboBox");
-        //TODO Set combobox selection to current tuz value via Board.getTuz()
-        tuzComboBox.setSelectedIndex(0);
+        
+        //TODO Test this behaviour once Tuz is identifiable in the GUI
+        tuzComboBox.setSelectedIndex(tuzIndex + 1);
         
         //add to the side panel.
         tuzPanel.add(tuzLabel);
         tuzPanel.add(Box.createRigidArea(new Dimension(10, 0)));
         tuzPanel.add(tuzComboBox);
+        addToComponentMap(tuzComboBox);
         
         sidePanel.add(tuzPanel);
         
@@ -182,10 +202,9 @@ public class CustomGameDialogue extends JDialog {
         importMenuItem.getAccessibleContext().setAccessibleDescription("Import board state from a file");
         fileMenu.add(importMenuItem);
         
-        //TODO Add event listeners for Export and Import menu items.
-        
-        exportMenuItem.addActionListener(e -> placeholderActionMethod());
-        importMenuItem.addActionListener(e -> placeholderActionMethod());
+        //TODO Replace placeholders from import/export statements
+        exportMenuItem.addActionListener(e -> System.out.println("I am a placeholder"));
+        importMenuItem.addActionListener(e -> System.out.println("I am a placeholder"));
         
         menuBar.add(fileMenu);
         
@@ -222,8 +241,54 @@ public class CustomGameDialogue extends JDialog {
         return controlPanel;
     }
     
+    /*Data methods-----------------------------------------------------*/
+    //TODO Validate data, else open an error message.
+    private int validateInputData() { //Currently this method always returns that the data is valid.
+        int retval = 0;
+        //the Sum of korgools in holes of a side must not be greater than 161
+        //the Sum of korgools on the board must be 162
+        //tuz rules
+        //game ending rules:
+        //there must be at least one korgool on a side.
+        //etc
+        return retval;
+    }
+    
+    //TODO Refactor code duplication
+    private void sendInputDataToBackEnd() {
+        //set holes for light
+        Board board = GameController.getBoard();
+        
+        for (int i = 1; i <= 9; i++) {
+            int lightHoleCount = (int) ((JSpinner) getComponentByName("lightHoleSpinner" + i)).getValue();
+            board.setLightHoleCount(i - 1, lightHoleCount);
+        }
+        
+        //set holes for dark
+        for (int i = 1; i <= 9; i++) {
+            int lightHoleCount = (int) ((JSpinner) getComponentByName("lightHoleSpinner" + i)).getValue();
+            board.setLightHoleCount(i - 1, lightHoleCount);
+        }
+        
+        //set kazan for light
+        int lightKazanCount = (int) ((JSpinner) getComponentByName("lightKazanSpinner")).getValue();
+        board.setLightKazanCount(lightKazanCount);
+        
+        //set kazan for dark
+        int darkKazanValue = (int) ((JSpinner) getComponentByName("lightKazanSpinner")).getValue();
+        board.setLightKazanCount(darkKazanValue);
+        
+        //set tuz for light
+        int lightTuzIndex = ((JComboBox) getComponentByName("lightTuzComboBox")).getSelectedIndex() - 1;
+        if (lightTuzIndex >= 0) board.setLightPlayerTuz(lightTuzIndex);
+        
+        //set tuz for dark
+        int darkTuzIndex = ((JComboBox) getComponentByName("darkTuzComboBox")).getSelectedIndex() - 1;
+        if (darkTuzIndex >= 0) board.setDarkPlayerTuz(darkTuzIndex);
+    }
+    
     //TODO Move helper methods into a static helper methods class
-    /*Helper methods*/
+    /*Helper methods---------------------------------------------------*/
     private void addAndHorizontalCenterInPanel(JComponent component, JPanel panel) {
         panel.add(Box.createHorizontalGlue());
         panel.add(component);
@@ -236,14 +301,25 @@ public class CustomGameDialogue extends JDialog {
         panel.add(Box.createRigidArea(new Dimension(0, 5)));
     }
     
-    private void placeholderActionMethod() {
-        System.out.println("Action was performed.");
+    /* methods adapted from
+        https://stackoverflow.com/questions/4958600/get-a-swing-component-by-name */
+    private void addToComponentMap(Component component) {
+        componentMap.put(component.getName(), component);
     }
+    
+    private Component getComponentByName(String name) {
+        return componentMap.getOrDefault(name, null);
+    }
+    
     
     /*Action Methods*/
     private void onApply() {
-        //TODO check data with validator
-        //TODO set up board
+        if (validateInputData() > 0) /*data invalid*/ {
+            return; //TODO make more elegant
+        } else {
+            sendInputDataToBackEnd();
+            GameController.updateGUI();
+        }
         dispose();
     }
     

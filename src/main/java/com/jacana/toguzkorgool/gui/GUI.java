@@ -63,8 +63,14 @@ public class GUI extends JFrame {
         contentPane.remove(ending);
         contentPane.add(this.gamePane);
         contentPane.updateUI();
-
     }
+    
+    public void update() {
+        gamePane.updateGamePane();
+        JPanel contentPane = (JPanel) getContentPane();
+        contentPane.updateUI();
+    }
+    
     /**
      * Encapsulation method for populating the main frame with its components.
      */
@@ -105,7 +111,7 @@ public class GUI extends JFrame {
         restartMenuItem.getAccessibleContext().setAccessibleDescription("Create custom game");
         fileMenu.add(customMenuItem);
         
-        customMenuItem.addActionListener(e -> CustomGameDialogue.showCustomGameDialogue());
+        customMenuItem.addActionListener(e -> CustomGameDialog.showCustomGameDialog());
 
         // Exit menu
         exitMenuItem = new JMenuItem("Exit");
