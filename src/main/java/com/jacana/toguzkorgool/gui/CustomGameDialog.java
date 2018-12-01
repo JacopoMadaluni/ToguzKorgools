@@ -259,12 +259,10 @@ public class CustomGameDialog extends JDialog {
         //set holes for light
         Board board = GameController.getBoard();
         
-        for (int i = 1; i <= 9; i++) {
-            int lightHoleCount = (int) ((JSpinner) getComponentByName("lightHoleSpinner" + i)).getValue();
-            board.setLightHoleCount(i - 1, lightHoleCount);
-        }
+        //TODO Refactor board API to mitigate code duplication
         
-        //set holes for dark
+        //LIGHT---------------------------------------------------------
+        //set holes for light
         for (int i = 1; i <= 9; i++) {
             int lightHoleCount = (int) ((JSpinner) getComponentByName("lightHoleSpinner" + i)).getValue();
             board.setLightHoleCount(i - 1, lightHoleCount);
@@ -274,14 +272,21 @@ public class CustomGameDialog extends JDialog {
         int lightKazanCount = (int) ((JSpinner) getComponentByName("lightKazanSpinner")).getValue();
         board.setLightKazanCount(lightKazanCount);
         
-        //set kazan for dark
-        int darkKazanValue = (int) ((JSpinner) getComponentByName("lightKazanSpinner")).getValue();
-        board.setLightKazanCount(darkKazanValue);
-        
         //set tuz for light
         int lightTuzIndex = ((JComboBox) getComponentByName("lightTuzComboBox")).getSelectedIndex() - 1;
         if (lightTuzIndex >= 0) board.setLightPlayerTuz(lightTuzIndex);
-        
+    
+        //DARK-----------------------------------------------------------
+        //set holes for dark
+        for (int i = 1; i <= 9; i++) {
+            int darkHoleCount = (int) ((JSpinner) getComponentByName("darkHoleSpinner" + i)).getValue();
+            board.setDarkHoleCount(i - 1, darkHoleCount);
+        }
+    
+        //set kazan for dark
+        int darkKazanValue = (int) ((JSpinner) getComponentByName("darkKazanSpinner")).getValue();
+        board.setDarkKazanCount(darkKazanValue);
+    
         //set tuz for dark
         int darkTuzIndex = ((JComboBox) getComponentByName("darkTuzComboBox")).getSelectedIndex() - 1;
         if (darkTuzIndex >= 0) board.setDarkPlayerTuz(darkTuzIndex);
