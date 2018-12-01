@@ -21,8 +21,8 @@ public class GameController {
     }
 
     private void initialiseGUI() {
-        gui.getGamePane().initialisePanel(true, board.getPlayer());
-        gui.getGamePane().initialisePanel(false, board.getOpponent());
+        gui.getGamePane().initialisePanel(true, board.getCurrentPlayer());
+        gui.getGamePane().initialisePanel(false, board.getCurrentOpponent());
 
         this.initialiseMenuItems();
         this.initialiseHoles();
@@ -41,13 +41,13 @@ public class GameController {
     }
 
     private void initialiseHoles() {
-        for (int j = 0; j < board.getPlayer().getHoleCount(); j++) {
+        for (int j = 0; j < board.getCurrentPlayer().getHoleCount(); j++) {
             int finalJ = j;
             final JHole currentJHole = gui.getGamePane().getPlayerHoles().get(j);
             currentJHole.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseReleased(MouseEvent e) {
-                    board.getPlayer().makeMove(finalJ + 1);
+                    board.getCurrentPlayer().makeMove(finalJ + 1);
                     gui.getGamePane().updateHoles(true);
                     gui.getGamePane().updateKazan(true);
                     if (board.currentPlayerHasWon()){
@@ -55,8 +55,8 @@ public class GameController {
                         return;
                     }
                     board.changePlayer();
-                    if (board.getPlayer() instanceof BotPlayer) {
-                        ((BotPlayer) board.getPlayer()).act();
+                    if (board.getCurrentPlayer() instanceof BotPlayer) {
+                        ((BotPlayer) board.getCurrentPlayer()).act();
                         gui.getGamePane().updateHoles(false);
                         gui.getGamePane().updateKazan(false);
                         if (board.currentPlayerHasWon()){
@@ -70,8 +70,8 @@ public class GameController {
     }
 
     private void initialiseKazans() {
-        this.gui.getGamePane().initialiseKazan(this.board.getPlayer());
-        this.gui.getGamePane().initialiseKazan(this.board.getOpponent());
+        this.gui.getGamePane().initialiseKazan(this.board.getCurrentPlayer());
+        this.gui.getGamePane().initialiseKazan(this.board.getCurrentOpponent());
     }
 
     public Board getBoard() {
