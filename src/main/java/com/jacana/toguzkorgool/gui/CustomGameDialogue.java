@@ -2,10 +2,10 @@ package com.jacana.toguzkorgool.gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.List;
+
 
 
 /**
@@ -18,8 +18,8 @@ import java.util.ArrayList;
  */
 public class CustomGameDialogue extends JDialog {
     private JPanel contentPane;
-    private ArrayList<JSpinner> lightHoleSpinners = new ArrayList<>();
-    private ArrayList<JSpinner> darkHoleSpinners = new ArrayList<>();
+    private List<JSpinner> lightHoleSpinners = new ArrayList<>();
+    private List<JSpinner> darkHoleSpinners = new ArrayList<>();
     
     private CustomGameDialogue() {
         setResizable(false);
@@ -33,7 +33,7 @@ public class CustomGameDialogue extends JDialog {
         setUpComponentsInitialData();
         
         // call onCancel() when cross is clicked
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 onCancel();
@@ -41,10 +41,13 @@ public class CustomGameDialogue extends JDialog {
         });
         
         // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(
-                e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT
-        );
+        contentPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(
+                "released ESCAPE"),"closeWindow" );
+        contentPane.getActionMap().put("closeWindow", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                onCancel();
+            }
+        });
     }
     
     static void showCustomGameDialogue() {
@@ -82,7 +85,7 @@ public class CustomGameDialogue extends JDialog {
     }
     
     private JPanel constructAndGetSidePanel(String panelLabel,
-                                            ArrayList<JSpinner> panelHoleSpinners) {
+                                            List<JSpinner> panelHoleSpinners) {
         // should be "dark" or "light"
         final String namePrefix = panelLabel.split(" ")[0].toLowerCase();
         final String namePrefixCapitalized = namePrefix.substring(0, 1).toUpperCase()
@@ -163,20 +166,6 @@ public class CustomGameDialogue extends JDialog {
         return sidePanel;
     }
     
-    //TODO Move helper methods into a static helper methods class
-    /*Helper methods*/
-    private void addAndHorizontalCenterInPanel(JComponent component, JPanel panel) {
-        panel.add(Box.createHorizontalGlue());
-        panel.add(component);
-        panel.add(Box.createHorizontalGlue());
-    }
-    
-    private void addHorizontalSeparator(JPanel panel) {
-        panel.add(Box.createRigidArea(new Dimension(0, 5)));
-        panel.add(new JSeparator(SwingConstants.HORIZONTAL));
-        panel.add(Box.createRigidArea(new Dimension(0, 5)));
-    }
-    
     private JPanel constructAndGetControlPanel() {
         //make new panel
         JPanel controlPanel = new JPanel();
@@ -207,6 +196,25 @@ public class CustomGameDialogue extends JDialog {
         return controlPanel;
     }
     
+    //TODO Move helper methods into a static helper methods class
+    /*Helper methods*/
+    private void addAndHorizontalCenterInPanel(JComponent component, JPanel panel) {
+        panel.add(Box.createHorizontalGlue());
+        panel.add(component);
+        panel.add(Box.createHorizontalGlue());
+    }
+    
+    private void addHorizontalSeparator(JPanel panel) {
+        panel.add(Box.createRigidArea(new Dimension(0, 5)));
+        panel.add(new JSeparator(SwingConstants.HORIZONTAL));
+        panel.add(Box.createRigidArea(new Dimension(0, 5)));
+    }
+    
+    private void placeholderActionMethod() {
+        System.out.println("Action was performed.");
+    }
+    
+    /*Action Methods*/
     private void onApply() {
         //TODO check data with validator
         //TODO set up board
