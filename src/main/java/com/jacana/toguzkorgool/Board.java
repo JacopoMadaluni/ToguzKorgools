@@ -94,6 +94,10 @@ public class Board {
         return opponent.getKorgoolsInHole(index);
     }
 
+    public int getOpponentTuz() {
+        return getCurrentOpponent().getTuzIndex();
+    }
+
     /**
      * @return True if the current player's opponent has a tuz
      */
