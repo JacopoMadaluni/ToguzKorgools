@@ -95,8 +95,9 @@ public class Board {
         return opponent.getKorgoolsInHole(index);
     }
 
+    // TODO: Confirm if this is calling the correct method.
     public int getOpponentTuz() {
-        return getCurrentOpponent().getTuzIndex();
+        return getCurrentOpponent().getOpponentTuzIndex();
     }
 
     /**
