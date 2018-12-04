@@ -35,10 +35,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -233,7 +230,32 @@ public class CustomGameDialog extends JDialog {
         fileMenu.add(importMenuItem);
 
         //TODO Replace placeholders from import/export statements
-        exportMenuItem.addActionListener(e -> System.out.println("I am a placeholder"));
+        exportMenuItem.addActionListener(e ->
+                EventQueue.invokeLater(() -> {
+                    JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.setDialogTitle("Choose a location to save to");
+                    fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                    int returnVal = fileChooser.showSaveDialog(this);
+                    if (returnVal == JFileChooser.APPROVE_OPTION) {
+                        try {
+                            File selectedFile = fileChooser.getSelectedFile();
+                            if (!selectedFile.getName().toLowerCase().endsWith(".json")) {
+                                selectedFile = new File(selectedFile.getParentFile(), selectedFile.getName() + ".json");
+                            }
+
+                            Board board = GameController.getBoard();
+                            String serializedBoard = Utilities.getGson().toJson(board);
+                            FileWriter writer = new FileWriter(selectedFile);
+                            writer.write(serializedBoard);
+                            writer.close();
+
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            JOptionPane.showMessageDialog(this, "An error occurred!");
+                        }
+                    }
+                })
+        );
         importMenuItem.addActionListener(e -> {
 
             EventQueue.invokeLater(() -> {
@@ -418,7 +440,7 @@ public class CustomGameDialog extends JDialog {
         tuzComboBox.setSelectedIndex(tuzIndex != -1 ? (tuzIndex + 1) : -1);
 
         JSpinner kazanSpinner = (JSpinner) componentMap.get(name + "KazanSpinner");
-        kazanSpinner.setValue(String.valueOf(player.getKazanCount()));
+        kazanSpinner.setValue(Integer.valueOf(player.getKazanCount()));
     }
 
     /* Static helper methods */
@@ -445,7 +467,7 @@ public class CustomGameDialog extends JDialog {
             if (hole.isTuz()) {
                 if (tuzId != -1) return "More than one tuz found for " + name;
                 if (i == 9 - 1) return "Hole 9 cannot be a tuz for " + name;
-                tuzId = (i + 1);
+                tuzId = (i);
             }
         }
         if (player.getKazan().getKorgools() < 0) {
