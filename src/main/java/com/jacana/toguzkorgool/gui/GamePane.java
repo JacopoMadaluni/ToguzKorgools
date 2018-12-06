@@ -139,5 +139,12 @@ public class GamePane extends JPanel {
         if (isPlayer) playerKazan.updateKazan();
         else botKazan.updateKazan();
     }
+    
+    public void updateGamePane() {
+        updateHoles(true);
+        updateHoles(false);
+        updateKazan(true);
+        updateKazan(false);
+    }
 
 }

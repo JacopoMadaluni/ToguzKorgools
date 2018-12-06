@@ -8,16 +8,24 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class GameController {
+    
+    private static GameController instance;
+    private static GUI gui; //front-end
+    private static Board board; //back-end
 
-    private GUI gui; //front-end
-    private Board board; //back-end
-
-    public GameController() {
+    private GameController() {
         board = new Board();
         gui = new GUI();
 
         initialiseGUI();
         gui.setVisible(true);
+    }
+    
+    public static GameController getInstance() {
+        if (instance == null) {
+            instance = new GameController();
+        }
+        return instance;
     }
 
     private void initialiseGUI() {
@@ -70,16 +78,20 @@ public class GameController {
     }
 
     private void initialiseKazans() {
-        this.gui.getGamePane().initialiseKazan(this.board.getCurrentPlayer());
-        this.gui.getGamePane().initialiseKazan(this.board.getCurrentOpponent());
+        gui.getGamePane().initialiseKazan(board.getCurrentPlayer());
+        gui.getGamePane().initialiseKazan(board.getCurrentOpponent());
     }
 
-    public Board getBoard() {
+    public static Board getBoard() {
         return board;
     }
 
     public GUI getGUI() {
         return gui;
+    }
+    
+    public static void updateGUI() {
+        gui.update();
     }
 
     public void restartGame() {
