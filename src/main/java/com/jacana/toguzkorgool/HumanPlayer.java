@@ -4,8 +4,8 @@ import java.awt.Color;
 
 public class HumanPlayer extends Player {
 
-    public HumanPlayer(Board board, Color boardColour){
-        super(board, boardColour);
+    public HumanPlayer(Board board, int id, Color boardColour){
+        super(board, id, boardColour);
     }
 
 }

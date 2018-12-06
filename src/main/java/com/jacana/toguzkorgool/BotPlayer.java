@@ -5,8 +5,8 @@ public class BotPlayer extends Player {
 
     private Random random;
 
-    public BotPlayer(Board board, Color boardColour){
-        super(board, boardColour);
+    public BotPlayer(Board board, int id, Color boardColour){
+        super(board, id, boardColour);
         this.random = new Random();
     }
 

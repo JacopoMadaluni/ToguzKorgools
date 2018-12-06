@@ -4,12 +4,14 @@ package com.jacana.toguzkorgool;
 import java.awt.Color;
 
 public abstract class Player {
+    private final int id;
     private Kazan kazan;
     private Hole[] holes;
     private Board board;
     private Color boardColour;
 
-    public Player(Board board, Color boardColour) {
+    public Player(Board board, int id, Color boardColour) {
+        this.id = id;
         this.kazan = new Kazan();
         this.holes = new Hole[9];
         for (int i = 0; i < 9; ++i) {
@@ -23,10 +25,17 @@ public abstract class Player {
         return boardColour;
     }
 
+    public int getId(){
+        return id;
+    }
+
     public Hole getHole(int index) {
         return holes[index];
     }
 
+    /**
+     * @return The number of holes of the player
+     */
     public int getHoleCount() {
         return holes.length;
     }
@@ -43,7 +52,7 @@ public abstract class Player {
         return holes[index].getKorgools();
     }
 
-    public boolean opponentHasTuz() {
+    public boolean hasTuz() {
         for (Hole hole : holes) {
             if (hole.isTuz()) {
                 return true;
@@ -52,7 +61,7 @@ public abstract class Player {
         return false;
     }
 
-    public int getOpponentTuzIndex() {
+    public int getTuzIndex() {
         for (int i = 0; i < holes.length; ++i) {
             if (holes[i].isTuz()) {
                 return i;
@@ -65,7 +74,7 @@ public abstract class Player {
 
     public void setTuz(int holeNumber) {
         Player opponent = board.getOpponentOf(this);
-        if (holeNumber != 8 && !opponentHasTuz() && opponent.getOpponentTuzIndex() != holeNumber) {
+        if (holeNumber != 8 && !hasTuz() && opponent.getTuzIndex() != holeNumber) {
             holes[holeNumber].setTuz(true);
         }
         // ... cannot set tuz
