@@ -34,7 +34,7 @@ public abstract class Player {
         return holes.length;
     }
 
-    public int getKazanCount(){
+    public int getKazanCount() {
         return kazan.getKorgools();
     }
 
@@ -74,7 +74,7 @@ public abstract class Player {
         // ... cannot set tuz
     }
 
-    public void setKazanCount(int count){
+    public void setKazanCount(int count) {
         kazan.clear();
         kazan.add(count);
     }
@@ -101,13 +101,23 @@ public abstract class Player {
             if (holeNumber == 9) {
                 korgools = moveOpponent(korgools);
             } else {
-                holes[holeNumber].add(1);
+                Hole hole = holes[holeNumber];
+                if (hole.isTuz()) {
+                    board.addToOpponentKazan(1);
+                } else {
+                    holes[holeNumber].add(1);
+                }
                 --korgools;
             }
         }
         while (korgools > 0) {
             while (holeNumber <= 9 && korgools > 0) {
-                holes[holeNumber - 1].add(1);
+                Hole hole = holes[holeNumber - 1];
+                if (hole.isTuz()) {
+                    board.addToOpponentKazan(1);
+                } else {
+                    holes[holeNumber - 1].add(1);
+                }
                 ++holeNumber;
                 --korgools;
             }
@@ -116,13 +126,17 @@ public abstract class Player {
                 holeNumber = 1;
             }
         }
-        System.out.println(kazan.getKorgools());
     }
 
     private int moveOpponent(int korgools) {
         int holeNumber = 1;
+        int opponentTuz = board.getOpponentTuz() + 1;
         while (holeNumber <= 9 && korgools > 0) {
-            board.addToOpponentHole(holeNumber - 1, 1);
+            if (opponentTuz != -1 && holeNumber == opponentTuz) {
+                kazan.add(1);
+            } else {
+                board.addToOpponentHole(holeNumber - 1, 1);
+            }
             --korgools;
             ++holeNumber;
         }
