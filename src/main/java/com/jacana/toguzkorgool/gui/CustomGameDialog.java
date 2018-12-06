@@ -41,6 +41,7 @@ import java.util.Map;
 
 
 /**
+ * TODO use new refactored method in board class.
  * The CustomGameDialog GUI allows the player to "set up" the board state
  * to their liking during any point of the game, using the modal this class
  * creates.
@@ -475,8 +476,8 @@ public class CustomGameDialog extends JDialog {
         } else if (player.getKazan().getKorgools() > 162) {
             return name + " cannot have a kazan with more than 162 korgools.";
         }
-        if (tuzId != player.getOpponentTuzIndex()) {
-            return name + "'s tuz (" + player.getOpponentTuzIndex() + ") does not match the hole marked as tuz (" + tuzId + ").";
+        if (tuzId != player.getTuzIndex()) {
+            return name + "'s tuz (" + player.getTuzIndex() + ") does not match the hole marked as tuz (" + tuzId + ").";
         }
         return null;
     }
