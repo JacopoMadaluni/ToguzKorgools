@@ -237,37 +237,6 @@ public class Board {
     }
 
     /**
-     * TODO REMOVE
-     * Set the index hole of the dark player to be the tuz of the light player.
-     * If the player already has a tuz, the previous tuz is removed and the new hole
-     * is promoted to be tuz.
-     * @param index The hole index
-     */
-    public void setLightPlayerTuz(int index){
-        if (darkPlayer.hasTuz()){
-            int oldTuzIndex = darkPlayer.getTuzIndex();
-            Hole oldTuz = darkPlayer.getHole(oldTuzIndex);
-            oldTuz.setTuz(false);
-        }
-        darkPlayer.getHole(index).setTuz(true);
-    }
-    /**
-     * TODO REMOVE
-     * Set the index hole of the light player to be the tuz of the light player.
-     * If the player already has a tuz, the previous tuz is removed and the new hole
-     * is promoted to be tuz.
-     * @param index The hole index
-     */
-    public void setDarkPlayerTuz(int index){
-        if (lightPlayer.hasTuz()){
-            int oldTuzIndex = lightPlayer.getTuzIndex();
-            Hole oldTuz = lightPlayer.getHole(oldTuzIndex);
-            oldTuz.setTuz(false);
-        }
-        lightPlayer.getHole(index).setTuz(true);
-    }
-
-    /**
      * Sets a hole in the opponent field to be a tuz, if possible.
      * @param index The index of the hole.
      */

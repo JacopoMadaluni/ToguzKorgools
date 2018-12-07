@@ -127,10 +127,10 @@ public class CustomGameDialog extends JDialog {
         int tuzIndex;
         if (isLightPanel) {
             kazanKorgoolCount = GameController.getBoard().getLightKazanCount();
-            tuzIndex = GameController.getBoard().getLightPlayerTuzIndex();
+            tuzIndex = GameController.getBoard().getTuzIndex(0);
         } else {
             kazanKorgoolCount = GameController.getBoard().getDarkKazanCount();
-            tuzIndex = GameController.getBoard().getDarkPlayerTuzIndex();
+            tuzIndex = GameController.getBoard().getTuzIndex(1);
         }
 
         //make the panel a vertical box layout
@@ -367,7 +367,7 @@ public class CustomGameDialog extends JDialog {
 
         //set tuz for light
         int lightTuzIndex = ((JComboBox) getComponentByName("lightTuzComboBox")).getSelectedIndex() - 1;
-        if (lightTuzIndex >= 0) board.setLightPlayerTuz(lightTuzIndex);
+        if (lightTuzIndex >= 0) board.setTuz(0, lightTuzIndex);
 
         //DARK-----------------------------------------------------------
         //set holes for dark
@@ -382,7 +382,7 @@ public class CustomGameDialog extends JDialog {
 
         //set tuz for dark
         int darkTuzIndex = ((JComboBox) getComponentByName("darkTuzComboBox")).getSelectedIndex() - 1;
-        if (darkTuzIndex >= 0) board.setDarkPlayerTuz(darkTuzIndex);
+        if (darkTuzIndex >= 0) board.setTuz(1, darkTuzIndex);
     }
 
     //TODO Move helper methods into a static helper methods class
