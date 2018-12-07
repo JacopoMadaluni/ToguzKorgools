@@ -57,6 +57,7 @@ public class JKazan extends JPanel {
             }
             this.korgoolsInGui = 0;
         }
+        this.setToolTipText("Korgools: " + numberOfKorgools);
     }
 
     /**
