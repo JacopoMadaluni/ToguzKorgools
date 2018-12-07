@@ -21,6 +21,10 @@ public class Board {
 
     // ---- getters -----
 
+    public Player getPlayer(int id) {
+        return this.players.get(id);
+    }
+
     /**
      * @return The current player
      */

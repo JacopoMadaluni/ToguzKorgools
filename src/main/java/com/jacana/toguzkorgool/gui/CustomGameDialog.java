@@ -246,10 +246,9 @@ public class CustomGameDialog extends JDialog {
 
                             Board board = GameController.getBoard();
                             String serializedBoard = Utilities.getGson().toJson(board);
-                            FileWriter writer = new FileWriter(selectedFile);
-                            writer.write(serializedBoard);
-                            writer.close();
-
+                            try (FileWriter writer = new FileWriter(selectedFile)) {
+                                writer.write(serializedBoard);
+                            }
                         } catch (Exception ex) {
                             ex.printStackTrace();
                             JOptionPane.showMessageDialog(this, "An error occurred!");
@@ -258,7 +257,6 @@ public class CustomGameDialog extends JDialog {
                 })
         );
         importMenuItem.addActionListener(e -> {
-
             EventQueue.invokeLater(() -> {
                 JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setDialogTitle("Choose a Toguz Korgool board JSON file.");
@@ -273,15 +271,16 @@ public class CustomGameDialog extends JDialog {
                         StringBuilder sbFile = new StringBuilder();
                         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(selectedFile))) {
                             String line;
-                            while ((line = bufferedReader.readLine()) != null)
+                            while ((line = bufferedReader.readLine()) != null) {
                                 sbFile.append(line).append(System.lineSeparator());
+                            }
                         }
                         try {
                             Board deserializedBoard = Utilities.getGson().fromJson(sbFile.toString(), Board.class);
                             String error = validateBoard(deserializedBoard);
                             if (error == null) {
-                                loadUser(deserializedBoard, deserializedBoard.getCurrentPlayer(), "light");
-                                loadUser(deserializedBoard, deserializedBoard.getCurrentOpponent(), "dark");
+                                loadUser(deserializedBoard.getPlayer(0), "light");
+                                loadUser(deserializedBoard.getPlayer(1), "dark");
                                 JOptionPane.showMessageDialog(this, "Loaded in '" + selectedFile.getName() + "'!");
                             } else {
                                 JOptionPane.showMessageDialog(this, "Cannot load in '" + selectedFile.getName() + "': " + error);
@@ -427,7 +426,7 @@ public class CustomGameDialog extends JDialog {
     }
 
     /* Loading and saving methods */
-    private void loadUser(final Board board, final Player player, String name) {
+    private void loadUser(final Player player, String name) {
         int tuzIndex = -1;
         for (int i = 0; i < player.getHoleCount(); i++) {
             Hole hole = player.getHole(i);
@@ -441,22 +440,22 @@ public class CustomGameDialog extends JDialog {
         tuzComboBox.setSelectedIndex(tuzIndex != -1 ? (tuzIndex + 1) : -1);
 
         JSpinner kazanSpinner = (JSpinner) componentMap.get(name + "KazanSpinner");
-        kazanSpinner.setValue(Integer.valueOf(player.getKazanCount()));
+        kazanSpinner.setValue(player.getKazanCount());
     }
 
     /* Static helper methods */
 
     private static String validateBoard(final Board board) {
         if (board == null) return "Board is null";
-        String currPlayerValidation = validateUser(board.getCurrentPlayer());
-        if (currPlayerValidation != null) return currPlayerValidation;
-        String opponentValidation = validateUser(board.getCurrentOpponent());
-        if (opponentValidation != null) return opponentValidation;
+        String player1Validation = validateUser(board.getPlayer(0));
+        if (player1Validation != null) return player1Validation;
+        String player2Validation = validateUser(board.getPlayer(1));
+        if (player2Validation != null) return player2Validation;
         return null;
     }
 
     private static String validateUser(final Player player) {
-        String name = player.getClass().getSimpleName();
+        String name = "player " + (player.getId() + 1);
         int tuzId = -1;
         for (int i = 0; i < player.getHoleCount(); i++) {
             Hole hole = player.getHole(i);
@@ -475,9 +474,6 @@ public class CustomGameDialog extends JDialog {
             return name + " cannot have a kazan with less than 0 korgools.";
         } else if (player.getKazan().getKorgools() > 162) {
             return name + " cannot have a kazan with more than 162 korgools.";
-        }
-        if (tuzId != player.getTuzIndex()) {
-            return name + "'s tuz (" + player.getTuzIndex() + ") does not match the hole marked as tuz (" + tuzId + ").";
         }
         return null;
     }
