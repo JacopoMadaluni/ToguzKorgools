@@ -8,7 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class GameController {
-    
+
     private static GameController instance;
     private static GUI gui; //front-end
     private static Board board; //back-end
@@ -20,7 +20,7 @@ public class GameController {
         initialiseGUI();
         gui.setVisible(true);
     }
-    
+
     public static GameController getInstance() {
         if (instance == null) {
             instance = new GameController();
@@ -29,8 +29,9 @@ public class GameController {
     }
 
     private void initialiseGUI() {
-        gui.getGamePane().initialisePanel(true, board.getCurrentPlayer());
-        gui.getGamePane().initialisePanel(false, board.getCurrentOpponent());
+        for (Player player : board.getPlayers()) {
+            gui.getGamePane().initialisePanel(player);
+        }
 
         this.initialiseMenuItems();
         this.initialiseHoles();
@@ -38,7 +39,7 @@ public class GameController {
         this.initializeEnding();
     }
 
-    private void initializeEnding(){
+    private void initializeEnding() {
         gui.getEnding().getRestartButton().addActionListener(e -> restartGame());
         gui.getEnding().getQuitButton().addActionListener(e -> EventQueue.invokeLater(() -> gui.dispose()));
     }
@@ -51,23 +52,23 @@ public class GameController {
     private void initialiseHoles() {
         for (int j = 0; j < board.getCurrentPlayer().getHoleCount(); j++) {
             int finalJ = j;
-            final JHole currentJHole = gui.getGamePane().getPlayerHoles().get(j);
+            final JHole currentJHole = gui.getGamePane().getHoles(board.getCurrentPlayer().getId()).get(j);
             currentJHole.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseReleased(MouseEvent e) {
                     board.getCurrentPlayer().makeMove(finalJ + 1);
-                    gui.getGamePane().updateHoles(true);
-                    gui.getGamePane().updateKazan(true);
-                    if (board.currentPlayerHasWon()){
+                    gui.getGamePane().updateHoles(board.getCurrentPlayer().getId());
+                    gui.getGamePane().updateKazan(board.getCurrentPlayer().getId());
+                    if (board.currentPlayerHasWon()) {
                         gui.loadVictoryScreen();
                         return;
                     }
                     board.changePlayer();
                     if (board.getCurrentPlayer() instanceof BotPlayer) {
                         ((BotPlayer) board.getCurrentPlayer()).act();
-                        gui.getGamePane().updateHoles(false);
-                        gui.getGamePane().updateKazan(false);
-                        if (board.currentPlayerHasWon()){
+                        gui.getGamePane().updateHoles(board.getCurrentPlayer().getId());
+                        gui.getGamePane().updateKazan(board.getCurrentPlayer().getId());
+                        if (board.currentPlayerHasWon()) {
                             gui.loadDefeatScreen();
                         }
                         board.changePlayer();
@@ -89,17 +90,14 @@ public class GameController {
     public GUI getGUI() {
         return gui;
     }
-    
+
     public static void updateGUI() {
-        gui.update();
+        gui.update(board.getPlayers().size() - 1);
     }
 
     public void restartGame() {
         board.resetBoard();
-        gui.getGamePane().updateHoles(true);
-        gui.getGamePane().updateHoles(false);
-        gui.getGamePane().updateKazan(true);
-        gui.getGamePane().updateKazan(false);
+        gui.getGamePane().updateGamePane(board.getPlayers().size() - 1);
         gui.restart();
     }
 

@@ -65,8 +65,8 @@ public class GUI extends JFrame {
         contentPane.updateUI();
     }
     
-    public void update() {
-        gamePane.updateGamePane();
+    public void update(int highestPlayerId) {
+        gamePane.updateGamePane(highestPlayerId);
         JPanel contentPane = (JPanel) getContentPane();
         contentPane.updateUI();
     }
