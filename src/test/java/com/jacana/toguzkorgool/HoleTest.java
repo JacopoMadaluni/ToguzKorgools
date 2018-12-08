@@ -16,7 +16,7 @@ public class HoleTest {
     public void testAdd() {
         Hole hole = new Hole();
         hole.add(1);
-        assertEquals(1, hole.getKorgools());
+        assertEquals(10, hole.getKorgools());
     }
 
     @Test
