@@ -1,6 +1,5 @@
 package com.jacana.toguzkorgool.gui;
 
-import com.jacana.toguzkorgool.HumanPlayer;
 import com.jacana.toguzkorgool.Player;
 import com.jacana.toguzkorgool.gui.components.JHole;
 import com.jacana.toguzkorgool.gui.components.JKazan;
@@ -12,7 +11,9 @@ import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * GamePane is the custom GUI representation of a Toguz Korgool game board.
@@ -22,15 +23,11 @@ import java.util.List;
 public class GamePane extends JPanel {
 
     //the opposite sides of the board.
-    private JPanel botPanel = null;
-    private JKazan botKazan = null;
-    private JPanel playerPanel = null;
-    private JKazan playerKazan = null;
+    private Map<Integer, JPanel> playersPanel = new HashMap<>();
+    private Map<Integer, JKazan> playersKazan = new HashMap<>();
 
-    //arrays to store object references to GUI Hole components for both
-    //players.
-    private List<JHole> botHoles = new ArrayList<>();
-    private List<JHole> playerHoles = new ArrayList<>();
+    // mapping of player IDs to a list of object references to the GUI hole components
+    private Map<Integer, List<JHole>> playersHoles = new HashMap<>();
 
     public GamePane() {
         super();
@@ -46,70 +43,62 @@ public class GamePane extends JPanel {
      * Function which encapsulates the creation of GamePane's components.
      */
     private void populatePane() {
-        botHoles.clear();
-        playerHoles.clear();
+        playersHoles.clear();
 
         JPanel kazanPanel = new JPanel();
         kazanPanel.setLayout(new BoxLayout(kazanPanel, BoxLayout.X_AXIS));
         kazanPanel.setAlignmentX(CENTER_ALIGNMENT);
 
-        botKazan = createKazanPanel();
-        playerKazan = createKazanPanel();
+        final JKazan player1Kazan = createKazanPanel();
+        final JKazan player2Kazan = createKazanPanel();
+        playersKazan.put(0, player1Kazan);
+        playersKazan.put(1, player2Kazan);
 
-        kazanPanel.add(botKazan);
-        kazanPanel.add(playerKazan);
+        kazanPanel.add(player2Kazan);
+        kazanPanel.add(player1Kazan);
 
-        botPanel = new JPanel();
-        botPanel.setLayout(new BoxLayout(botPanel, BoxLayout.X_AXIS));
-        botPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-        botPanel.setAlignmentX(CENTER_ALIGNMENT);
+        JPanel player2Panel = createPlayerPanel();
+        JPanel player1Panel = createPlayerPanel();
+        playersPanel.put(0, player1Panel);
+        playersPanel.put(1, player2Panel);
 
-        playerPanel = new JPanel();
-        playerPanel.setLayout(new BoxLayout(playerPanel, BoxLayout.X_AXIS));
-        playerPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-        playerPanel.setAlignmentX(CENTER_ALIGNMENT);
-
-        add(botPanel);
+        add(player2Panel);
         add(kazanPanel);
-        add(playerPanel);
+        add(player1Panel);
     }
 
     private JKazan createKazanPanel() {
         return new JKazan(null);
     }
 
-    public List<JHole> getBotHoles() {
-        return botHoles;
+    private JPanel createPlayerPanel() {
+        JPanel playerPanel = new JPanel();
+        playerPanel.setLayout(new BoxLayout(playerPanel, BoxLayout.X_AXIS));
+        playerPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        playerPanel.setAlignmentX(CENTER_ALIGNMENT);
+        return playerPanel;
     }
 
-    public JKazan getBotKazan() {
-        return botKazan;
-    }
-
-    public List<JHole> getPlayerHoles() {
-        return playerHoles;
-    }
-
-    public JKazan getPlayerKazan() {
-        return playerKazan;
+    public List<JHole> getHoles(int playerId) {
+        return playersHoles.get(playerId);
     }
 
     /**
      * A construction method for initializing the players side of the board,
      * for example setting up the holes.
      *
-     * @param isPlayer Boolean which specifies whether the player is a Bot
-     * or a Human.
      * @param player the reference to the player object.
      */
-    public void initialisePanel(boolean isPlayer, Player player) {
-        List<JHole> holes = isPlayer ? playerHoles : botHoles;
-        JPanel panel = isPlayer ? playerPanel : botPanel;
+    public void initialisePanel(Player player) {
+        List<JHole> holes = playersHoles.get(player.getId());
+        if (holes == null) holes = new ArrayList<>();
+        JPanel panel = playersPanel.get(player.getId());
+        if (panel == null) return;
         panel.setBackground(player.getBoardColour());
 
         holes.clear();
         for (int i = 0; i < player.getHoleCount(); ++i) {
-            int k = isPlayer ? i : player.getHoleCount() - 1 - i;
+            int k = player.getId() == 0 ? i : player.getHoleCount() - 1 - i;
             JHole holePanel = new JHole(player.getHole(k));
             holePanel.setBackground(player.getBoardColour());
             panel.add(holePanel);
@@ -118,33 +107,36 @@ public class GamePane extends JPanel {
             }
             holes.add(holePanel);
         }
+        playersHoles.put(player.getId(), holes);
     }
 
     public void initialiseKazan(Player player) {
-        JKazan kazan = player instanceof HumanPlayer ? playerKazan : botKazan;
+        JKazan kazan = playersKazan.get(player.getId());
+        if (kazan == null) return;
         kazan.setKazan(player.getKazan());
         kazan.setBackground(player.getBoardColour());
     }
 
-    public void updateHoles(boolean isPlayer) {
-        List<JHole> holePanels = isPlayer ? playerHoles : botHoles;
+    public void updateHoles(int playerId) {
+        List<JHole> holePanels = playersHoles.get(playerId);
+        if (holePanels == null) return;
         for (JHole holePanel : holePanels) {
             holePanel.updateHole();
         }
-        if (isPlayer) playerPanel.updateUI();
-        else botPanel.updateUI();
+        playersPanel.get(playerId).updateUI();
     }
 
-    public void updateKazan(boolean isPlayer) {
-        if (isPlayer) playerKazan.updateKazan();
-        else botKazan.updateKazan();
+    public void updateKazan(int playerId) {
+        JKazan kazan = playersKazan.get(playerId);
+        if (kazan == null) return;
+        kazan.updateKazan();
     }
-    
-    public void updateGamePane() {
-        updateHoles(true);
-        updateHoles(false);
-        updateKazan(true);
-        updateKazan(false);
+
+    public void updateGamePane(int highestPlayerId) {
+        for (int i = 0; i <= highestPlayerId; i++) {
+            updateHoles(i);
+            updateKazan(i);
+        }
     }
 
 }

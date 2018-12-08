@@ -73,11 +73,10 @@ public abstract class Player {
     // -- setters
 
     public void setTuz(int holeNumber) {
-        Player opponent = board.getOpponentOf(this);
+        Player opponent = board.getOpponentOf(id);
         if (holeNumber != 8 && !hasTuz() && opponent.getTuzIndex() != holeNumber) {
             holes[holeNumber].setTuz(true);
         }
-        // ... cannot set tuz
     }
 
     public void setKazanCount(int count) {
