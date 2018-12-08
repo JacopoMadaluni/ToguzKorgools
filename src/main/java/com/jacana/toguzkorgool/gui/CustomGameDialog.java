@@ -336,7 +336,7 @@ public class CustomGameDialog extends JDialog {
             // Set number of korgools in hole
             for (int i = 0; i < 9; i++) {
                 int holeCount = (int) ((JSpinner) getComponentByName("Player" + playerId + "Hole" + i)).getValue();
-                board.setHoleCout(playerId, i, holeCount);
+                board.setHoleCount(playerId, i, holeCount);
             }
 
             // Set number of korgools in kazan

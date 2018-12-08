@@ -6,7 +6,6 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.jacana.toguzkorgool.Board;
 import com.jacana.toguzkorgool.Hole;
-import com.jacana.toguzkorgool.HumanPlayer;
 import com.jacana.toguzkorgool.Player;
 
 import java.lang.reflect.Type;
@@ -16,10 +15,9 @@ public class BoardSerializer implements JsonSerializer<Board> {
     @Override
     public JsonElement serialize(final Board board, final Type type, final JsonSerializationContext jsonSerializationContext) {
         JsonObject jsonBoard = new JsonObject();
-        Player currentPlayer = board.getCurrentPlayer() instanceof HumanPlayer ? board.getCurrentPlayer() : board.getCurrentOpponent();
-        Player otherPlayer = board.getOpponentOf(currentPlayer);
-        jsonBoard.add("player", serializeUser(currentPlayer));
-        jsonBoard.add("opponent", serializeUser(otherPlayer));
+        for (Player player : board.getPlayers()) {
+            jsonBoard.add(String.valueOf(player.getId()), serializeUser(player));
+        }
         return jsonBoard;
     }
 

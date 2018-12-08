@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.jacana.toguzkorgool.json.BoardDeserializer;
 import com.jacana.toguzkorgool.json.BoardSerializer;
 
+import java.util.OptionalInt;
+
 public class Utilities {
 
     private static Gson gson = null;
@@ -21,6 +23,15 @@ public class Utilities {
                     .create();
         }
         return gson;
+    }
+
+    public static OptionalInt tryParseInt(String strNumber) {
+        if (strNumber == null) return OptionalInt.empty();
+        try {
+            return OptionalInt.of(Integer.parseInt(strNumber));
+        } catch (NumberFormatException ignored) {
+        }
+        return OptionalInt.empty();
     }
 
 }

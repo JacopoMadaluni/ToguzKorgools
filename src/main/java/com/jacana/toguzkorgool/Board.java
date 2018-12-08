@@ -1,7 +1,9 @@
 package com.jacana.toguzkorgool;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Board {
@@ -23,6 +25,10 @@ public class Board {
 
     public Player getPlayer(int id) {
         return this.players.get(id);
+    }
+
+    public List<Player> getPlayers() {
+        return new ArrayList<>(this.players.values());
     }
 
     /**
@@ -70,6 +76,7 @@ public class Board {
      */
     public int getTuzIndex(int playerId){
         Player player = players.get(playerId);
+        if (player == null) return -1;
         if (player.hasTuz()){
             return player.getTuzIndex();
         }
@@ -107,7 +114,9 @@ public class Board {
      * @return The number of korgools in the hole
      */
     public int getHoleKorgoolCount(int playerId, int index){
-        return players.get(playerId).getKorgoolsInHole(index);
+        Player player = players.get(playerId);
+        if (player == null) return -1;
+        return player.getKorgoolsInHole(index);
     }
 
     /**
@@ -168,8 +177,11 @@ public class Board {
      * @param numberOfKorgools The new number of korgools
      */
     public void setKazanCount(int playerId, int numberOfKorgools){
-        players.get(playerId).setKazanCount(numberOfKorgools);
+        Player player = players.get(playerId);
+        if (player == null) return;
+        player.setKazanCount(numberOfKorgools);
     }
+
     /**
      * TODO remove
      * Sets the light player's kazan count.
@@ -193,8 +205,9 @@ public class Board {
      * @param index The hole's index
      * @param numberOfKorgools The new number of korgools in the hole
      */
-    public void setHoleCout(int playerId, int index, int numberOfKorgools){
+    public void setHoleCount(int playerId, int index, int numberOfKorgools){
         Player player = players.get(playerId);
+        if (player == null) return;
         player.clearHole(index);
         player.addToHole(index, numberOfKorgools);
     }
@@ -228,6 +241,7 @@ public class Board {
      */
     public void setTuz(int playerId, int holeIndex){
         Player player = players.get(playerId);
+        if (player == null) return;
         if (player.hasTuz()){
             int oldTuzIndex = player.getTuzIndex();
             Hole oldTuz = player.getHole(oldTuzIndex);
@@ -262,7 +276,7 @@ public class Board {
 
     // getOpponentStuff...
     public Player getOpponentOf(int playerId){
-        return players.get((playerId+1) % players.size());
+        return players.get((playerId + 1) % players.size());
     }
 
     public Player getOpponentOf(Player other){
@@ -273,13 +287,14 @@ public class Board {
     }
 
     public void changePlayer() {
-        currentPlayer = players.get((currentPlayer.getId()+1) % players.size());
+        currentPlayer = players.get((currentPlayer.getId() + 1) % players.size());
     }
 
     public void resetBoard() {
-        for (int playerId = 0; playerId < players.size(); playerId++){
-            players.get(playerId).resetPlayer();
+        for (Player player : players.values()){
+            player.resetPlayer();
         }
         currentPlayer = players.get(0);
     }
+
 }
