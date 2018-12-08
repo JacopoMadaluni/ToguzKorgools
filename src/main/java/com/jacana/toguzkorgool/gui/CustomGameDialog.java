@@ -353,9 +353,8 @@ public class CustomGameDialog extends JDialog {
     //TODO Refactor code duplication
     private void sendInputDataToBackEnd() {
         Board board = GameController.getBoard();
-        // TODO: Refactor to not use '2' but number of players.
         // For each player
-        for (int playerId = 0; playerId < 2; playerId++) {
+        for (int playerId = 0; playerId < board.getPlayerCount(); playerId++) {
             // Set number of korgools in hole
             for (int i = 0; i < 9; i++) {
                 int holeCount = (int) ((JSpinner) getComponentByName("Player" + playerId + "Hole" + i)).getValue();

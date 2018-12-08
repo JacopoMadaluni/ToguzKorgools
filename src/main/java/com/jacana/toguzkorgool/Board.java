@@ -29,6 +29,10 @@ public class Board {
         return new ArrayList<>(this.players.values());
     }
 
+    public int getPlayerCount() {
+        return this.players.size();
+    }
+
     /**
      * @return The current player
      */

@@ -58,7 +58,7 @@ public class GameController {
                 public void mouseReleased(MouseEvent e) {
                     board.getCurrentPlayer().makeMove(finalJ + 1);
                     if (board.currentPlayerHasWon()) {
-                        gui.getGamePane().updateGamePane(board.getPlayers().size() - 1);
+                        gui.getGamePane().updateGamePane(board.getPlayerCount() - 1);
                         gui.loadVictoryScreen();
                         return;
                     }
@@ -69,7 +69,7 @@ public class GameController {
                             gui.loadDefeatScreen();
                         }
                         board.changePlayer();
-                        gui.getGamePane().updateGamePane(board.getPlayers().size() - 1);
+                        gui.getGamePane().updateGamePane(board.getPlayerCount() - 1);
                     }
                 }
             });
@@ -90,12 +90,12 @@ public class GameController {
     }
 
     public static void updateGUI() {
-        gui.update(board.getPlayers().size() - 1);
+        gui.update(board.getPlayerCount() - 1);
     }
 
     public void restartGame() {
         board.resetBoard();
-        gui.getGamePane().updateGamePane(board.getPlayers().size() - 1);
+        gui.getGamePane().updateGamePane(board.getPlayerCount() - 1);
         gui.restart();
     }
 
