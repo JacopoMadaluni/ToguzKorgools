@@ -146,7 +146,7 @@ public class CustomGameDialog extends JDialog {
             holeSpinner.setName("Player" + playerId + "Hole" + i);
             holeSpinner.setValue(GameController.getBoard().getHoleKorgoolCount(playerId, i));
 
-            JLabel newSpinnerLabel = new JLabel("Hole " + i + ":");
+            JLabel newSpinnerLabel = new JLabel("Hole " + (i + 1) + ":");
 
             //add the label and the spinner to the panel
             holeSpinnerPanel.add(newSpinnerLabel);
@@ -185,7 +185,6 @@ public class CustomGameDialog extends JDialog {
         JComboBox<String> tuzComboBox = new JComboBox<>(tuzOptions);
         tuzComboBox.setName("Player" + playerId + "Tuz");
 
-        //TODO Test this behaviour once Tuz is identifiable in the GUI
         tuzComboBox.setSelectedIndex(tuzIndex + 1);
 
         //add to the side panel.
