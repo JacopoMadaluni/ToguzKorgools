@@ -8,17 +8,15 @@ import java.util.Map;
 
 public class Board {
     private Map<Integer, Player> players;
-    private HumanPlayer lightPlayer; // light and dark
-    private BotPlayer darkPlayer;
     private Player currentPlayer;
 
     public Board() {
-        this.lightPlayer = new HumanPlayer(this, 0, Color.lightGray);
-        this.darkPlayer = new BotPlayer(this, 1, Color.darkGray);
+        Player player1 = new HumanPlayer(this, 0, Color.lightGray);
+        Player player2 = new BotPlayer(this, 1, Color.darkGray);
         players = new HashMap<>();
-        players.put(0, lightPlayer);
-        players.put(1, darkPlayer);
-        this.currentPlayer = lightPlayer;
+        players.put(player1.getId(), player1);
+        players.put(player2.getId(), player2);
+        this.currentPlayer = player1;
     }
 
     // ---- getters -----
@@ -54,22 +52,6 @@ public class Board {
     }
 
     /**
-     * TODO remove
-     * @return The number of korgools in light player's kazan
-     */
-    public int getLightKazanCount(){
-        return lightPlayer.getKazanCount();
-    }
-
-    /**
-     * TODO remove
-     * @return The number of korgools in dark player's kazan
-     */
-    public int getDarkKazanCount(){
-        return darkPlayer.getKazanCount();
-    }
-
-    /**
      *
      * @param playerId The player's id
      * @return The index of the tuz on player's side (beneficial to opponent player).
@@ -84,30 +66,6 @@ public class Board {
     }
 
     /**
-     * TODO remove
-     * @return The index of the light player's tuz.
-     * If he has no tuz, returns -1
-     */
-    public int getLightPlayerTuzIndex(){
-        if (darkPlayer.hasTuz()){
-            return darkPlayer.getTuzIndex();
-        }
-        return -1;
-    }
-
-    /**
-     * TODO remove
-     * @return The index of the dark player's tuz.
-     * If he has no tuz, returns -1
-     */
-    public int getDarkPlayerTuzIndex(){
-        if (lightPlayer.hasTuz()){
-            return lightPlayer.getTuzIndex();
-        }
-        return -1;
-    }
-
-    /**
      *
      * @param playerId The player's id
      * @param index The hole index
@@ -117,24 +75,6 @@ public class Board {
         Player player = players.get(playerId);
         if (player == null) return -1;
         return player.getKorgoolsInHole(index);
-    }
-
-    /**
-     * TODO remove
-     * @param index The index of the hole.
-     * @return Returns the number of korgools of the light player in the hole index
-     */
-    public int getLightHoleKorgoolCount(int index){
-        return lightPlayer.getKorgoolsInHole(index);
-    }
-
-    /**
-     * TODO remove
-     * @param index The index of the hole.
-     * @return Returns the number of korgools of the dark player in the hole index
-     */
-    public int getDarkHoleKorgoolCount(int index){
-        return darkPlayer.getKorgoolsInHole(index);
     }
 
     /**
@@ -183,23 +123,6 @@ public class Board {
     }
 
     /**
-     * TODO remove
-     * Sets the light player's kazan count.
-     * @param numberOfKorgools New nuber of korgools in kazan.
-     */
-    public void setLightKazanCount(int numberOfKorgools){
-        lightPlayer.setKazanCount(numberOfKorgools);
-    }
-    /**
-     * TODO remove
-     * Sets the dark player's kazan count.
-     * @param numberOfKorgools New nuber of korgools in kazan.
-     */
-    public void setDarkKazanCount(int numberOfKorgools){
-        darkPlayer.setKazanCount(numberOfKorgools);
-    }
-
-    /**
      * Sets the hole count of the player to the new number
      * @param playerId The player's id
      * @param index The hole's index
@@ -210,26 +133,6 @@ public class Board {
         if (player == null) return;
         player.clearHole(index);
         player.addToHole(index, numberOfKorgools);
-    }
-    /**
-     * TODO remove
-     * Sets the number of korgools in a light hole.
-     * @param index The index of the hole
-     * @param numberOfKorgools The new number of korgools
-     */
-    public void setLightHoleCount(int index, int numberOfKorgools){
-        lightPlayer.clearHole(index);
-        lightPlayer.addToHole(index, numberOfKorgools);
-    }
-    /**
-     * TODO remove
-     * Sets the number of korgools in a dark hole.
-     * @param index The index of the hole
-     * @param numberOfKorgools The new number of korgools
-     */
-    public void setDarkHoleCount(int index, int numberOfKorgools){
-        darkPlayer.clearHole(index);
-        darkPlayer.addToHole(index, numberOfKorgools);
     }
 
     /**
@@ -277,13 +180,6 @@ public class Board {
     // getOpponentStuff...
     public Player getOpponentOf(int playerId){
         return players.get((playerId + 1) % players.size());
-    }
-
-    public Player getOpponentOf(Player other){
-        if (lightPlayer.equals(other)){
-            return darkPlayer;
-        }
-        return lightPlayer;
     }
 
     public void changePlayer() {
