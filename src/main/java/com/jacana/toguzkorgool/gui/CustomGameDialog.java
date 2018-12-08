@@ -350,10 +350,17 @@ public class CustomGameDialog extends JDialog {
         return retval;
     }
 
-    //TODO Refactor code duplication
     private void sendInputDataToBackEnd() {
         Board board = GameController.getBoard();
+
         // For each player
+
+        // Reset the kazan
+        for (int playerId = 0; playerId < board.getPlayerCount(); playerId++) {
+            board.setKazanCount(playerId, 0);
+        }
+
+        // Update holes and kazan.
         for (int playerId = 0; playerId < board.getPlayerCount(); playerId++) {
             // Set number of korgools in hole
             for (int i = 0; i < 9; i++) {
@@ -362,11 +369,21 @@ public class CustomGameDialog extends JDialog {
             }
 
             // Set number of korgools in kazan
-            board.setKazanCount(playerId, (int) ((JSpinner) getComponentByName("Player" + playerId + "Kazan")).getValue());
+            int kazanCount = board.getKazanCount(playerId);
+            board.setKazanCount(playerId, kazanCount + (int) ((JSpinner) getComponentByName("Player" + playerId + "Kazan")).getValue());
 
             // Set tuz index
             int tuzIndex = ((JComboBox) getComponentByName("Player" + playerId + "Tuz")).getSelectedIndex() - 1;
-            if (tuzIndex >= 0) board.setTuz(playerId, tuzIndex);
+            if (tuzIndex >= 0) {
+                board.setTuz(playerId, tuzIndex);
+
+                int holeCount = board.getHoleKorgoolCount(playerId, tuzIndex);
+                board.setHoleCount(playerId, tuzIndex, 0);
+
+                int opponentId = board.getOpponentOf(playerId).getId();
+                int opponentKazanCount = board.getKazanCount(opponentId);
+                board.setKazanCount(opponentId, opponentKazanCount + holeCount);
+            }
         }
     }
 
