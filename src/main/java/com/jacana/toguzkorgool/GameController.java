@@ -59,14 +59,14 @@ public class GameController {
                     board.getCurrentPlayer().makeMove(finalJ + 1);
                     if (board.currentPlayerHasWon()) {
                         gui.getGamePane().updateGamePane(board.getPlayerCount() - 1);
-                        gui.loadVictoryScreen();
+                        onWin(board.getCurrentPlayer().getId());
                         return;
                     }
                     board.changePlayer();
                     if (board.getCurrentPlayer() instanceof BotPlayer) {
                         ((BotPlayer) board.getCurrentPlayer()).act();
                         if (board.currentPlayerHasWon()) {
-                            gui.loadDefeatScreen();
+                            onWin(board.getCurrentPlayer().getId());
                         }
                         board.changePlayer();
                         gui.getGamePane().updateGamePane(board.getPlayerCount() - 1);
@@ -81,22 +81,30 @@ public class GameController {
         gui.getGamePane().initialiseKazan(board.getCurrentOpponent());
     }
 
-    public static Board getBoard() {
-        return board;
-    }
-
     public GUI getGUI() {
         return gui;
     }
 
-    public static void updateGUI() {
-        gui.update(board.getPlayerCount() - 1);
+    public void onWin(int playerId) {
+        if (playerId == 0) {
+            gui.loadVictoryScreen();
+        } else if (playerId == 1) {
+            gui.loadDefeatScreen();
+        }
     }
 
     public void restartGame() {
         board.resetBoard();
         gui.getGamePane().updateGamePane(board.getPlayerCount() - 1);
         gui.restart();
+    }
+
+    public static Board getBoard() {
+        return board;
+    }
+
+    public static void updateGUI() {
+        gui.update(board.getPlayerCount() - 1);
     }
 
 }

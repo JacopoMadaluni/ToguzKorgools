@@ -385,6 +385,13 @@ public class CustomGameDialog extends JDialog {
                 board.setKazanCount(opponentId, opponentKazanCount + holeCount);
             }
         }
+
+        for (int playerId = 0; playerId < board.getPlayerCount(); playerId++) {
+            if (board.playerHasWon(playerId)) {
+                GameController.getInstance().onWin(playerId);
+                break;
+            }
+        }
     }
 
     //TODO Move helper methods into a static helper methods class

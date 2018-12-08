@@ -113,6 +113,12 @@ public class Board {
         return currentPlayer.hasWon();
     }
 
+    public boolean playerHasWon(int playerId) {
+        Player player = players.get(playerId);
+        if (player == null) return false;
+        return player.hasWon();
+    }
+
     // ---- setters -----
 
     /**
