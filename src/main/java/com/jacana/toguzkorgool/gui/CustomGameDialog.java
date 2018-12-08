@@ -102,11 +102,11 @@ public class CustomGameDialog extends JDialog {
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new GridLayout(0, 2, 5, 0));
 
-        JPanel lightPanel = constructAndGetSidePanel("Light Player");
-        JPanel darkPanel = constructAndGetSidePanel("Dark Player");
+        JPanel player1Panel = constructAndGetSidePanel(0);
+        JPanel player2Panel = constructAndGetSidePanel(1);
 
-        inputPanel.add(lightPanel);
-        inputPanel.add(darkPanel);
+        inputPanel.add(player1Panel);
+        inputPanel.add(player2Panel);
 
         JPanel controlPanel = constructAndGetControlPanel();
 
@@ -114,24 +114,11 @@ public class CustomGameDialog extends JDialog {
         contentPane.add(controlPanel, BorderLayout.PAGE_END);
     }
 
-    private JPanel constructAndGetSidePanel(String panelLabel) {
-        // should be "dark" or "light"
-        final String namePrefix = panelLabel.split(" ")[0].toLowerCase();
-        final String namePrefixCapitalized = namePrefix.substring(0, 1).toUpperCase()
-                + namePrefix.substring(1);
+    private JPanel constructAndGetSidePanel(int playerId) {
+        final String playerName = "Player " + (playerId + 1);
 
-        //Get Data from board--------------------------------------------
-        boolean isLightPanel = namePrefix.equals("light");
-        //TODO Refactor this with player IDs or some other way
-        int kazanKorgoolCount;
-        int tuzIndex;
-        if (isLightPanel) {
-            kazanKorgoolCount = GameController.getBoard().getLightKazanCount();
-            tuzIndex = GameController.getBoard().getTuzIndex(0);
-        } else {
-            kazanKorgoolCount = GameController.getBoard().getDarkKazanCount();
-            tuzIndex = GameController.getBoard().getTuzIndex(1);
-        }
+        int kazanKorgoolCount = GameController.getBoard().getKazanCount(playerId);
+        int tuzIndex = GameController.getBoard().getTuzIndex(playerId);
 
         //make the panel a vertical box layout
         JPanel sidePanel = new JPanel();
@@ -139,7 +126,7 @@ public class CustomGameDialog extends JDialog {
 
         // add name label to the top
         JPanel sideLabelPanel = new JPanel();
-        addAndHorizontalCenterInPanel(new JLabel(panelLabel), sideLabelPanel);
+        addAndHorizontalCenterInPanel(new JLabel(playerName), sideLabelPanel);
 
         sidePanel.add(sideLabelPanel);
         addHorizontalSeparator(sidePanel);
@@ -147,22 +134,15 @@ public class CustomGameDialog extends JDialog {
         //HOLE SPINNERS--------------------------------------------------
         // create 9 numerical spinners with names and labels, each within a
         // flow layout
-        for (int i = 1; i <= 9; i++) {
+        for (int i = 0; i < 9; i++) {
             JPanel holeSpinnerPanel = new JPanel();
 
             SpinnerNumberModel spinnerHoleModel = new SpinnerNumberModel(0, 0, 161, 1);
             JSpinner holeSpinner = new JSpinner(spinnerHoleModel);
+            holeSpinner.setName("Player" + playerId + "Hole" + i);
+            holeSpinner.setValue(GameController.getBoard().getHoleKorgoolCount(playerId, i));
 
-            holeSpinner.setName(namePrefix + "HoleSpinner" + i);
-
-            //TODO Refactor this with player IDs or some other way
-            if (isLightPanel) {
-                holeSpinner.setValue(GameController.getBoard().getLightHoleKorgoolCount(i - 1));
-            } else {
-                holeSpinner.setValue(GameController.getBoard().getDarkHoleKorgoolCount(i - 1));
-            }
-
-            JLabel newSpinnerLabel = new JLabel("Hole " + (i) + ":");
+            JLabel newSpinnerLabel = new JLabel("Hole " + i + ":");
 
             //add the label and the spinner to the panel
             holeSpinnerPanel.add(newSpinnerLabel);
@@ -180,8 +160,8 @@ public class CustomGameDialog extends JDialog {
 
         SpinnerNumberModel spinnerKazanModel = new SpinnerNumberModel(kazanKorgoolCount, 0, 81, 1);
         JSpinner kazanSpinner = new JSpinner(spinnerKazanModel);
-        kazanSpinner.setName(namePrefix + "KazanSpinner");
-        JLabel kazanLabel = new JLabel(namePrefixCapitalized + " Kazan:");
+        kazanSpinner.setName("Player" + playerId + "Kazan");
+        JLabel kazanLabel = new JLabel(playerName + " Kazan:");
 
         kazanPanel.add(kazanLabel);
         kazanPanel.add(Box.createRigidArea(new Dimension(10, 0)));
@@ -195,11 +175,11 @@ public class CustomGameDialog extends JDialog {
 
         JPanel tuzPanel = new JPanel();
 
-        JLabel tuzLabel = new JLabel(namePrefixCapitalized + "'s Tuz:");
+        JLabel tuzLabel = new JLabel(playerName + "'s Tuz:");
         String[] tuzOptions = {"None", "1st Hole", "2nd Hole", "3rd Hole",
                 "4th Hole", "5th Hole", "6th Hole", "7th Hole", "8th Hole"};
         JComboBox<String> tuzComboBox = new JComboBox<>(tuzOptions);
-        tuzComboBox.setName(namePrefix + "TuzComboBox");
+        tuzComboBox.setName("Player" + playerId + "Tuz");
 
         //TODO Test this behaviour once Tuz is identifiable in the GUI
         tuzComboBox.setSelectedIndex(tuzIndex + 1);
@@ -279,8 +259,8 @@ public class CustomGameDialog extends JDialog {
                             Board deserializedBoard = Utilities.getGson().fromJson(sbFile.toString(), Board.class);
                             String error = validateBoard(deserializedBoard);
                             if (error == null) {
-                                loadUser(deserializedBoard.getPlayer(0), "light");
-                                loadUser(deserializedBoard.getPlayer(1), "dark");
+                                loadUser(deserializedBoard.getPlayer(0));
+                                loadUser(deserializedBoard.getPlayer(1));
                                 JOptionPane.showMessageDialog(this, "Loaded in '" + selectedFile.getName() + "'!");
                             } else {
                                 JOptionPane.showMessageDialog(this, "Cannot load in '" + selectedFile.getName() + "': " + error);
@@ -349,40 +329,23 @@ public class CustomGameDialog extends JDialog {
 
     //TODO Refactor code duplication
     private void sendInputDataToBackEnd() {
-        //set holes for light
         Board board = GameController.getBoard();
+        // TODO: Refactor to not use '2' but number of players.
+        // For each player
+        for (int playerId = 0; playerId < 2; playerId++) {
+            // Set number of korgools in hole
+            for (int i = 0; i < 9; i++) {
+                int holeCount = (int) ((JSpinner) getComponentByName("Player" + playerId + "Hole" + i)).getValue();
+                board.setHoleCout(playerId, i, holeCount);
+            }
 
-        //TODO Refactor board API to mitigate code duplication
+            // Set number of korgools in kazan
+            board.setKazanCount(playerId, (int) ((JSpinner) getComponentByName("Player" + playerId + "Kazan")).getValue());
 
-        //LIGHT---------------------------------------------------------
-        //set holes for light
-        for (int i = 1; i <= 9; i++) {
-            int lightHoleCount = (int) ((JSpinner) getComponentByName("lightHoleSpinner" + i)).getValue();
-            board.setLightHoleCount(i - 1, lightHoleCount);
+            // Set tuz index
+            int tuzIndex = ((JComboBox) getComponentByName("Player" + playerId + "Tuz")).getSelectedIndex() - 1;
+            if (tuzIndex >= 0) board.setTuz(playerId, tuzIndex);
         }
-
-        //set kazan for light
-        int lightKazanCount = (int) ((JSpinner) getComponentByName("lightKazanSpinner")).getValue();
-        board.setLightKazanCount(lightKazanCount);
-
-        //set tuz for light
-        int lightTuzIndex = ((JComboBox) getComponentByName("lightTuzComboBox")).getSelectedIndex() - 1;
-        if (lightTuzIndex >= 0) board.setTuz(0, lightTuzIndex);
-
-        //DARK-----------------------------------------------------------
-        //set holes for dark
-        for (int i = 1; i <= 9; i++) {
-            int darkHoleCount = (int) ((JSpinner) getComponentByName("darkHoleSpinner" + i)).getValue();
-            board.setDarkHoleCount(i - 1, darkHoleCount);
-        }
-
-        //set kazan for dark
-        int darkKazanValue = (int) ((JSpinner) getComponentByName("darkKazanSpinner")).getValue();
-        board.setDarkKazanCount(darkKazanValue);
-
-        //set tuz for dark
-        int darkTuzIndex = ((JComboBox) getComponentByName("darkTuzComboBox")).getSelectedIndex() - 1;
-        if (darkTuzIndex >= 0) board.setTuz(1, darkTuzIndex);
     }
 
     //TODO Move helper methods into a static helper methods class
@@ -426,20 +389,20 @@ public class CustomGameDialog extends JDialog {
     }
 
     /* Loading and saving methods */
-    private void loadUser(final Player player, String name) {
+    private void loadUser(final Player player) {
         int tuzIndex = -1;
         for (int i = 0; i < player.getHoleCount(); i++) {
             Hole hole = player.getHole(i);
-            JSpinner holeSpinner = (JSpinner) componentMap.get(name + "HoleSpinner" + (i + 1));
+            JSpinner holeSpinner = (JSpinner) componentMap.get("Player" + player.getId() + "Hole" + i);
             holeSpinner.setValue(hole.getKorgools());
             if (hole.isTuz()) {
                 tuzIndex = i;
             }
         }
-        JComboBox<String> tuzComboBox = (JComboBox<String>) componentMap.get(name + "TuzComboBox");
+        JComboBox<String> tuzComboBox = (JComboBox<String>) componentMap.get("Player" + player.getId() + "Tuz");
         tuzComboBox.setSelectedIndex(tuzIndex != -1 ? (tuzIndex + 1) : -1);
 
-        JSpinner kazanSpinner = (JSpinner) componentMap.get(name + "KazanSpinner");
+        JSpinner kazanSpinner = (JSpinner) componentMap.get("Player" + player.getId() + "Kazan");
         kazanSpinner.setValue(player.getKazanCount());
     }
 
