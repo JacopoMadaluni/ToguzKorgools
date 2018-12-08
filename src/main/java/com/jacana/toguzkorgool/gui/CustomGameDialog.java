@@ -35,7 +35,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -222,6 +226,23 @@ public class CustomGameDialog extends JDialog {
                             if (!selectedFile.getName().toLowerCase().endsWith(".json")) {
                                 selectedFile = new File(selectedFile.getParentFile(), selectedFile.getName() + ".json");
                             }
+                            if (selectedFile.exists()) {
+                                int response = JOptionPane.showConfirmDialog(this, "A file with that name already exists. Do you want to replace the file?");
+                                if (response != JOptionPane.YES_OPTION) {
+                                    return;
+                                } else {
+                                    try {
+                                        if (!selectedFile.delete()) {
+                                            JOptionPane.showMessageDialog(this, "Failed to delete the previous file.");
+                                            return;
+                                        }
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                        JOptionPane.showMessageDialog(this, "Failed to delete the previous file.");
+                                        return;
+                                    }
+                                }
+                            }
 
                             Board customBoard = new Board();
                             for (Player player : customBoard.getPlayers()) {
@@ -231,6 +252,7 @@ public class CustomGameDialog extends JDialog {
                             try (FileWriter writer = new FileWriter(selectedFile)) {
                                 writer.write(serializedBoard);
                             }
+                            JOptionPane.showMessageDialog(this, "Successfully saved custom board to '" + selectedFile.getName() + "'.");
                         } catch (Exception ex) {
                             ex.printStackTrace();
                             JOptionPane.showMessageDialog(this, "An error occurred!");
