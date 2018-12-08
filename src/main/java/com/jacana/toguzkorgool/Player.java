@@ -74,8 +74,14 @@ public abstract class Player {
 
     public void setTuz(int holeNumber) {
         Player opponent = board.getOpponentOf(id);
-        if (holeNumber != 8 && !hasTuz() && opponent.getTuzIndex() != holeNumber) {
-            holes[holeNumber].setTuz(true);
+        if (holeNumber == -1) {
+            for (Hole hole : holes) {
+                hole.setTuz(false);
+            }
+        } else {
+            if (holeNumber != 8 && !hasTuz() && opponent.getTuzIndex() != holeNumber) {
+                holes[holeNumber].setTuz(true);
+            }
         }
     }
 

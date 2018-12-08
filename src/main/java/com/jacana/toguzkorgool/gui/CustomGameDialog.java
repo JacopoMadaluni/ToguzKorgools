@@ -223,8 +223,11 @@ public class CustomGameDialog extends JDialog {
                                 selectedFile = new File(selectedFile.getParentFile(), selectedFile.getName() + ".json");
                             }
 
-                            Board board = GameController.getBoard();
-                            String serializedBoard = Utilities.getGson().toJson(board);
+                            Board customBoard = new Board();
+                            for (Player player : customBoard.getPlayers()) {
+                                saveUser(player);
+                            }
+                            String serializedBoard = Utilities.getGson().toJson(customBoard);
                             try (FileWriter writer = new FileWriter(selectedFile)) {
                                 writer.write(serializedBoard);
                             }
@@ -403,6 +406,28 @@ public class CustomGameDialog extends JDialog {
 
         JSpinner kazanSpinner = (JSpinner) componentMap.get("Player" + player.getId() + "Kazan");
         kazanSpinner.setValue(player.getKazanCount());
+    }
+
+    private void saveUser(final Player player) {
+        for (int i = 0; i < player.getHoleCount(); i++) {
+            JSpinner holeSpinner = (JSpinner) componentMap.get("Player" + player.getId() + "Hole" + i);
+            if (holeSpinner == null) return;
+            player.clearHole(i);
+            player.addToHole(i, (Integer) holeSpinner.getValue());
+        }
+
+        player.setTuz(-1);
+        JComboBox<String> tuzComboBox = (JComboBox<String>) componentMap.get("Player" + player.getId() + "Tuz");
+        if (tuzComboBox != null) {
+            if (tuzComboBox.getSelectedIndex() > 0) {
+                player.setTuz(Math.max(Math.min(tuzComboBox.getSelectedIndex() - 1, player.getHoleCount() - 1), 0));
+            }
+        }
+
+        JSpinner kazanSpinner = (JSpinner) componentMap.get("Player" + player.getId() + "Kazan");
+        if (kazanSpinner != null) {
+            player.setKazanCount(Math.max((Integer) kazanSpinner.getValue(), 0));
+        }
     }
 
     /* Static helper methods */
