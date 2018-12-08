@@ -57,21 +57,19 @@ public class GameController {
                 @Override
                 public void mouseReleased(MouseEvent e) {
                     board.getCurrentPlayer().makeMove(finalJ + 1);
-                    gui.getGamePane().updateHoles(board.getCurrentPlayer().getId());
-                    gui.getGamePane().updateKazan(board.getCurrentPlayer().getId());
                     if (board.currentPlayerHasWon()) {
+                        gui.getGamePane().updateGamePane(board.getPlayers().size() - 1);
                         gui.loadVictoryScreen();
                         return;
                     }
                     board.changePlayer();
                     if (board.getCurrentPlayer() instanceof BotPlayer) {
                         ((BotPlayer) board.getCurrentPlayer()).act();
-                        gui.getGamePane().updateHoles(board.getCurrentPlayer().getId());
-                        gui.getGamePane().updateKazan(board.getCurrentPlayer().getId());
                         if (board.currentPlayerHasWon()) {
                             gui.loadDefeatScreen();
                         }
                         board.changePlayer();
+                        gui.getGamePane().updateGamePane(board.getPlayers().size() - 1);
                     }
                 }
             });
