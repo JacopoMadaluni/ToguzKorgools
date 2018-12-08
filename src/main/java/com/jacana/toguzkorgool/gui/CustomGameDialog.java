@@ -210,7 +210,6 @@ public class CustomGameDialog extends JDialog {
         importMenuItem.getAccessibleContext().setAccessibleDescription("Import board state from a file");
         fileMenu.add(importMenuItem);
 
-        //TODO Replace placeholders from import/export statements
         exportMenuItem.addActionListener(e ->
                 EventQueue.invokeLater(() -> {
                     JFileChooser fileChooser = new JFileChooser();
@@ -400,7 +399,7 @@ public class CustomGameDialog extends JDialog {
             }
         }
         JComboBox<String> tuzComboBox = (JComboBox<String>) componentMap.get("Player" + player.getId() + "Tuz");
-        tuzComboBox.setSelectedIndex(tuzIndex != -1 ? (tuzIndex + 1) : -1);
+        tuzComboBox.setSelectedIndex(tuzIndex + 1);
 
         JSpinner kazanSpinner = (JSpinner) componentMap.get("Player" + player.getId() + "Kazan");
         kazanSpinner.setValue(player.getKazanCount());
