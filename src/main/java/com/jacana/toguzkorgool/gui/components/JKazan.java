@@ -43,10 +43,15 @@ public class JKazan extends JPanel {
     private void internalUpdate() {
         int numberOfKorgools = kazan != null ? kazan.getKorgools() : 0;
         if (numberOfKorgools > 0) {
-            for (int j = this.korgoolsInGui; j < numberOfKorgools; ++j) {
-                remove(this.korgoolsInGui + 1);
+            while (this.korgoolsInGui < numberOfKorgools) {
+                remove(this.korgoolsInGui);
                 add(new JKorgool(), 0);
                 this.korgoolsInGui++;
+            }
+            while (this.korgoolsInGui > numberOfKorgools) {
+                remove(this.korgoolsInGui - 1);
+                add(new JEmptyComponent());
+                this.korgoolsInGui--;
             }
         } else {
             removeAll();
