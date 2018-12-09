@@ -1,16 +1,8 @@
 package com.jacana.toguzkorgool.gui;
 
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 /**
@@ -99,7 +91,7 @@ public class GUI extends JFrame {
      */
     private JMenuBar constructMenuBar() {
         JMenuBar menuBar = new JMenuBar();
-
+        
         // File menu
         JMenu fileMenu = new JMenu("File");
 
@@ -112,14 +104,8 @@ public class GUI extends JFrame {
         fileMenu.add(customMenuItem);
         
         customMenuItem.addActionListener(e -> CustomGameDialog.showCustomGameDialog());
-
-        // Exit menu
-        exitMenuItem = new JMenuItem("Exit");
-        exitMenuItem.setMnemonic(KeyEvent.VK_E);
-        exitMenuItem.getAccessibleContext().setAccessibleDescription("Exit the game");
-
+        
         menuBar.add(fileMenu);
-        menuBar.add(exitMenuItem);
 
         return menuBar;
     }
