@@ -1,10 +1,6 @@
 package com.jacana.toguzkorgool.gui;
 
-import com.jacana.toguzkorgool.Board;
-import com.jacana.toguzkorgool.GameController;
-import com.jacana.toguzkorgool.Hole;
-import com.jacana.toguzkorgool.Player;
-import com.jacana.toguzkorgool.Utilities;
+import com.jacana.toguzkorgool.*;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -40,8 +36,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 
 /**
@@ -56,6 +55,7 @@ import java.util.Map;
 public class CustomGameDialog extends JDialog {
     private JPanel contentPane;
     private Map<String, Component> componentMap = new HashMap<>();
+    private List<String> errors;
 
     private CustomGameDialog() {
         setResizable(false);
@@ -64,6 +64,8 @@ public class CustomGameDialog extends JDialog {
 
         contentPane = new JPanel();
         setContentPane(contentPane);
+        
+        errors = new ArrayList<>();
 
         setUpComponents();
 
@@ -339,17 +341,83 @@ public class CustomGameDialog extends JDialog {
 
     /*Data methods-----------------------------------------------------*/
     //TODO Validate data, else open an error message.
-    private int validateInputData() { //Currently this method always returns that the data is valid.
-        int retval = 0;
-        //the Sum of korgools in holes of a side must not be greater than 161
-        //the Sum of korgools on the board must be 162
-        //tuz rules
-        //game ending rules:
-        //there must be at least one korgool on a side.
-        //etc
-        return retval;
+    private int checkInputForErrors() {
+        //useful definitions
+        int playerCount = GameController.getBoard().getPlayerCount();
+        
+        //Validation 1 & 2: the Sum of korgools in holes of a side must not be greater than 161 and not less than 1
+        int[] holeKorgoolPerSideCount = new int[playerCount];
+        for (int playerId = 0; playerId < playerCount; playerId++) {
+            holeKorgoolPerSideCount[playerId] = 0;
+            for (int i = 0; i < Constants.CONSTRAINT_HOLES_PER_PLAYER; i++) {
+                holeKorgoolPerSideCount[playerId] +=
+                        (int) ((JSpinner) getComponentByName("Player" + playerId + "Hole" + i)).getValue();
+            }
+        }
+        boolean sideHoleMaxViolation = false;
+        boolean sideHoleMinViolation = false;
+        for (int sideCount : holeKorgoolPerSideCount) {
+            if (sideCount > Constants.CONSTRAINT_MAX_KORGOOLS_PER_HOLES)
+                sideHoleMaxViolation = true;
+            if (sideCount < Constants.CONSTRAINT_MIN_KORGOOLS_PER_HOLES)
+                sideHoleMinViolation = true;
+        }
+        if (sideHoleMaxViolation) {
+            errors.add(Constants.ERROR_CUSTOM_GUI_CONSTRAINT_MAX_TOTAL_KORGOOLS_PER_HOLES_VIOLATION);
+        }
+        if (sideHoleMinViolation) {
+            errors.add(Constants.ERROR_CUSTOM_GUI_CONSTRAINT_MIN_TOTAL_KORGOOLS_PER_HOLES_VIOLATION);
+        }
+        
+        //Validation 3: the Sum of korgools on the board must be 162
+        int totalKorgoolCount = 0;
+        for (int playerId = 0; playerId < playerCount; playerId++) {
+            totalKorgoolCount +=
+                    (int) ((JSpinner) getComponentByName("Player" + playerId + "Kazan")).getValue();
+        }
+        int holeKorgoolCount = IntStream.of(holeKorgoolPerSideCount).sum();
+        totalKorgoolCount += holeKorgoolCount;
+        if (totalKorgoolCount != Constants.CONSTRAINT_TOTAL_KORGOOLS) {
+            errors.add(Constants.ERROR_CUSTOM_GUI_CONSTRAINT_TOTAL_KORGOOLS_VIOLATION);
+        }
+        
+        //Validation 4:Tuz can be the same hole.
+        int[] tuzIndexies = new int[playerCount];
+        for (int playerId = 0; playerId < playerCount; playerId++) {
+            tuzIndexies[playerId] = ((JComboBox) getComponentByName("Player" + playerId + "Tuz")).getSelectedIndex() - 1;
+        }
+        
+        //check for duplicates
+        boolean duplicate = false;
+        for (int i = 0; i < tuzIndexies.length && !duplicate; i++) {
+            for (int j = i + 1 ; j < tuzIndexies.length && !duplicate; j++) {
+                if (tuzIndexies[i] == tuzIndexies[j] && tuzIndexies[i] != -1) {
+                    duplicate = true;
+                }
+            }
+        }
+        if (duplicate) {
+            errors.add(Constants.ERROR_CUSTOM_GUI_CONSTRAINT_TUZ_IDENTITY_VIOLATION);
+        }
+    
+        //TODO add more constraints if needed
+        
+        //see if any errors were found
+        return errors.size();
     }
-
+    
+    private void clearErrorList(){ errors.clear(); }
+    
+    private String makeErrorString() {
+        StringBuilder sb = new StringBuilder();
+        String lineStart = "· ";
+        String lineEnd = "\n";
+        for (String errorMessage : errors) {
+            sb.append(lineStart).append(errorMessage).append(lineEnd);
+        }
+        return sb.toString();
+    }
+    
     private void sendInputDataToBackEnd() {
         Board board = GameController.getBoard();
 
@@ -421,15 +489,18 @@ public class CustomGameDialog extends JDialog {
 
     /*Action Methods*/
     private void onApply() {
-        if (validateInputData() > 0) /*data invalid*/ {
-            return; //TODO make more elegant
+        if (checkInputForErrors() > 0) /*data invalid*/ {
+            // make a JOptionPanel with errors in the errors list
+            String errorString = makeErrorString();
+            JOptionPane.showMessageDialog(this, errorString);
+            clearErrorList();
         } else {
             sendInputDataToBackEnd();
             GameController.updateGUI();
+            dispose();
         }
-        dispose();
     }
-
+    
     private void onCancel() {
         dispose();
     }
