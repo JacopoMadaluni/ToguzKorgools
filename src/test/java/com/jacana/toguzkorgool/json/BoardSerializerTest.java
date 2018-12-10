@@ -59,7 +59,7 @@ public class BoardSerializerTest {
     }
 
     @Test
-    public void testSimpleBoardTuz() {
+    public void testSimpleBoardWithoutTuz() {
         JsonObject serializedBoard = (JsonObject) this.boardSerializer.serialize(this.board, JsonObject.class, null);
         for (Player player : this.board.getPlayers()) {
             JsonObject jsonPlayer = serializedBoard.getAsJsonObject(String.valueOf(player.getId()));
@@ -67,6 +67,22 @@ public class BoardSerializerTest {
             for (int holeId = 1; holeId <= player.getHoleCount(); holeId++) {
                 JsonObject jsonHole = jsonHoles.getAsJsonObject(String.valueOf(holeId));
                 assertFalse(jsonHole.has("tuz"));
+            }
+        }
+    }
+
+    @Test
+    public void testSimpleBoardWithTuz() {
+        this.board.setTuz(0, 0);
+        JsonObject serializedBoard = (JsonObject) this.boardSerializer.serialize(this.board, JsonObject.class, null);
+        for (Player player : this.board.getPlayers()) {
+            JsonObject jsonPlayer = serializedBoard.getAsJsonObject(String.valueOf(player.getId()));
+            JsonObject jsonHoles = jsonPlayer.getAsJsonObject("holes");
+            for (int holeId = 1; holeId <= player.getHoleCount(); holeId++) {
+                JsonObject jsonHole = jsonHoles.getAsJsonObject(String.valueOf(holeId));
+                if (player.getId() == 0 && holeId == 1) {
+                    assertTrue(jsonHole.has("tuz"));
+                }
             }
         }
     }
