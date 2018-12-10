@@ -75,6 +75,13 @@ public class CustomGameDialog extends JDialog {
         dialog.setVisible(true);
     }
     
+    @Override
+    public void dispose() {
+        //removeAll();
+        instance = null;
+        super.dispose();
+    }
+    
     public static void main(String[] args) {
         showCustomGameDialog();
         System.exit(0);

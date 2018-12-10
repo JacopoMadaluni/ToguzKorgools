@@ -52,7 +52,7 @@ public class CustomGameDialogTest {
     }
     
     
-    //IMPORTANT Test gives inconsistent results
+    //IMPORTANT Test gives inconsistent results (maybe cos of JSpinners)
     @Test
     public void testNormalUse() {
         //increase a hole by 1 and decrease another by 1 on both sides
@@ -71,10 +71,16 @@ public class CustomGameDialogTest {
         }
         assertThat(CustomGameDialog.areErrorsPresent(), is(equalTo(false)));
         
-        //check that the back end is intact.
+        //check that the back-end is intact.
     }
     
+    @Test
     public void testNormalUseWithTuz() {
+    
+    }
+    
+    @Test
+    public void testInvalidInput() {
     
     }
 }
