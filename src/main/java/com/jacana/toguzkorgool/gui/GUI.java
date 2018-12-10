@@ -1,16 +1,8 @@
 package com.jacana.toguzkorgool.gui;
 
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 /**
@@ -89,7 +81,7 @@ public class GUI extends JFrame {
     }
 
     private JMenuItem restartMenuItem;
-    private JMenuItem customMenuItem;
+    private JMenuItem customGameMenuItem;
     private JMenuItem exitMenuItem;
 
     /**
@@ -99,33 +91,29 @@ public class GUI extends JFrame {
      */
     private JMenuBar constructMenuBar() {
         JMenuBar menuBar = new JMenuBar();
-
+        
         // File menu
         JMenu fileMenu = new JMenu("File");
+        fileMenu.setName("fileMenu");
 
         restartMenuItem = new JMenuItem("Restart", KeyEvent.VK_R);
         restartMenuItem.getAccessibleContext().setAccessibleDescription("Restart the game");
         fileMenu.add(restartMenuItem);
 
-        customMenuItem = new JMenuItem("Custom", KeyEvent.VK_C);
+        customGameMenuItem = new JMenuItem("Custom", KeyEvent.VK_C);
+        customGameMenuItem.setName("customGameMenuItem");
         restartMenuItem.getAccessibleContext().setAccessibleDescription("Create custom game");
-        fileMenu.add(customMenuItem);
+        fileMenu.add(customGameMenuItem);
         
-        customMenuItem.addActionListener(e -> CustomGameDialog.showCustomGameDialog());
-
-        // Exit menu
-        exitMenuItem = new JMenuItem("Exit");
-        exitMenuItem.setMnemonic(KeyEvent.VK_E);
-        exitMenuItem.getAccessibleContext().setAccessibleDescription("Exit the game");
-
+        customGameMenuItem.addActionListener(e -> CustomGameDialog.showCustomGameDialog());
+        
         menuBar.add(fileMenu);
-        menuBar.add(exitMenuItem);
 
         return menuBar;
     }
 
-    public JMenuItem getCustomMenuItem() {
-        return customMenuItem;
+    public JMenuItem getCustomGameMenuItem() {
+        return customGameMenuItem;
     }
 
     public JMenuItem getExitMenuItem() {

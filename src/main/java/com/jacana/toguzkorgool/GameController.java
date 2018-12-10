@@ -46,7 +46,6 @@ public class GameController {
 
     private void initialiseMenuItems() {
         gui.getRestartMenuItem().addActionListener(e -> restartGame());
-        gui.getExitMenuItem().addActionListener(e -> EventQueue.invokeLater(() -> gui.dispose()));
     }
 
     private void initialiseHoles() {
