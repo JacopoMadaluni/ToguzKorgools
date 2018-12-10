@@ -185,6 +185,24 @@ public class BoardDeserializerTest {
     }
 
     @Test
+    public void testUnknownPlayerID() {
+        JsonObject serializedBoard = this.createBoard(new HashMap<Integer, Map<Integer, Integer>>() {{
+            this.put(0, new HashMap<Integer, Integer>() {{
+                for (int i = 1; i <= 9; i++) this.put(i, 10);
+            }});
+            this.put(1, new HashMap<Integer, Integer>() {{
+                for (int i = 1; i <= 9; i++) this.put(i, 10);
+            }});
+        }}, 0);
+        serializedBoard.remove("0");
+        serializedBoard.add("-1", new JsonObject());
+
+        Board deserializedBoard = this.boardDeserializer.deserialize(serializedBoard, Board.class, null);
+        assertEquals(10, deserializedBoard.getHoleKorgoolCount(1, 0));
+        assertEquals(9, deserializedBoard.getHoleKorgoolCount(0, 0));
+    }
+
+    @Test
     public void testInvalidPlayerID() {
         JsonObject serializedBoard = this.createBoard(new HashMap<Integer, Map<Integer, Integer>>() {{
             this.put(0, new HashMap<Integer, Integer>() {{
