@@ -345,15 +345,25 @@ public class CustomGameDialog extends JDialog {
         //useful definitions
         int playerCount = GameController.getBoard().getPlayerCount();
         
-        //Validation 1 & 2: the Sum of korgools in holes of a side must not be greater than 161 and not less than 1
+        //collect information
+        int totalKorgoolCount = 0;
         int[] holeKorgoolPerSideCount = new int[playerCount];
+        int[] tubIndexes = new int[playerCount];
         for (int playerId = 0; playerId < playerCount; playerId++) {
-            holeKorgoolPerSideCount[playerId] = 0;
+            totalKorgoolCount +=
+                    (int) ((JSpinner) getComponentByName("Player" + playerId + "Kazan")).getValue();
+            tubIndexes[playerId] = ((JComboBox) getComponentByName("Player" + playerId + "Tuz")).getSelectedIndex() - 1;
             for (int i = 0; i < Constants.CONSTRAINT_HOLES_PER_PLAYER; i++) {
                 holeKorgoolPerSideCount[playerId] +=
                         (int) ((JSpinner) getComponentByName("Player" + playerId + "Hole" + i)).getValue();
             }
         }
+        int holeKorgoolCount = IntStream.of(holeKorgoolPerSideCount).sum();
+        totalKorgoolCount += holeKorgoolCount;
+        
+        
+        //CHECK VIOLATIONS
+        //Validation 1 & 2: the Sum of korgools in holes of a side must not be greater than 161 and not less than 1
         boolean sideHoleMaxViolation = false;
         boolean sideHoleMinViolation = false;
         for (int sideCount : holeKorgoolPerSideCount) {
@@ -370,28 +380,15 @@ public class CustomGameDialog extends JDialog {
         }
         
         //Validation 3: the Sum of korgools on the board must be 162
-        int totalKorgoolCount = 0;
-        for (int playerId = 0; playerId < playerCount; playerId++) {
-            totalKorgoolCount +=
-                    (int) ((JSpinner) getComponentByName("Player" + playerId + "Kazan")).getValue();
-        }
-        int holeKorgoolCount = IntStream.of(holeKorgoolPerSideCount).sum();
-        totalKorgoolCount += holeKorgoolCount;
         if (totalKorgoolCount != Constants.CONSTRAINT_TOTAL_KORGOOLS) {
             errors.add(Constants.ERROR_CUSTOM_GUI_CONSTRAINT_TOTAL_KORGOOLS_VIOLATION);
         }
         
         //Validation 4:Tuz can be the same hole.
-        int[] tuzIndexies = new int[playerCount];
-        for (int playerId = 0; playerId < playerCount; playerId++) {
-            tuzIndexies[playerId] = ((JComboBox) getComponentByName("Player" + playerId + "Tuz")).getSelectedIndex() - 1;
-        }
-        
-        //check for duplicates
         boolean duplicate = false;
-        for (int i = 0; i < tuzIndexies.length && !duplicate; i++) {
-            for (int j = i + 1 ; j < tuzIndexies.length && !duplicate; j++) {
-                if (tuzIndexies[i] == tuzIndexies[j] && tuzIndexies[i] != -1) {
+        for (int i = 0; i < tubIndexes.length && !duplicate; i++) {
+            for (int j = i + 1 ; j < tubIndexes.length && !duplicate; j++) {
+                if (tubIndexes[i] == tubIndexes[j] && tubIndexes[i] != -1) {
                     duplicate = true;
                 }
             }
@@ -399,8 +396,6 @@ public class CustomGameDialog extends JDialog {
         if (duplicate) {
             errors.add(Constants.ERROR_CUSTOM_GUI_CONSTRAINT_TUZ_IDENTITY_VIOLATION);
         }
-    
-        //TODO add more constraints if needed
         
         //see if any errors were found
         return errors.size();
