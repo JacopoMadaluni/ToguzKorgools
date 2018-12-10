@@ -26,9 +26,9 @@ import java.util.stream.IntStream;
  */
 public class CustomGameDialog extends JDialog {
     private static CustomGameDialog instance;
+    private static List<String> errors;
     private JPanel contentPane;
     private Map<String, Component> componentMap = new HashMap<>();
-    private static List<String> errors;
     
     private CustomGameDialog() {
         setResizable(false);
@@ -73,13 +73,6 @@ public class CustomGameDialog extends JDialog {
         dialog.pack();
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
-    }
-    
-    @Override
-    public void dispose() {
-        //removeAll();
-        instance = null;
-        super.dispose();
     }
     
     public static void main(String[] args) {
@@ -127,6 +120,17 @@ public class CustomGameDialog extends JDialog {
     
     public static List<String> getErrors() {
         return errors;
+    }
+    
+    public Map<String, Component> getComponentMap() {
+        return componentMap;
+    }
+    
+    @Override
+    public void dispose() {
+        //removeAll();
+        instance = null;
+        super.dispose();
     }
     
     private void setUpComponents() {
@@ -212,8 +216,12 @@ public class CustomGameDialog extends JDialog {
         JPanel tuzPanel = new JPanel();
         
         JLabel tuzLabel = new JLabel(playerName + "'s Tuz:");
-        String[] tuzOptions = {"None", "1st Hole", "2nd Hole", "3rd Hole",
-                "4th Hole", "5th Hole", "6th Hole", "7th Hole", "8th Hole"};
+        
+        String[] tuzOptions = new String[Constants.CONSTRAINT_HOLES_PER_PLAYER];
+        tuzOptions[0] = "None";
+        for (int i = 1; i < tuzOptions.length; i++)
+            tuzOptions[i] = "Hole " + i;
+        
         JComboBox<String> tuzComboBox = new JComboBox<>(tuzOptions);
         tuzComboBox.setName("Player" + playerId + "Tuz");
         
@@ -374,7 +382,7 @@ public class CustomGameDialog extends JDialog {
     private int checkInputForErrors() {
         //useful definitions
         int playerCount = GameController.getBoard().getPlayerCount();
-        //IMPORTANT sometimes counts korgools on one side to be 82...
+        
         //collect information
         int totalKorgoolCount = 0;
         int[] holeKorgoolPerSideCount = new int[playerCount];
