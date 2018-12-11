@@ -21,6 +21,10 @@ public abstract class Player {
         this.boardColour = boardColour;
     }
 
+    public Board getBoard(){
+        return board;
+    }
+
     public Color getBoardColour() {
         return boardColour;
     }
