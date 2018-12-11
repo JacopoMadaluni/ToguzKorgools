@@ -81,8 +81,6 @@ public class GUI extends JFrame {
     }
 
     private JMenuItem restartMenuItem;
-    private JMenuItem customGameMenuItem;
-    private JMenuItem exitMenuItem;
 
     /**
      * Constructs the overarching menu bar for he GUI and returns it.
@@ -97,12 +95,13 @@ public class GUI extends JFrame {
         fileMenu.setName("fileMenu");
 
         restartMenuItem = new JMenuItem("Restart", KeyEvent.VK_R);
+        restartMenuItem.setName("restartMenuItem");
         restartMenuItem.getAccessibleContext().setAccessibleDescription("Restart the game");
         fileMenu.add(restartMenuItem);
 
-        customGameMenuItem = new JMenuItem("Custom", KeyEvent.VK_C);
+        JMenuItem customGameMenuItem = new JMenuItem("Custom", KeyEvent.VK_C);
         customGameMenuItem.setName("customGameMenuItem");
-        restartMenuItem.getAccessibleContext().setAccessibleDescription("Create custom game");
+        customGameMenuItem.getAccessibleContext().setAccessibleDescription("Create custom game");
         fileMenu.add(customGameMenuItem);
         
         customGameMenuItem.addActionListener(e -> CustomGameDialog.showCustomGameDialog());
@@ -112,14 +111,6 @@ public class GUI extends JFrame {
         return menuBar;
     }
 
-    public JMenuItem getCustomGameMenuItem() {
-        return customGameMenuItem;
-    }
-
-    public JMenuItem getExitMenuItem() {
-        return exitMenuItem;
-    }
-    
     public JMenuItem getRestartMenuItem() {
         return restartMenuItem;
     }

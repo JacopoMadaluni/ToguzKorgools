@@ -1,8 +1,12 @@
 package com.jacana.toguzkorgool.gui;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import java.awt.Dimension;
+import java.awt.Font;
 
 public class EndingPane extends JPanel {
 
@@ -24,8 +28,10 @@ public class EndingPane extends JPanel {
     private void initializeComponents(){
 
         restart = new JButton("New Game");
+        restart.setName("ButtonNewGame");
         restart.setHorizontalAlignment(JButton.CENTER);
         quit = new JButton("Quit");
+        quit.setName("ButtonQuit");
         quit.setHorizontalAlignment(JButton.CENTER);
         message = new JLabel();
         message.setHorizontalAlignment(JLabel.CENTER);
