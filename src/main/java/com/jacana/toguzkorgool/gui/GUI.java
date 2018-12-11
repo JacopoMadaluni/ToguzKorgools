@@ -81,7 +81,7 @@ public class GUI extends JFrame {
     }
 
     private JMenuItem restartMenuItem;
-    private JMenuItem customMenuItem;
+    private JMenuItem customGameMenuItem;
     private JMenuItem exitMenuItem;
 
     /**
@@ -94,24 +94,26 @@ public class GUI extends JFrame {
         
         // File menu
         JMenu fileMenu = new JMenu("File");
+        fileMenu.setName("fileMenu");
 
         restartMenuItem = new JMenuItem("Restart", KeyEvent.VK_R);
         restartMenuItem.getAccessibleContext().setAccessibleDescription("Restart the game");
         fileMenu.add(restartMenuItem);
 
-        customMenuItem = new JMenuItem("Custom", KeyEvent.VK_C);
+        customGameMenuItem = new JMenuItem("Custom", KeyEvent.VK_C);
+        customGameMenuItem.setName("customGameMenuItem");
         restartMenuItem.getAccessibleContext().setAccessibleDescription("Create custom game");
-        fileMenu.add(customMenuItem);
+        fileMenu.add(customGameMenuItem);
         
-        customMenuItem.addActionListener(e -> CustomGameDialog.showCustomGameDialog());
+        customGameMenuItem.addActionListener(e -> CustomGameDialog.showCustomGameDialog());
         
         menuBar.add(fileMenu);
 
         return menuBar;
     }
 
-    public JMenuItem getCustomMenuItem() {
-        return customMenuItem;
+    public JMenuItem getCustomGameMenuItem() {
+        return customGameMenuItem;
     }
 
     public JMenuItem getExitMenuItem() {

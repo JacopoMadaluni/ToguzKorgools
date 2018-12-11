@@ -24,7 +24,10 @@ public class BoardDeserializer implements JsonDeserializer<Board> {
             if (playerId.isPresent()) {
                 JsonElement jsonPlayer = serializedBoard.get(strPlayerId);
                 if (jsonPlayer.isJsonObject()) {
-                    updateUser(jsonPlayer.getAsJsonObject(), board.getPlayer(playerId.getAsInt()));
+                    Player player = board.getPlayer(playerId.getAsInt());
+                    if (player != null) {
+                        updateUser(jsonPlayer.getAsJsonObject(), player);
+                    }
                 }
             }
         }
