@@ -7,10 +7,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComboBox;
+import javax.swing.JSpinner;
+import java.awt.Component;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -27,25 +27,25 @@ public class CustomGameDialogTest {
     
     
     @Before
-    public void setup() {
+    public void setUp() {
         //open the application
         GameController.getInstance();
         //open the custom game dialog
         Swinger.setDEFAULT(com.athaydes.automaton.Speed.VERY_FAST);
-        Swinger.forSwingWindow().pause(250)
-                .clickOn("name:fileMenu")
+        Swinger.forSwingWindow().pause(250);
+        swinger = Swinger.getUserWith(GameController.getInstance().getGUI());
+        swinger.clickOn("name:fileMenu")
                 .pause(250)
                 .clickOn("name:customGameMenuItem")
                 .pause(250);
         //set the custom game dialog to be the subject
-        Swinger.setDEFAULT(com.athaydes.automaton.Speed.VERY_FAST);
         swinger = Swinger.getUserWith(CustomGameDialog.getCustomGameDialogInstance());
     }
     
     @After
-    public void tareDown() throws InterruptedException {
+    public void tearDown() throws InterruptedException {
         GameController.destroyInstance();
-        TimeUnit.SECONDS.sleep(1);
+        swinger = null;
     }
     
     private void performTest(int[][] params, Runnable controlAction, Runnable assertion) {
