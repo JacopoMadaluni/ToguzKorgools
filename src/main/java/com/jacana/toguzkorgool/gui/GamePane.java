@@ -9,6 +9,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +22,8 @@ import java.util.Map;
  * two players on the board.
  */
 public class GamePane extends JPanel {
+
+    private Map<String, Component> componentMap = new HashMap<>();
 
     //the opposite sides of the board.
     private Map<Integer, JPanel> playersPanel = new HashMap<>();
@@ -44,6 +47,7 @@ public class GamePane extends JPanel {
      */
     private void populatePane() {
         playersHoles.clear();
+        componentMap.clear();
 
         JPanel kazanPanel = new JPanel();
         kazanPanel.setLayout(new BoxLayout(kazanPanel, BoxLayout.X_AXIS));
@@ -67,6 +71,10 @@ public class GamePane extends JPanel {
         add(player1Panel);
     }
 
+    private void addToComponentMap(Component component) {
+        this.componentMap.put(component.getName(), component);
+    }
+
     private JKazan createKazanPanel() {
         return new JKazan(null);
     }
@@ -77,6 +85,10 @@ public class GamePane extends JPanel {
         playerPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
         playerPanel.setAlignmentX(CENTER_ALIGNMENT);
         return playerPanel;
+    }
+
+    public Component getComponentByName(String name) {
+        return componentMap.get(name);
     }
 
     public List<JHole> getHoles(int playerId) {
@@ -100,7 +112,10 @@ public class GamePane extends JPanel {
         for (int i = 0; i < player.getHoleCount(); ++i) {
             int k = player.getId() == 0 ? i : player.getHoleCount() - 1 - i;
             JHole holePanel = new JHole(player.getHole(k));
+            holePanel.setName("Player" + player.getId() + "Hole" + i);
             holePanel.setBackground(player.getBoardColour());
+            addToComponentMap(holePanel);
+
             panel.add(holePanel);
             if (i != player.getHoleCount() - 1) {
                 panel.add(Box.createRigidArea(new Dimension(5, 0)));
@@ -113,8 +128,11 @@ public class GamePane extends JPanel {
     public void initialiseKazan(Player player) {
         JKazan kazan = playersKazan.get(player.getId());
         if (kazan == null) return;
+        kazan.setName("Player" + player.getId() + "Kazan");
         kazan.setKazan(player.getKazan());
         kazan.setBackground(player.getBoardColour());
+
+        addToComponentMap(kazan);
     }
 
     public void updateHoles(int playerId) {

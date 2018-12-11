@@ -3,7 +3,6 @@ package com.jacana.toguzkorgool;
 import com.jacana.toguzkorgool.gui.GUI;
 import com.jacana.toguzkorgool.gui.components.JHole;
 
-import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -48,7 +47,7 @@ public class GameController {
 
     private void initializeEnding() {
         gui.getEnding().getRestartButton().addActionListener(e -> restartGame());
-        gui.getEnding().getQuitButton().addActionListener(e -> EventQueue.invokeLater(() -> gui.dispose()));
+        gui.getEnding().getQuitButton().addActionListener(e -> gui.dispose());
     }
 
     private void initialiseMenuItems() {
