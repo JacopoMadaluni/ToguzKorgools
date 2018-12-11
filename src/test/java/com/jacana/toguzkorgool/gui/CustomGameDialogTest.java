@@ -3,11 +3,13 @@ package com.jacana.toguzkorgool.gui;
 import com.athaydes.automaton.Swinger;
 import com.jacana.toguzkorgool.Board;
 import com.jacana.toguzkorgool.GameController;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComboBox;
+import javax.swing.JSpinner;
+import java.awt.Component;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,18 +27,25 @@ public class CustomGameDialogTest {
     
     
     @Before
-    public void setup() {
+    public void setUp() {
         //open the application
         GameController.getInstance();
         //open the custom game dialog
-        Swinger.forSwingWindow().pause(250)
-                .clickOn("name:fileMenu")
+        Swinger.setDEFAULT(com.athaydes.automaton.Speed.VERY_FAST);
+        Swinger.forSwingWindow().pause(250);
+        swinger = Swinger.getUserWith(GameController.getInstance().getGUI());
+        swinger.clickOn("name:fileMenu")
                 .pause(250)
                 .clickOn("name:customGameMenuItem")
                 .pause(250);
         //set the custom game dialog to be the subject
-        Swinger.setDEFAULT(com.athaydes.automaton.Speed.VERY_FAST);
         swinger = Swinger.getUserWith(CustomGameDialog.getCustomGameDialogInstance());
+    }
+    
+    @After
+    public void tearDown() throws InterruptedException {
+        GameController.destroyInstance();
+        swinger = null;
     }
     
     private void performTest(int[][] params, Runnable controlAction, Runnable assertion) {
@@ -94,10 +103,6 @@ public class CustomGameDialogTest {
     
     private Component getComponentFromMap(Map<String, Component> components, String name) {
         return components.get(name);
-    }
-    
-    private void checkFrontend(int[][] params) {
-    
     }
     
     private void pause() {
