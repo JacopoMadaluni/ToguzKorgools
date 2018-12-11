@@ -3,12 +3,14 @@ package com.jacana.toguzkorgool.gui;
 import com.athaydes.automaton.Swinger;
 import com.jacana.toguzkorgool.Board;
 import com.jacana.toguzkorgool.GameController;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -29,6 +31,7 @@ public class CustomGameDialogTest {
         //open the application
         GameController.getInstance();
         //open the custom game dialog
+        Swinger.setDEFAULT(com.athaydes.automaton.Speed.VERY_FAST);
         Swinger.forSwingWindow().pause(250)
                 .clickOn("name:fileMenu")
                 .pause(250)
@@ -37,6 +40,12 @@ public class CustomGameDialogTest {
         //set the custom game dialog to be the subject
         Swinger.setDEFAULT(com.athaydes.automaton.Speed.VERY_FAST);
         swinger = Swinger.getUserWith(CustomGameDialog.getCustomGameDialogInstance());
+    }
+    
+    @After
+    public void tareDown() throws InterruptedException {
+        GameController.destroyInstance();
+        TimeUnit.SECONDS.sleep(1);
     }
     
     private void performTest(int[][] params, Runnable controlAction, Runnable assertion) {
@@ -94,10 +103,6 @@ public class CustomGameDialogTest {
     
     private Component getComponentFromMap(Map<String, Component> components, String name) {
         return components.get(name);
-    }
-    
-    private void checkFrontend(int[][] params) {
-    
     }
     
     private void pause() {

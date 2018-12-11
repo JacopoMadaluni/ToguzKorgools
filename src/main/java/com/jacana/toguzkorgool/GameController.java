@@ -27,7 +27,14 @@ public class GameController {
         }
         return instance;
     }
-
+    
+    public static void destroyInstance() {
+        board = null;
+        gui.dispose();
+        gui = null;
+        instance = null;
+    }
+    
     private void initialiseGUI() {
         for (Player player : board.getPlayers()) {
             gui.getGamePane().initialisePanel(player);
