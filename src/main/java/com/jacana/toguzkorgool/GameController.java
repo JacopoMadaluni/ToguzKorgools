@@ -10,9 +10,9 @@ import java.awt.event.MouseEvent;
 
 public class GameController {
 
-    private static GameController instance;
-    private static GUI gui; //front-end
-    private static Board board; //back-end
+    private static GameController instance = null;
+    private static GUI gui = null;
+    private static Board board = null;
 
     private GameController() {
         board = new Board();
@@ -97,10 +97,6 @@ public class GameController {
         gui.getGamePane().initialiseColour(1, Color.darkGray);
     }
 
-    public GUI getGUI() {
-        return gui;
-    }
-
     public void onWin(int playerId) {
         if (playerId == 0) {
             gui.loadVictoryScreen();
@@ -117,6 +113,10 @@ public class GameController {
 
     public static Board getBoard() {
         return board;
+    }
+
+    public static GUI getGUI() {
+        return gui;
     }
 
     public static void updateGUI() {

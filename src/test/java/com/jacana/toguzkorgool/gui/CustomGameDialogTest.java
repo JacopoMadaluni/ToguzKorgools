@@ -31,7 +31,7 @@ public class CustomGameDialogTest {
         // Create the swinger
         Swinger.setDEFAULT(com.athaydes.automaton.Speed.VERY_FAST);
         Swinger.forSwingWindow().pause(250);
-        swinger = Swinger.getUserWith(GameController.getInstance().getGUI());
+        swinger = Swinger.getUserWith(GameController.getGUI());
 
         // Open the custom game dialog
         swinger.clickOn("name:fileMenu")

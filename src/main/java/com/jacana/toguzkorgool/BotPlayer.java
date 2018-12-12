@@ -14,4 +14,5 @@ public class BotPlayer extends Player {
         int randomIndex = random.nextInt(holes.length);
         super.makeMove(randomIndex);
     }
+
 }

@@ -26,7 +26,7 @@ public class GUITest {
         Swinger.forSwingWindow().pause(250);
 
         Swinger.setDEFAULT(com.athaydes.automaton.Speed.VERY_FAST);
-        this.swinger = Swinger.getUserWith(GameController.getInstance().getGUI());
+        this.swinger = Swinger.getUserWith(GameController.getGUI());
     }
 
     @After
@@ -80,7 +80,7 @@ public class GUITest {
     }
 
     private Component getComponent(String name) {
-        return GameController.getInstance().getGUI().getGamePane().getComponentByName(name);
+        return GameController.getGUI().getGamePane().getComponentByName(name);
     }
 
 }
