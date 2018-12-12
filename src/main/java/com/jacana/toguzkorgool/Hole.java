@@ -1,12 +1,12 @@
 package com.jacana.toguzkorgool;
 
 public class Hole extends KorgoolContainer{
-    private boolean tuz;
+
+    private boolean tuz = false;
 
     public Hole() {
         super();
         this.korgools = Constants.CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE;
-        this.tuz = false;
     }
 
     public boolean isTuz() {
@@ -16,4 +16,5 @@ public class Hole extends KorgoolContainer{
     public void setTuz(boolean tuzValue) {
         tuz = tuzValue;
     }
+
 }
