@@ -26,7 +26,7 @@ public class PlayerTest {
         int expectedId = 10;
         Player aPlayer = new HumanPlayer(expectedBoard, expectedId);
         aPlayer.setTuz(3);
-        aPlayer.setTuz(-1);
+        aPlayer.setTuz(-1, false);
         assertFalse(aPlayer.hasTuz());
         assertEquals(-1, aPlayer.getTuzIndex());
     }
@@ -36,16 +36,16 @@ public class PlayerTest {
         Board board = new Board();
         Player player = board.getCurrentPlayer();
         Player bot = board.getCurrentOpponent();
-        player.makeMove(1);
+        player.makeMove(0);
         assertEquals(1, player.getHole(0).getKorgools()); // hole one has one korgool
         for (int i = 1; i < 9; ++i) {
             // holes two to nine have ten korgools each
             assertEquals(10, player.getHole(i).getKorgools());
         }
-        player.makeMove(1);
+        player.makeMove(0);
         assertEquals(0, player.getHole(0).getKorgools()); // hole one has zero korgools
         assertEquals(11, player.getHole(1).getKorgools()); // hole two has eleven korgools
-        player.makeMove(2);
+        player.makeMove(1);
         assertEquals(1, player.getHole(1).getKorgools()); // hole two has one korgool
         for (int i = 2; i < 9; ++i) {
             // holes three to nine have eleven korgools each
@@ -59,7 +59,7 @@ public class PlayerTest {
         assertEquals(0, bot.getHole(2).getKorgools());
         // ten korgools have been added to the player's kazan
         assertEquals(10, player.getKazan().getKorgools());
-        player.makeMove(9);
+        player.makeMove(8);
         assertEquals(1, player.getHole(8).getKorgools()); // hole nine has one korgool
         for (int i = 0; i < 2; ++i) {
             // opponent holes one to two have eleven korgools each
@@ -83,7 +83,7 @@ public class PlayerTest {
         player.setTuz(5);
         bot.clearHole(1);
         bot.setTuz(1);
-        player.makeMove(4);
+        player.makeMove(3);
 
         assertEquals(11, player.getKazanCount());
         assertEquals(1, bot.getKazanCount());
@@ -109,7 +109,7 @@ public class PlayerTest {
         bot.getHole(0).add(2); // first 3 holes of bot can become tuz.
         bot.getHole(1).add(2);
         bot.getHole(2).add(2);
-        player.makeMove(9);
+        player.makeMove(8);
 
         Hole tuz = bot.getHole(2);
         Hole notTuz = bot.getHole(1);
@@ -131,7 +131,7 @@ public class PlayerTest {
 
 
         player.getHole(8).add(2);
-        player.makeMove(9);
+        player.makeMove(8);
 
         assertTrue(bot.hasTuz());
         assertFalse(player.hasTuz());

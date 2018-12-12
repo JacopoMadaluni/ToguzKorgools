@@ -27,7 +27,7 @@ public class GameController {
         }
         return instance;
     }
-    
+
     public static void destroyInstance() {
         CustomGameDialog.destroyInstance();
 
@@ -37,7 +37,7 @@ public class GameController {
         board = null;
         instance = null;
     }
-    
+
     private void initialiseGUI() {
         for (Player player : board.getPlayers()) {
             gui.getGamePane().initialisePanel(player);
@@ -65,7 +65,7 @@ public class GameController {
             currentJHole.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseReleased(MouseEvent e) {
-                    board.getCurrentPlayer().makeMove(finalJ + 1);
+                    board.getCurrentPlayer().makeMove(finalJ);
                     if (board.currentPlayerHasWon()) {
                         gui.getGamePane().updateGamePane(board.getPlayerCount() - 1);
                         onWin(board.getCurrentPlayer().getId());
