@@ -14,13 +14,15 @@ import java.awt.GridLayout;
  */
 public class JKazan extends JPanel {
     private Kazan kazan;
+    private int korgoolsInGui = 0;
 
     public JKazan(Kazan kazan) {
         super();
         this.kazan = kazan;
 
-        setLayout(new GridLayout(6, 27));
-        setBorder(new LineBorder(Color.black, 1, true));
+        GridLayout layout = new GridLayout(6, 27);
+        setLayout(layout);
+        setBorder(new LineBorder(Color.black, 1, false));
 
         internalUpdate();
     }
@@ -40,21 +42,33 @@ public class JKazan extends JPanel {
      */
     private void internalUpdate() {
         int numberOfKorgools = kazan != null ? kazan.getKorgools() : 0;
-        GridLayout layout = (GridLayout) getLayout();
-        for (int j = 0; j < numberOfKorgools; ++j) {
-            add(new JKorgool());
+        if (numberOfKorgools > 0) {
+            while (this.korgoolsInGui < numberOfKorgools) {
+                remove(this.korgoolsInGui);
+                add(new JKorgool(), 0);
+                this.korgoolsInGui++;
+            }
+            while (this.korgoolsInGui > numberOfKorgools) {
+                remove(this.korgoolsInGui - 1);
+                add(new JEmptyComponent());
+                this.korgoolsInGui--;
+            }
+        } else {
+            removeAll();
+            GridLayout layout = (GridLayout) getLayout();
+            int fillers = layout.getColumns() * layout.getRows();
+            for (int j = 0; j < fillers; ++j) {
+                add(new JEmptyComponent());
+            }
+            this.korgoolsInGui = 0;
         }
-        int maxFillers = layout.getColumns() * layout.getRows();
-        for (int j = numberOfKorgools; j < maxFillers; ++j) {
-            add(new JEmptyComponent());
-        }
+        this.setToolTipText("Korgools: " + numberOfKorgools);
     }
 
     /**
      * Wrapper method to carryout the graphical update of the component.
      */
     public void updateKazan() {
-        removeAll();
         internalUpdate();
     }
 }

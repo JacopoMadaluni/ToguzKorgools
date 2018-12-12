@@ -7,10 +7,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.jacana.toguzkorgool.Board;
 import com.jacana.toguzkorgool.Hole;
-import com.jacana.toguzkorgool.HumanPlayer;
 import com.jacana.toguzkorgool.Player;
+import com.jacana.toguzkorgool.Utilities;
 
 import java.lang.reflect.Type;
+import java.util.OptionalInt;
 
 public class BoardDeserializer implements JsonDeserializer<Board> {
 
@@ -18,13 +19,17 @@ public class BoardDeserializer implements JsonDeserializer<Board> {
     public Board deserialize(final JsonElement jsonElement, final Type type, final JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         JsonObject serializedBoard = jsonElement.getAsJsonObject();
         Board board = new Board();
-        Player currentPlayer = board.getCurrentPlayer() instanceof HumanPlayer ? board.getCurrentPlayer() : board.getCurrentOpponent();
-        Player otherPlayer = board.getOpponentOf(currentPlayer);
-        if (serializedBoard.has("player")) {
-            updateUser(serializedBoard.getAsJsonObject("player"), currentPlayer);
-        }
-        if (serializedBoard.has("opponent")) {
-            updateUser(serializedBoard.getAsJsonObject("opponent"), otherPlayer);
+        for (String strPlayerId : serializedBoard.keySet()) {
+            OptionalInt playerId = Utilities.tryParseInt(strPlayerId);
+            if (playerId.isPresent()) {
+                JsonElement jsonPlayer = serializedBoard.get(strPlayerId);
+                if (jsonPlayer.isJsonObject()) {
+                    Player player = board.getPlayer(playerId.getAsInt());
+                    if (player != null) {
+                        updateUser(jsonPlayer.getAsJsonObject(), player);
+                    }
+                }
+            }
         }
         return board;
     }
@@ -35,9 +40,12 @@ public class BoardDeserializer implements JsonDeserializer<Board> {
         for (int i = 0; i < player.getHoleCount(); i++) {
             String strHoleId = String.valueOf(i + 1);
             if (jsonUserHoles.has(strHoleId)) {
-                final Hole hole = player.getHole(i);
-                updateHole(jsonUserHoles.getAsJsonObject(strHoleId), hole,  i + 1, tuzId);
-                if (hole.isTuz()) tuzId = i;
+                JsonElement jsonHole = jsonUserHoles.get(strHoleId);
+                if (jsonHole.isJsonObject()) {
+                    final Hole hole = player.getHole(i);
+                    updateHole(jsonHole.getAsJsonObject(), hole, i + 1, tuzId);
+                    if (hole.isTuz()) tuzId = i;
+                }
             }
         }
         int kazanKorgools = jsonUser.get("kazan").getAsInt();
