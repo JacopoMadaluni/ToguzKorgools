@@ -93,10 +93,10 @@ public class CustomGameDialogTest {
         for (int j = 0; j < params.length; j++) {
             int[] sideParam = params[j];
             for (int i = 0; i < sideParam.length - 2; i++) {
-                int boardValue = board.getHoleKorgoolCount(j, i);
+                int boardValue = board.getKorgoolsInHole(j, i);
                 assertThat(boardValue, is(equalTo(sideParam[i])));
             }
-            assertThat(board.getKazanCount(j), is(equalTo(sideParam[sideParam.length - 2])));
+            assertThat(board.getKorgoolsInKazan(j), is(equalTo(sideParam[sideParam.length - 2])));
             assertThat(board.getTuzIndex(j), is(equalTo(sideParam[sideParam.length - 1])));
         }
     }

@@ -68,7 +68,7 @@ public class GameController {
                 @Override
                 public void mouseReleased(MouseEvent e) {
                     board.getCurrentPlayer().makeMove(finalJ);
-                    if (board.currentPlayerHasWon()) {
+                    if (board.hasCurrentPlayerWon()) {
                         gui.getGamePane().updateGamePane(board.getPlayerCount() - 1);
                         onWin(board.getCurrentPlayer().getId());
                         return;
@@ -76,7 +76,7 @@ public class GameController {
                     board.changePlayer();
                     if (board.getCurrentPlayer() instanceof BotPlayer) {
                         ((BotPlayer) board.getCurrentPlayer()).act();
-                        if (board.currentPlayerHasWon()) {
+                        if (board.hasCurrentPlayerWon()) {
                             onWin(board.getCurrentPlayer().getId());
                         }
                         board.changePlayer();

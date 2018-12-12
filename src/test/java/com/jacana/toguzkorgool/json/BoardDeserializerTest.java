@@ -164,7 +164,7 @@ public class BoardDeserializerTest {
         serializedBoard.getAsJsonObject("0").getAsJsonObject("holes").remove("3");
 
         Board deserializedBoard = this.boardDeserializer.deserialize(serializedBoard, Board.class, null);
-        assertEquals(9, deserializedBoard.getHoleKorgoolCount(0, 2));
+        assertEquals(9, deserializedBoard.getKorgoolsInHole(0, 2));
     }
 
     @Test
@@ -181,7 +181,7 @@ public class BoardDeserializerTest {
         serializedBoard.getAsJsonObject("0").getAsJsonObject("holes").add("3", new JsonArray());
 
         Board deserializedBoard = this.boardDeserializer.deserialize(serializedBoard, Board.class, null);
-        assertEquals(9, deserializedBoard.getHoleKorgoolCount(0, 2));
+        assertEquals(9, deserializedBoard.getKorgoolsInHole(0, 2));
     }
 
     @Test
@@ -198,8 +198,8 @@ public class BoardDeserializerTest {
         serializedBoard.add("-1", new JsonObject());
 
         Board deserializedBoard = this.boardDeserializer.deserialize(serializedBoard, Board.class, null);
-        assertEquals(10, deserializedBoard.getHoleKorgoolCount(1, 0));
-        assertEquals(9, deserializedBoard.getHoleKorgoolCount(0, 0));
+        assertEquals(10, deserializedBoard.getKorgoolsInHole(1, 0));
+        assertEquals(9, deserializedBoard.getKorgoolsInHole(0, 0));
     }
 
     @Test
@@ -216,8 +216,8 @@ public class BoardDeserializerTest {
         serializedBoard.add("Player0", new JsonObject());
 
         Board deserializedBoard = this.boardDeserializer.deserialize(serializedBoard, Board.class, null);
-        assertEquals(10, deserializedBoard.getHoleKorgoolCount(1, 0));
-        assertEquals(9, deserializedBoard.getHoleKorgoolCount(0, 0));
+        assertEquals(10, deserializedBoard.getKorgoolsInHole(1, 0));
+        assertEquals(9, deserializedBoard.getKorgoolsInHole(0, 0));
     }
 
     @Test
@@ -233,8 +233,8 @@ public class BoardDeserializerTest {
         serializedBoard.add("0", new JsonArray());
 
         Board deserializedBoard = this.boardDeserializer.deserialize(serializedBoard, Board.class, null);
-        assertEquals(10, deserializedBoard.getHoleKorgoolCount(1, 0));
-        assertEquals(9, deserializedBoard.getHoleKorgoolCount(0, 0));
+        assertEquals(10, deserializedBoard.getKorgoolsInHole(1, 0));
+        assertEquals(9, deserializedBoard.getKorgoolsInHole(0, 0));
     }
 
 }

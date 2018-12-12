@@ -111,7 +111,7 @@ public class CustomGameDialog extends JDialog {
     public JPanel constructAndGetSidePanel(int playerId) {
         final String playerName = "Player " + (playerId + 1);
 
-        int kazanKorgoolCount = GameController.getBoard().getKazanCount(playerId);
+        int kazanKorgoolCount = GameController.getBoard().getKorgoolsInKazan(playerId);
         int tuzIndex = GameController.getBoard().getTuzIndex(playerId);
 
         //make the panel a vertical box layout
@@ -134,7 +134,7 @@ public class CustomGameDialog extends JDialog {
             SpinnerNumberModel spinnerHoleModel = new SpinnerNumberModel(0, 0, 161, 1);
             JSpinner holeSpinner = new JSpinner(spinnerHoleModel);
             holeSpinner.setName("Player" + playerId + "Hole" + i);
-            holeSpinner.setValue(GameController.getBoard().getHoleKorgoolCount(playerId, i));
+            holeSpinner.setValue(GameController.getBoard().getKorgoolsInHole(playerId, i));
 
             JLabel newSpinnerLabel = new JLabel("Hole " + (i + 1) + ":");
 
@@ -399,7 +399,7 @@ public class CustomGameDialog extends JDialog {
 
         // Reset the kazan
         for (int playerId = 0; playerId < board.getPlayerCount(); playerId++) {
-            board.setKazanCount(playerId, 0);
+            board.setKorgoolsInKazan(playerId, 0);
         }
 
         // Update holes and kazan.
@@ -407,29 +407,29 @@ public class CustomGameDialog extends JDialog {
             // Set number of korgools in hole
             for (int i = 0; i < Constants.CONSTRAINT_HOLES_PER_PLAYER; i++) {
                 int holeCount = (int) ((JSpinner) getComponentByName("Player" + playerId + "Hole" + i)).getValue();
-                board.setHoleCount(playerId, i, holeCount);
+                board.setKorgoolsInHole(playerId, i, holeCount);
             }
 
             // Set number of korgools in kazan
-            int kazanCount = board.getKazanCount(playerId);
-            board.setKazanCount(playerId, kazanCount + (int) ((JSpinner) getComponentByName("Player" + playerId + "Kazan")).getValue());
+            int kazanCount = board.getKorgoolsInKazan(playerId);
+            board.setKorgoolsInKazan(playerId, kazanCount + (int) ((JSpinner) getComponentByName("Player" + playerId + "Kazan")).getValue());
 
             // Set tuz index
             int tuzIndex = ((JComboBox) getComponentByName("Player" + playerId + "Tuz")).getSelectedIndex() - 1;
             if (tuzIndex >= 0) {
                 board.setTuz(playerId, tuzIndex);
 
-                int holeCount = board.getHoleKorgoolCount(playerId, tuzIndex);
-                board.setHoleCount(playerId, tuzIndex, 0);
+                int holeCount = board.getKorgoolsInHole(playerId, tuzIndex);
+                board.setKorgoolsInHole(playerId, tuzIndex, 0);
 
                 int opponentId = board.getOpponentOf(playerId).getId();
-                int opponentKazanCount = board.getKazanCount(opponentId);
-                board.setKazanCount(opponentId, opponentKazanCount + holeCount);
+                int opponentKazanCount = board.getKorgoolsInKazan(opponentId);
+                board.setKorgoolsInKazan(opponentId, opponentKazanCount + holeCount);
             }
         }
 
         for (int playerId = 0; playerId < board.getPlayerCount(); playerId++) {
-            if (board.playerHasWon(playerId)) {
+            if (board.hasPlayerWon(playerId)) {
                 GameController.getInstance().onWin(playerId);
                 break;
             }

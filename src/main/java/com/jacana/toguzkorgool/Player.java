@@ -262,15 +262,15 @@ public abstract class Player {
             --korgools;
             ++holeIndex;
         }
-        int korgoolsInOpponentHole = board.getOpponentHoleKorgoolCount(holeIndex - 1);
+        int korgoolsInOpponentHole = board.getKorgoolsInOpponentHole(holeIndex - 1);
         if (korgools == 0 && korgoolsInOpponentHole % 2 == 0) {
             kazan.add(korgoolsInOpponentHole);
             board.clearOpponentHole(holeIndex - 1);
         }
 
-        int korgoolsInLastHole = board.getOpponentHoleKorgoolCount(holeIndex - 1);
+        int korgoolsInLastHole = board.getKorgoolsInOpponentHole(holeIndex - 1);
         if (korgools == 0 && korgoolsInLastHole == 3) {
-            if (!board.opponentHasTuz()) {
+            if (!board.doesOpponentHaveTuz()) {
                 board.setOpponentTuz(holeIndex - 1, true);
                 board.clearOpponentHole(holeIndex - 1);
                 kazan.add(korgoolsInLastHole);

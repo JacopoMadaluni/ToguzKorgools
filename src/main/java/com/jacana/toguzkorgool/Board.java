@@ -7,39 +7,45 @@ import java.util.Map;
 
 public class Board {
 
-    private Map<Integer, Player> players;
-    private Player currentPlayer;
+    private Map<Integer, Player> players = new HashMap<>();
+    private Player currentPlayer = null;
 
     public Board() {
+        this.setupPlayers();
+        this.currentPlayer = this.players.get(0);
+    }
+
+    /**
+     * Fill the players map with the instances of the players.
+     */
+    private void setupPlayers() {
+        this.players.clear();
         Player player1 = new HumanPlayer(this, 0);
         Player player2 = new BotPlayer(this, 1);
 
-        players = new HashMap<>();
-        players.put(player1.getId(), player1);
-        players.put(player2.getId(), player2);
-
-        currentPlayer = player1;
+        this.players.put(player1.getId(), player1);
+        this.players.put(player2.getId(), player2);
     }
 
     /**
      * Add korgools to a hole on the current opponent's field.
      *
      * @param index The hole index
-     * @param amount The number of korgools to add
+     * @param korgools The number of korgools to add
      */
-    public void addToOpponentHole(int index, int amount) {
+    public void addToOpponentHole(int index, int korgools) {
         Player opponent = getCurrentOpponent();
-        opponent.addToHole(index, amount);
+        opponent.addToHole(index, korgools);
     }
 
     /**
      * Add korgools to the current opponent's kazan.
      *
-     * @param amount The number of korgools to add
+     * @param korgools The number of korgools to add
      */
-    public void addToOpponentKazan(int amount) {
+    public void addToOpponentKazan(int korgools) {
         Player opponent = getCurrentOpponent();
-        opponent.addToKazan(amount);
+        opponent.addToKazan(korgools);
     }
 
     /**
@@ -60,10 +66,11 @@ public class Board {
     }
 
     /**
-     * @return True if the current player has won
+     * @return True if the current opponent has a tuz in their side of the field
      */
-    public boolean currentPlayerHasWon() {
-        return currentPlayer.hasWon();
+    public boolean doesOpponentHaveTuz() {
+        Player opponent = getCurrentOpponent();
+        return opponent.hasTuz();
     }
 
     /**
@@ -85,7 +92,7 @@ public class Board {
      * @param index The hole index
      * @return The number of korgools in the hole of the player
      */
-    public int getHoleKorgoolCount(int playerId, int index) {
+    public int getKorgoolsInHole(int playerId, int index) {
         Player player = players.get(playerId);
         if (player == null) return -1;
         return player.getKorgoolsInHole(index);
@@ -95,8 +102,17 @@ public class Board {
      * @param playerId The ID of the player
      * @return The number of korgools in the player's kazan
      */
-    public int getKazanCount(int playerId) {
+    public int getKorgoolsInKazan(int playerId) {
         return players.get(playerId).getKazanCount();
+    }
+
+    /**
+     * @param index The index of the hole
+     * @return The number of korgools in the hole on the opponent's field.
+     */
+    public int getKorgoolsInOpponentHole(int index) {
+        Player opponent = getCurrentOpponent();
+        return opponent.getKorgoolsInHole(index);
     }
 
     /**
@@ -105,15 +121,6 @@ public class Board {
      */
     public Player getOpponentOf(int playerId) {
         return players.get((playerId + 1) % players.size());
-    }
-
-    /**
-     * @param index The index of the hole
-     * @return The number of korgools in the hole on the opponent's field.
-     */
-    public int getOpponentHoleKorgoolCount(int index) {
-        Player opponent = getCurrentOpponent();
-        return opponent.getKorgoolsInHole(index);
     }
 
     /**
@@ -159,18 +166,17 @@ public class Board {
     }
 
     /**
-     * @return True if the current opponent has a tuz in their side of the field
+     * @return True if the current player has won
      */
-    public boolean opponentHasTuz() {
-        Player opponent = getCurrentOpponent();
-        return opponent.hasTuz();
+    public boolean hasCurrentPlayerWon() {
+        return currentPlayer.hasWon();
     }
 
     /**
      * @param playerId The player ID
      * @return True if the player has won
      */
-    public boolean playerHasWon(int playerId) {
+    public boolean hasPlayerWon(int playerId) {
         Player player = players.get(playerId);
         if (player == null) return false;
         return player.hasWon();
@@ -194,7 +200,7 @@ public class Board {
      * @param index The hole index
      * @param numberOfKorgools The new number of korgools
      */
-    public void setHoleCount(int playerId, int index, int numberOfKorgools) {
+    public void setKorgoolsInHole(int playerId, int index, int numberOfKorgools) {
         Player player = players.get(playerId);
         if (player == null) return;
         player.clearHole(index);
@@ -207,7 +213,7 @@ public class Board {
      * @param playerId The player ID
      * @param numberOfKorgools The new number of korgools
      */
-    public void setKazanCount(int playerId, int numberOfKorgools) {
+    public void setKorgoolsInKazan(int playerId, int numberOfKorgools) {
         Player player = players.get(playerId);
         if (player == null) return;
         player.setKazanCount(numberOfKorgools);
