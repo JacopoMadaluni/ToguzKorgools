@@ -3,9 +3,10 @@ package com.jacana.toguzkorgool;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class BoardTest {
-
 
     @Test
     public void testChangePlayer(){
@@ -13,9 +14,9 @@ public class BoardTest {
         Player player1 = board.getCurrentPlayer();
         Player bot = board.getCurrentOpponent();
         board.changePlayer();
-        assert(board.getCurrentPlayer().equals(bot));
+        assertEquals(bot, board.getCurrentPlayer());
         board.changePlayer();
-        assert(board.getCurrentPlayer().equals(player1));
+        assertEquals(player1, board.getCurrentPlayer());
     }
 
     @Test
@@ -172,37 +173,27 @@ public class BoardTest {
     public void testCurrentPlayerHasWonWhenHasWon(){
         Board board = new Board();
         board.setKazanCount(0, 82);
-        assertEquals(true, board.currentPlayerHasWon());
+        assertTrue(board.currentPlayerHasWon());
     }
 
     @Test
     public void testCurrentPlayerHasWonWhenHasNotWon(){
         Board board = new Board();
-        assertEquals(false, board.currentPlayerHasWon());
+        assertFalse(board.currentPlayerHasWon());
     }
 
     @Test
     public void testPlayerHasWon(){
         Board board = new Board();
         board.setKazanCount(1, 82);
-        assertEquals(true, board.playerHasWon(1));
+        assertTrue(board.playerHasWon(1));
     }
 
     @Test
     public void testPlayerHasWonWithInvalidPlayer(){
         Board board = new Board();
         int invalidId = 3;
-        assertEquals(false, board.playerHasWon(invalidId));
+        assertFalse(board.playerHasWon(invalidId));
     }
 
-    @Test
-    public void testChangePlayer(){
-        Board board = new Board();
-        Player player1 = board.getCurrentPlayer();
-        Player bot = board.getCurrentOpponent();
-        board.changePlayer();
-        assert(board.getCurrentPlayer().equals(bot));
-        board.changePlayer();
-        assert(board.getCurrentPlayer().equals(player1));
-    }
 }
