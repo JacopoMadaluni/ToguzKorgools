@@ -28,9 +28,10 @@ public class GameController {
     }
     
     public static void destroyInstance() {
-        board = null;
         gui.dispose();
         gui = null;
+
+        board = null;
         instance = null;
     }
     
