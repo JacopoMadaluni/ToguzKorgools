@@ -1,11 +1,19 @@
 package com.jacana.toguzkorgool;
 
-import com.jacana.toguzkorgool.gui.GUI;
-
+/**
+ * The application class that creates the GameController instance.
+ */
 public class ToguzKorgool {
 
     public static void main(String[] args) {
-        new GameController();
+        GameController.getInstance();
+    }
+
+    /**
+     * Terminate the application, closing any open GUI.
+     */
+    public static void exitApplication() {
+        GameController.destroyInstance();
     }
 
 }

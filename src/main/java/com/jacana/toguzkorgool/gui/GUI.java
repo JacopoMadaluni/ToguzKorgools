@@ -1,16 +1,8 @@
 package com.jacana.toguzkorgool.gui;
 
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 /**
@@ -63,8 +55,14 @@ public class GUI extends JFrame {
         contentPane.remove(ending);
         contentPane.add(this.gamePane);
         contentPane.updateUI();
-
     }
+    
+    public void update(int highestPlayerId) {
+        gamePane.updateGamePane(highestPlayerId);
+        JPanel contentPane = (JPanel) getContentPane();
+        contentPane.updateUI();
+    }
+    
     /**
      * Encapsulation method for populating the main frame with its components.
      */
@@ -83,8 +81,6 @@ public class GUI extends JFrame {
     }
 
     private JMenuItem restartMenuItem;
-    private JMenuItem customMenuItem;
-    private JMenuItem exitMenuItem;
 
     /**
      * Constructs the overarching menu bar for he GUI and returns it.
@@ -93,43 +89,34 @@ public class GUI extends JFrame {
      */
     private JMenuBar constructMenuBar() {
         JMenuBar menuBar = new JMenuBar();
-
+        
         // File menu
         JMenu fileMenu = new JMenu("File");
+        fileMenu.setName("fileMenu");
 
         restartMenuItem = new JMenuItem("Restart", KeyEvent.VK_R);
+        restartMenuItem.setName("restartMenuItem");
         restartMenuItem.getAccessibleContext().setAccessibleDescription("Restart the game");
         fileMenu.add(restartMenuItem);
 
-        customMenuItem = new JMenuItem("Custom", KeyEvent.VK_C);
-        restartMenuItem.getAccessibleContext().setAccessibleDescription("Create custom game");
-        fileMenu.add(customMenuItem);
-
-        // Exit menu
-        exitMenuItem = new JMenuItem("Exit");
-        exitMenuItem.setMnemonic(KeyEvent.VK_E);
-        exitMenuItem.getAccessibleContext().setAccessibleDescription("Exit the game");
-
+        JMenuItem customGameMenuItem = new JMenuItem("Custom", KeyEvent.VK_C);
+        customGameMenuItem.setName("customGameMenuItem");
+        customGameMenuItem.getAccessibleContext().setAccessibleDescription("Create custom game");
+        fileMenu.add(customGameMenuItem);
+        
+        customGameMenuItem.addActionListener(e -> CustomGameDialog.showCustomGameDialog());
+        
         menuBar.add(fileMenu);
-        menuBar.add(exitMenuItem);
 
         return menuBar;
     }
 
-    public JMenuItem getCustomMenuItem() {
-        return customMenuItem;
-    }
-
-    public JMenuItem getExitMenuItem() {
-        return exitMenuItem;
+    public JMenuItem getRestartMenuItem() {
+        return restartMenuItem;
     }
 
     public GamePane getGamePane() {
         return this.gamePane;
-    }
-
-    public JMenuItem getRestartMenuItem() {
-        return restartMenuItem;
     }
 
     public EndingPane getEnding() {

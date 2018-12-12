@@ -2,15 +2,44 @@ package com.jacana.toguzkorgool;
 
 import org.junit.Test;
 
+import java.awt.*;
+
 import static org.junit.Assert.assertEquals;
 
 public class PlayerTest {
 
     @Test
+    public void testPlayerInitialization(){
+        Board expectedBoard = new Board();
+        Color expectedColor = new Color(0);
+        int expectedId = 10;
+        Player aPlayer = new HumanPlayer(expectedBoard, expectedId, expectedColor);
+        int actualId = aPlayer.getId();
+        Board actualBoard = aPlayer.getBoard();
+        Color actualColor = aPlayer.getBoardColour();
+
+        assert(expectedBoard == actualBoard);
+        assert(expectedId == actualId);
+        assert(expectedColor.equals(actualColor));
+    }
+
+    @Test
+    public void testSetTuzNegative(){
+        Board expectedBoard = new Board();
+        Color expectedColor = new Color(0);
+        int expectedId = 10;
+        Player aPlayer = new HumanPlayer(expectedBoard, expectedId, expectedColor);
+        aPlayer.setTuz(3);
+        aPlayer.setTuz(-1);
+        assertEquals(false, aPlayer.hasTuz());
+        assertEquals(-1, aPlayer.getTuzIndex());
+    }
+
+    @Test
     public void testMakeMove() {
         Board board = new Board();
-        Player player = board.getPlayer();
-        Player bot = board.getOpponent();
+        Player player = board.getCurrentPlayer();
+        Player bot = board.getCurrentOpponent();
         player.makeMove(1);
         assertEquals(1, player.getHole(0).getKorgools()); // hole one has one korgool
         for (int i = 1; i < 9; ++i) {
@@ -21,7 +50,7 @@ public class PlayerTest {
         assertEquals(0, player.getHole(0).getKorgools()); // hole one has zero korgools
         assertEquals(11, player.getHole(1).getKorgools()); // hole two has eleven korgools
         player.makeMove(2);
-        assertEquals( 1, player.getHole(1).getKorgools()); // hole two has one korgool
+        assertEquals(1, player.getHole(1).getKorgools()); // hole two has one korgool
         for (int i = 2; i < 9; ++i) {
             // holes three to nine have eleven korgools each
             assertEquals(11, player.getHole(i).getKorgools());
@@ -31,9 +60,9 @@ public class PlayerTest {
             assertEquals(10, bot.getHole(i).getKorgools());
         }
         // opponent hole three has been emptied
-        assertEquals (0,bot.getHole(2).getKorgools());
+        assertEquals(0, bot.getHole(2).getKorgools());
         // ten korgools have been added to the player's kazan
-        assertEquals(10, player.getKazan());
+        assertEquals(10, player.getKazan().getKorgools());
         player.makeMove(9);
         assertEquals(1, player.getHole(8).getKorgools()); // hole nine has one korgool
         for (int i = 0; i < 2; ++i) {
@@ -41,7 +70,7 @@ public class PlayerTest {
             assertEquals(11, bot.getHole(i).getKorgools());
         }
         // opponent hole three has one korgool
-        assertEquals (1,bot.getHole(2).getKorgools());
+        assertEquals(1, bot.getHole(2).getKorgools());
         for (int i = 3; i < 9; ++i) {
             // opponent holes four to nine have ten korgools each
             assertEquals(10, bot.getHole(i).getKorgools());
@@ -50,10 +79,30 @@ public class PlayerTest {
     }
 
     @Test
+    public void testMoveWithTuzes(){
+        Board board = new Board();
+        Player player = board.getCurrentPlayer();
+        Player bot = board.getCurrentOpponent();
+        player.clearHole(5);
+        player.setTuz(5);
+        bot.clearHole(1);
+        bot.setTuz(1);
+        player.makeMove(4);
+
+        assertEquals(11, player.getKazanCount());
+        assertEquals(1, bot.getKazanCount());
+        assertEquals(10, player.getHole(6).getKorgools());
+        assertEquals(10, player.getHole(7).getKorgools());
+        assertEquals(10, player.getHole(8).getKorgools());
+        assertEquals(10, bot.getHole(0).getKorgools());
+        assertEquals(0, bot.getHole(2).getKorgools());
+    }
+
+    @Test
     public void testTuzRule(){
         Board board = new Board();
-        Player player = board.getPlayer();
-        Player bot = board.getOpponent();
+        Player player = board.getCurrentPlayer();
+        Player bot = board.getCurrentOpponent();
         assertEquals(true, bot instanceof BotPlayer); // remove when two human players are playing
         for (int i = 0; i < 9; ++i) {
             player.getHole(i).clear();
@@ -72,7 +121,7 @@ public class PlayerTest {
 
         assertEquals(true, bot.hasTuz());
         assertEquals(false, player.hasTuz());
-        assertEquals(3, player.getKazan());
+        assertEquals(3, player.getKazan().getKorgools());
         assertEquals(true, tuz.isTuz());
         assertEquals(false, notTuz.isTuz());
         assertEquals(false, notTuz2.isTuz());
@@ -90,7 +139,7 @@ public class PlayerTest {
 
         assertEquals(true, bot.hasTuz());
         assertEquals(false, player.hasTuz());
-        assertEquals(3, player.getKazan());
+        assertEquals(3, player.getKazan().getKorgools());
         assertEquals(true, tuz.isTuz());
         assertEquals(false, notTuz.isTuz());
         assertEquals(false, notTuz2.isTuz());
@@ -99,8 +148,8 @@ public class PlayerTest {
     @Test
     public void testSetTuzConditions(){
         Board board = new Board();
-        Player player = board.getPlayer();
-        Player bot = board.getOpponent();
+        Player player = board.getCurrentPlayer();
+        Player bot = board.getCurrentOpponent();
 
         bot.setTuz(3);
         player.setTuz(3);
