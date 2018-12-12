@@ -4,6 +4,7 @@ import com.jacana.toguzkorgool.gui.CustomGameDialog;
 import com.jacana.toguzkorgool.gui.GUI;
 import com.jacana.toguzkorgool.gui.components.JHole;
 
+import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -44,6 +45,7 @@ public class GameController {
         }
 
         this.initialiseMenuItems();
+        this.initialiseColours();
         this.initialiseHoles();
         this.initialiseKazans();
         this.initializeEnding();
@@ -88,6 +90,11 @@ public class GameController {
     private void initialiseKazans() {
         gui.getGamePane().initialiseKazan(board.getCurrentPlayer());
         gui.getGamePane().initialiseKazan(board.getCurrentOpponent());
+    }
+
+    private void initialiseColours() {
+        gui.getGamePane().initialiseColour(0, Color.lightGray);
+        gui.getGamePane().initialiseColour(1, Color.darkGray);
     }
 
     public GUI getGUI() {

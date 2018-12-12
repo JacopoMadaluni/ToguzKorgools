@@ -40,9 +40,6 @@ public class GamePane extends JPanel {
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
         this.setBackground(Color.black);
 
-        this.playerColours.put(0, Color.lightGray);
-        this.playerColours.put(1, Color.darkGray);
-
         this.populatePane();
     }
 
@@ -137,6 +134,17 @@ public class GamePane extends JPanel {
         kazan.setBackground(playerColours.getOrDefault(player.getId(), kazan.getBackground()));
 
         addToComponentMap(kazan);
+    }
+
+    public void initialiseColour(int playerId, Color color) {
+        this.playerColours.put(playerId, color);
+
+        JPanel panel = playersPanel.get(playerId);
+        if (panel != null) panel.setBackground(color);
+        List<JHole> holes = playersHoles.get(playerId);
+        if (holes != null) {
+            for (JHole hole : holes) hole.setBackground(color);
+        }
     }
 
     public void updateHoles(int playerId) {
