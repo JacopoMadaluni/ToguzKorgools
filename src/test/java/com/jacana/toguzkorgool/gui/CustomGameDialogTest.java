@@ -1,5 +1,6 @@
 package com.jacana.toguzkorgool.gui;
 
+import com.athaydes.automaton.GuiItemNotFound;
 import com.athaydes.automaton.Swinger;
 import com.jacana.toguzkorgool.Board;
 import com.jacana.toguzkorgool.GameController;
@@ -14,8 +15,6 @@ import java.awt.Component;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertFalse;
-
 
 public class CustomGameDialogTest {
 
@@ -40,7 +39,7 @@ public class CustomGameDialogTest {
                 .clickOn("name:customGameMenuItem")
                 .pause(250);
         // Set the custom game dialog to be the subject
-        swinger.setRoot(CustomGameDialog.getCustomGameDialogInstance());
+        swinger.setRoot(CustomGameDialog.getInstance());
     }
 
     @After
@@ -82,10 +81,8 @@ public class CustomGameDialogTest {
             swinger.clickOn(playerId + "Tuz");
             pause();
             int tuzIndex = sideParam[sideParam.length - 1];
-            if (tuzIndex != -1)
-                swinger.clickOn("text:Hole " + tuzIndex);
-            else
-                swinger.clickOn("text:None");
+            if (tuzIndex != -1) swinger.clickOn("text:Hole " + tuzIndex);
+            else swinger.clickOn("text:None");
             pause();
         }
     }
@@ -104,11 +101,11 @@ public class CustomGameDialogTest {
         }
     }
 
-    private void performTest(int[][] params, Runnable controlAction, Runnable assertion) {
+    private void performTest(int[][] params, Runnable controlAction, Runnable testsAction) {
         inputParams(params);
 
         controlAction.run();
-        assertion.run();
+        testsAction.run();
 
         // Check that the back-end is intact.
         checkBackend(params);
@@ -138,20 +135,21 @@ public class CustomGameDialogTest {
             int guiTuzIndex = ((JComboBox<String>) getComponent(playerId + "Tuz")).getSelectedIndex() - 1;
             assertThat(guiTuzIndex, is(equalTo(sideParam[sideParam.length - 1])));
         }
+        swinger.pause(250);
     }
 
     /**
      * Test a set of valid inputs that the user could possibly select in the custom game GUI.
      */
-    @Test
+    @Test(expected = GuiItemNotFound.class)
     public void testValidInput() {
         int[][] params = {{12, 12, 4, 13, 1, 2, 12, 3, 13, 14, -1},  // Player 1 parameters
                 {13, 2, 11, 11, 2, 12, 0, 12, 1, 12, -1}}; // Player 2 parameters
-        performTest(params, applyAction, () -> assertFalse(CustomGameDialog.areErrorsPresent()));
+        performTest(params, applyAction, () -> swinger.clickOn("text:OK"));
     }
 
     private static Component getComponent(String name) {
-        return CustomGameDialog.getCustomGameDialogInstance().getComponentMap().get(name);
+        return CustomGameDialog.getInstance().getComponentMap().get(name);
     }
 
 }

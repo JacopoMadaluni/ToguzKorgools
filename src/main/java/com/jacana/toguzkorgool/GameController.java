@@ -1,5 +1,6 @@
 package com.jacana.toguzkorgool;
 
+import com.jacana.toguzkorgool.gui.CustomGameDialog;
 import com.jacana.toguzkorgool.gui.GUI;
 import com.jacana.toguzkorgool.gui.components.JHole;
 
@@ -28,6 +29,8 @@ public class GameController {
     }
     
     public static void destroyInstance() {
+        CustomGameDialog.destroyInstance();
+
         gui.dispose();
         gui = null;
 
