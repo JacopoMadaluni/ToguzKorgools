@@ -10,12 +10,12 @@ package com.jacana.toguzkorgool;
 public abstract class Player {
 
     // The board instance
-    private Board board;
+    protected Board board;
 
-    private final int id;
+    protected final int id;
 
-    private Kazan kazan;
-    private Hole[] holes;
+    protected Kazan kazan;
+    protected Hole[] holes;
 
     /**
      * Construct a Player instance
@@ -26,8 +26,8 @@ public abstract class Player {
     public Player(Board board, int id) {
         this.id = id;
         this.kazan = new Kazan();
-        this.holes = new Hole[9];
-        for (int i = 0; i < 9; ++i) {
+        this.holes = new Hole[Constants.CONSTRAINT_HOLES_PER_PLAYER];
+        for (int i = 0; i < this.holes.length; ++i) {
             this.holes[i] = new Hole();
         }
         this.board = board;
@@ -198,7 +198,7 @@ public abstract class Player {
         kazan.clear();
         for (int i = 0; i < holes.length; ++i) {
             holes[i].clear();
-            holes[i].add(9);
+            holes[i].add(Constants.CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE);
             holes[i].setTuz(false);
         }
     }
@@ -227,7 +227,7 @@ public abstract class Player {
             }
         }
         while (korgools > 0) {
-            while (holeNumber <= 9 && korgools > 0) {
+            while (holeNumber <= Constants.CONSTRAINT_HOLES_PER_PLAYER && korgools > 0) {
                 Hole hole = holes[holeNumber - 1];
                 if (hole.isTuz()) {
                     board.addToOpponentKazan(1);
@@ -253,7 +253,7 @@ public abstract class Player {
     private int moveOpponent(int korgools) {
         int holeNumber = 1;
         int opponentTuz = board.getOpponentTuz() + 1;
-        while (holeNumber <= 9 && korgools > 0) {
+        while (holeNumber <= Constants.CONSTRAINT_HOLES_PER_PLAYER && korgools > 0) {
             if (opponentTuz != -1 && holeNumber == opponentTuz) {
                 kazan.add(1);
             } else {

@@ -126,9 +126,9 @@ public class CustomGameDialog extends JDialog {
         addHorizontalSeparator(sidePanel);
 
         //HOLE SPINNERS--------------------------------------------------
-        // create 9 numerical spinners with names and labels, each within a
-        // flow layout
-        for (int i = 0; i < 9; i++) {
+        // Create numerical spinners with names and labels, each within a
+        // Flow layout
+        for (int i = 0; i < Constants.CONSTRAINT_HOLES_PER_PLAYER; i++) {
             JPanel holeSpinnerPanel = new JPanel();
 
             SpinnerNumberModel spinnerHoleModel = new SpinnerNumberModel(0, 0, 161, 1);
@@ -181,7 +181,7 @@ public class CustomGameDialog extends JDialog {
 
         tuzComboBox.setSelectedIndex(tuzIndex + 1);
 
-        //add to the side panel.
+        // Add to the side panel
         tuzPanel.add(tuzLabel);
         tuzPanel.add(Box.createRigidArea(new Dimension(10, 0)));
         tuzPanel.add(tuzComboBox);
@@ -189,7 +189,6 @@ public class CustomGameDialog extends JDialog {
 
         sidePanel.add(tuzPanel);
 
-        //done
         return sidePanel;
     }
 
@@ -406,7 +405,7 @@ public class CustomGameDialog extends JDialog {
         // Update holes and kazan.
         for (int playerId = 0; playerId < board.getPlayerCount(); playerId++) {
             // Set number of korgools in hole
-            for (int i = 0; i < 9; i++) {
+            for (int i = 0; i < Constants.CONSTRAINT_HOLES_PER_PLAYER; i++) {
                 int holeCount = (int) ((JSpinner) getComponentByName("Player" + playerId + "Hole" + i)).getValue();
                 board.setHoleCount(playerId, i, holeCount);
             }

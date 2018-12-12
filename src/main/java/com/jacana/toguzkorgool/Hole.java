@@ -5,7 +5,7 @@ public class Hole extends KorgoolContainer{
 
     public Hole() {
         super();
-        korgools = 9;
+        this.korgools = Constants.CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE;
         this.tuz = false;
     }
 

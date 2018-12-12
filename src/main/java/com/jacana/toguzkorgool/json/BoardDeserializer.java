@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.jacana.toguzkorgool.Board;
+import com.jacana.toguzkorgool.Constants;
 import com.jacana.toguzkorgool.Hole;
 import com.jacana.toguzkorgool.Player;
 import com.jacana.toguzkorgool.Utilities;
@@ -57,7 +58,7 @@ public class BoardDeserializer implements JsonDeserializer<Board> {
 
     private static void updateHole(JsonObject jsonHole, final Hole hole, int holeId, final int tuzId) {
         int korgoolCount = jsonHole.get("korgools").getAsInt();
-        if (korgoolCount < 0 || korgoolCount > 9 * 9 * 2) {
+        if (korgoolCount < 0 || korgoolCount > Constants.CONSTRAINT_TOTAL_KORGOOLS) {
             throw new IllegalArgumentException("Number of korgools is too large (" + korgoolCount + ")");
         }
         hole.clear();
