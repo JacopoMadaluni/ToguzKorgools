@@ -52,8 +52,8 @@ public class GameController {
     }
 
     private void initializeEnding() {
-        gui.getEnding().getRestartButton().addActionListener(e -> restartGame());
-        gui.getEnding().getQuitButton().addActionListener(e -> gui.dispose());
+        gui.getEndPane().getRestartButton().addActionListener(e -> restartGame());
+        gui.getEndPane().getQuitButton().addActionListener(e -> gui.dispose());
     }
 
     private void initialiseMenuItems() {
