@@ -2,36 +2,32 @@ package com.jacana.toguzkorgool;
 
 import org.junit.Test;
 
-import java.awt.*;
-
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class PlayerTest {
 
     @Test
     public void testPlayerInitialization(){
         Board expectedBoard = new Board();
-        Color expectedColor = new Color(0);
         int expectedId = 10;
-        Player aPlayer = new HumanPlayer(expectedBoard, expectedId, expectedColor);
+        Player aPlayer = new HumanPlayer(expectedBoard, expectedId);
         int actualId = aPlayer.getId();
         Board actualBoard = aPlayer.getBoard();
-        Color actualColor = aPlayer.getBoardColour();
 
-        assert(expectedBoard == actualBoard);
-        assert(expectedId == actualId);
-        assert(expectedColor.equals(actualColor));
+        assertEquals(expectedBoard, actualBoard);
+        assertEquals(expectedId, actualId);
     }
 
     @Test
     public void testSetTuzNegative(){
         Board expectedBoard = new Board();
-        Color expectedColor = new Color(0);
         int expectedId = 10;
-        Player aPlayer = new HumanPlayer(expectedBoard, expectedId, expectedColor);
+        Player aPlayer = new HumanPlayer(expectedBoard, expectedId);
         aPlayer.setTuz(3);
         aPlayer.setTuz(-1);
-        assertEquals(false, aPlayer.hasTuz());
+        assertFalse(aPlayer.hasTuz());
         assertEquals(-1, aPlayer.getTuzIndex());
     }
 
@@ -103,7 +99,7 @@ public class PlayerTest {
         Board board = new Board();
         Player player = board.getCurrentPlayer();
         Player bot = board.getCurrentOpponent();
-        assertEquals(true, bot instanceof BotPlayer); // remove when two human players are playing
+        assertTrue(bot instanceof BotPlayer); // remove when two human players are playing
         for (int i = 0; i < 9; ++i) {
             player.getHole(i).clear();
             bot.getHole(i).clear();
@@ -119,12 +115,12 @@ public class PlayerTest {
         Hole notTuz = bot.getHole(1);
         Hole notTuz2 = bot.getHole(0);
 
-        assertEquals(true, bot.hasTuz());
-        assertEquals(false, player.hasTuz());
+        assertTrue(bot.hasTuz());
+        assertFalse(player.hasTuz());
         assertEquals(3, player.getKazan().getKorgools());
-        assertEquals(true, tuz.isTuz());
-        assertEquals(false, notTuz.isTuz());
-        assertEquals(false, notTuz2.isTuz());
+        assertTrue(tuz.isTuz());
+        assertFalse(notTuz.isTuz());
+        assertFalse(notTuz2.isTuz());
 
         bot.getHole(0).clear(); // first 3 holes of bot can become tuz.
         bot.getHole(0).add(2);
@@ -137,12 +133,12 @@ public class PlayerTest {
         player.getHole(8).add(2);
         player.makeMove(9);
 
-        assertEquals(true, bot.hasTuz());
-        assertEquals(false, player.hasTuz());
+        assertTrue(bot.hasTuz());
+        assertFalse(player.hasTuz());
         assertEquals(3, player.getKazan().getKorgools());
-        assertEquals(true, tuz.isTuz());
-        assertEquals(false, notTuz.isTuz());
-        assertEquals(false, notTuz2.isTuz());
+        assertTrue(tuz.isTuz());
+        assertFalse(notTuz.isTuz());
+        assertFalse(notTuz2.isTuz());
     }
 
     @Test
@@ -153,13 +149,12 @@ public class PlayerTest {
 
         bot.setTuz(3);
         player.setTuz(3);
-        assertEquals(false, player.getHole(3).isTuz());
-        assertEquals(false, player.hasTuz());
+        assertFalse(player.getHole(3).isTuz());
+        assertFalse(player.hasTuz());
 
         player.setTuz(8);
-        assertEquals(false, player.getHole(8).isTuz());
-        assertEquals(false, player.hasTuz());
+        assertFalse(player.getHole(8).isTuz());
+        assertFalse(player.hasTuz());
     }
-
 
 }
