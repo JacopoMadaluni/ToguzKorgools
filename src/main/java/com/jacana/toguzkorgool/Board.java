@@ -1,21 +1,23 @@
 package com.jacana.toguzkorgool;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Board {
+
     private Map<Integer, Player> players;
     private Player currentPlayer;
 
     public Board() {
-        Player player1 = new HumanPlayer(this, 0, Color.lightGray);
-        Player player2 = new BotPlayer(this, 1, Color.darkGray);
+        Player player1 = new HumanPlayer(this, 0);
+        Player player2 = new BotPlayer(this, 1);
+
         players = new HashMap<>();
         players.put(player1.getId(), player1);
         players.put(player2.getId(), player2);
+
         currentPlayer = player1;
     }
 

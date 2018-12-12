@@ -25,7 +25,8 @@ public class GamePane extends JPanel {
 
     private Map<String, Component> componentMap = new HashMap<>();
 
-    //the opposite sides of the board.
+    private Map<Integer, Color> playerColours = new HashMap<>();
+    // The opposite sides of the board
     private Map<Integer, JPanel> playersPanel = new HashMap<>();
     private Map<Integer, JKazan> playersKazan = new HashMap<>();
 
@@ -38,6 +39,9 @@ public class GamePane extends JPanel {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
         this.setBackground(Color.black);
+
+        this.playerColours.put(0, Color.lightGray);
+        this.playerColours.put(1, Color.darkGray);
 
         this.populatePane();
     }
@@ -106,14 +110,14 @@ public class GamePane extends JPanel {
         if (holes == null) holes = new ArrayList<>();
         JPanel panel = playersPanel.get(player.getId());
         if (panel == null) return;
-        panel.setBackground(player.getBoardColour());
+        panel.setBackground(playerColours.getOrDefault(player.getId(), panel.getBackground()));
 
         holes.clear();
         for (int i = 0; i < player.getHoleCount(); ++i) {
             int k = player.getId() == 0 ? i : player.getHoleCount() - 1 - i;
             JHole holePanel = new JHole(player.getHole(k));
             holePanel.setName("Player" + player.getId() + "Hole" + i);
-            holePanel.setBackground(player.getBoardColour());
+            holePanel.setBackground(playerColours.getOrDefault(player.getId(), holePanel.getBackground()));
             addToComponentMap(holePanel);
 
             panel.add(holePanel);
@@ -130,7 +134,7 @@ public class GamePane extends JPanel {
         if (kazan == null) return;
         kazan.setName("Player" + player.getId() + "Kazan");
         kazan.setKazan(player.getKazan());
-        kazan.setBackground(player.getBoardColour());
+        kazan.setBackground(playerColours.getOrDefault(player.getId(), kazan.getBackground()));
 
         addToComponentMap(kazan);
     }

@@ -1,7 +1,5 @@
 package com.jacana.toguzkorgool;
 
-import java.awt.Color;
-
 /**
  * A class representing a player playing on a board.
  * <p>
@@ -16,9 +14,6 @@ public abstract class Player {
 
     private final int id;
 
-    // The colour representing this player
-    private Color boardColour;
-
     private Kazan kazan;
     private Hole[] holes;
 
@@ -27,9 +22,8 @@ public abstract class Player {
      *
      * @param board The board the player is playing on
      * @param id The ID of the player
-     * @param boardColour The colour representing the player
      */
-    public Player(Board board, int id, Color boardColour) {
+    public Player(Board board, int id) {
         this.id = id;
         this.kazan = new Kazan();
         this.holes = new Hole[9];
@@ -37,17 +31,12 @@ public abstract class Player {
             this.holes[i] = new Hole();
         }
         this.board = board;
-        this.boardColour = boardColour;
     }
 
     /* Getters */
 
     public Board getBoard() {
         return board;
-    }
-
-    public Color getBoardColour() {
-        return boardColour;
     }
 
     public int getId() {
