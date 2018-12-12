@@ -2,6 +2,7 @@ package com.jacana.toguzkorgool.gui;
 
 import com.athaydes.automaton.GuiItemNotFound;
 import com.athaydes.automaton.Swinger;
+import com.jacana.toguzkorgool.Constants;
 import com.jacana.toguzkorgool.GameController;
 import com.jacana.toguzkorgool.gui.components.JHole;
 import org.junit.After;
@@ -13,17 +14,16 @@ import java.awt.Component;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 public class GUITest {
-
-    private static final long CLICK_PAUSE = 250L;
 
     private Swinger swinger = null;
 
     @Before
     public void setUp() {
         GameController.getInstance();
-        Swinger.forSwingWindow().pause(CLICK_PAUSE);
+        Swinger.forSwingWindow().pause(250);
 
         Swinger.setDEFAULT(com.athaydes.automaton.Speed.VERY_FAST);
         this.swinger = Swinger.getUserWith(GameController.getInstance().getGUI());
@@ -38,36 +38,36 @@ public class GUITest {
     @Test
     public void testWin() {
         GameController.getInstance().onWin(0);
-        this.clickOnComponent("ButtonQuit");
+        this.swinger.clickOn("name:ButtonQuit");
     }
 
     @Test
     public void testLose() {
         GameController.getInstance().onWin(1);
-        this.clickOnComponent("ButtonQuit");
+        this.swinger.clickOn("name:ButtonQuit");
     }
 
     @Test(expected = GuiItemNotFound.class)
     public void testWinUnknownPlayer() {
         GameController.getInstance().onWin(-1);
-        this.clickOnComponent("ButtonQuit");
+        this.swinger.clickOn("name:ButtonQuit");
     }
 
     @Test
     public void testHoleInteraction() {
         String holeComponentName = "Player0Hole0";
-        this.clickOnComponent(holeComponentName).pause(CLICK_PAUSE);
+        this.swinger.clickOn("name:" + holeComponentName).pause(250);
         String holeTooltip = ((JHole) getComponent(holeComponentName)).getToolTipText();
-        assertThat(holeTooltip, is(equalTo("Korgools: " + 2)));
+        assertThat(holeTooltip, is(not(equalTo("Korgools: " + Constants.CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE))));
     }
 
     @Test
     public void testRestart() {
         String holeComponentName = "Player0Hole0";
-        this.clickOnComponent(holeComponentName).pause(CLICK_PAUSE);
+        this.swinger.clickOn("name:" + holeComponentName).pause(250);
 
-        this.clickOnComponent("fileMenu").pause(CLICK_PAUSE);
-        this.clickOnComponent("restartMenuItem").pause(CLICK_PAUSE);
+        this.swinger.clickOn("name:fileMenu").pause(250);
+        this.swinger.clickOn("name:restartMenuItem").pause(250);
 
         String holeTooltip = ((JHole) getComponent(holeComponentName)).getToolTipText();
         assertThat(holeTooltip, is(equalTo("Korgools: " + 9)));
@@ -76,22 +76,7 @@ public class GUITest {
     @Test
     public void testNewGameRestart() {
         GameController.getInstance().onWin(0);
-        this.clickOnComponent("ButtonNewGame").pause(CLICK_PAUSE);
-    }
-
-    private Swinger clickOnComponent(String component) {
-        this.swinger.clickOn("name:" + component);
-        return this.swinger;
-    }
-
-    private Swinger clickOnText(String text) {
-        this.swinger.clickOn("text:" + text);
-        return this.swinger;
-    }
-
-    private Swinger pause() {
-        this.swinger.pause(CLICK_PAUSE);
-        return this.swinger;
+        this.swinger.clickOn("name:ButtonNewGame").pause(250);
     }
 
     private Component getComponent(String name) {

@@ -31,6 +31,9 @@ public class CustomGameDialog extends JDialog {
     private Map<String, Component> componentMap = new HashMap<>();
     private JPanel contentPane;
 
+    private JFileChooser importFileChooser = null;
+    private JFileChooser exportFileChooser = null;
+
     private CustomGameDialog() {
         setResizable(false);
         setModal(true);
@@ -197,40 +200,46 @@ public class CustomGameDialog extends JDialog {
 
         // File menu
         JMenu fileMenu = new JMenu("File");
+        fileMenu.setName("fileMenu");
 
         JMenuItem exportMenuItem = new JMenuItem("Export Board", KeyEvent.VK_E);
+        exportMenuItem.setName("exportMenuItem");
         exportMenuItem.getAccessibleContext().setAccessibleDescription("Export board state to a file");
         fileMenu.add(exportMenuItem);
 
         JMenuItem importMenuItem = new JMenuItem("Import Board", KeyEvent.VK_I);
+        importMenuItem.setName("importMenuItem");
         importMenuItem.getAccessibleContext().setAccessibleDescription("Import board state from a file");
         fileMenu.add(importMenuItem);
 
         exportMenuItem.addActionListener(e ->
                 EventQueue.invokeLater(() -> {
-                    JFileChooser fileChooser = new JFileChooser();
-                    fileChooser.setDialogTitle("Choose a location to save to");
-                    fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
-                    fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                    int returnVal = fileChooser.showSaveDialog(this);
+                    exportFileChooser = new JFileChooser();
+                    exportFileChooser.setDialogTitle("Choose a location to save to");
+                    exportFileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
+                    exportFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                    int returnVal = exportFileChooser.showSaveDialog(this);
                     if (returnVal == JFileChooser.APPROVE_OPTION) {
                         try {
-                            File selectedFile = fileChooser.getSelectedFile();
+                            File selectedFile = exportFileChooser.getSelectedFile();
                             if (!selectedFile.getName().toLowerCase().endsWith(".json")) {
                                 selectedFile = new File(selectedFile.getParentFile(), selectedFile.getName() + ".json");
                             }
                             if (selectedFile.exists()) {
                                 int response = JOptionPane.showConfirmDialog(this, "A file with that name already exists. Do you want to replace the file?");
                                 if (response != JOptionPane.YES_OPTION) {
+                                    exportFileChooser = null;
                                     return;
                                 } else {
                                     try {
                                         if (!selectedFile.delete()) {
+                                            exportFileChooser = null;
                                             JOptionPane.showMessageDialog(this, "Failed to delete the previous file.");
                                             return;
                                         }
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
+                                        exportFileChooser = null;
                                         JOptionPane.showMessageDialog(this, "Failed to delete the previous file.");
                                         return;
                                     }
@@ -245,24 +254,28 @@ public class CustomGameDialog extends JDialog {
                             try (FileWriter writer = new FileWriter(selectedFile)) {
                                 writer.write(serializedBoard);
                             }
+                            exportFileChooser = null;
                             JOptionPane.showMessageDialog(this, "Successfully saved custom board to '" + selectedFile.getName() + "'.");
                         } catch (Exception ex) {
                             ex.printStackTrace();
+                            exportFileChooser = null;
                             JOptionPane.showMessageDialog(this, "An error occurred!");
                         }
+                    } else {
+                        exportFileChooser = null;
                     }
                 })
         );
         importMenuItem.addActionListener(e -> {
             EventQueue.invokeLater(() -> {
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setDialogTitle("Choose a Toguz Korgool board JSON file.");
-                fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
-                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                int returnVal = fileChooser.showOpenDialog(this);
+                importFileChooser = new JFileChooser();
+                importFileChooser.setDialogTitle("Choose a Toguz Korgool board JSON file.");
+                importFileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
+                importFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                int returnVal = importFileChooser.showOpenDialog(this);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     try {
-                        File selectedFile = fileChooser.getSelectedFile();
+                        File selectedFile = importFileChooser.getSelectedFile();
                         if (!selectedFile.getName().toLowerCase().endsWith(".json")) {
                             selectedFile = new File(selectedFile.getParentFile(), selectedFile.getName() + ".json");
                         }
@@ -279,20 +292,27 @@ public class CustomGameDialog extends JDialog {
                             if (error == null) {
                                 loadUser(deserializedBoard.getPlayer(0));
                                 loadUser(deserializedBoard.getPlayer(1));
+                                importFileChooser = null;
                                 JOptionPane.showMessageDialog(this, "Loaded in '" + selectedFile.getName() + "'!");
                             } else {
+                                importFileChooser = null;
                                 JOptionPane.showMessageDialog(this, "Cannot load in '" + selectedFile.getName() + "': " + error);
                             }
                         } catch (IllegalArgumentException ex) {
                             ex.printStackTrace();
+                            importFileChooser = null;
                             JOptionPane.showMessageDialog(this, "An error occurred: " + ex.getLocalizedMessage());
                         }
                     } catch (FileNotFoundException ex) {
+                        importFileChooser = null;
                         JOptionPane.showMessageDialog(this, "Error: " + ex.getLocalizedMessage());
                     } catch (Exception ex) {
                         ex.printStackTrace();
+                        importFileChooser = null;
                         JOptionPane.showMessageDialog(this, "An error occurred!");
                     }
+                } else {
+                    importFileChooser = null;
                 }
             });
         });
@@ -436,6 +456,16 @@ public class CustomGameDialog extends JDialog {
         }
     }
 
+    /* Getters */
+
+    public JFileChooser getExportFileChooser() {
+        return exportFileChooser;
+    }
+
+    public JFileChooser getImportFileChooser() {
+        return importFileChooser;
+    }
+
     /* Action methods */
 
     private void onApply() {
@@ -481,7 +511,7 @@ public class CustomGameDialog extends JDialog {
 
     /* Loading and saving methods */
 
-    private void loadUser(final Player player) {
+    void loadUser(final Player player) {
         int tuzIndex = -1;
         for (int i = 0; i < player.getHoleCount(); i++) {
             Hole hole = player.getHole(i);
@@ -498,7 +528,7 @@ public class CustomGameDialog extends JDialog {
         kazanSpinner.setValue(player.getKazanCount());
     }
 
-    private void saveUser(final Player player) {
+    void saveUser(final Player player) {
         for (int i = 0; i < player.getHoleCount(); i++) {
             JSpinner holeSpinner = (JSpinner) componentMap.get("Player" + player.getId() + "Hole" + i);
             if (holeSpinner == null) return;
