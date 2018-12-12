@@ -29,7 +29,7 @@ public abstract class Player {
         return boardColour;
     }
 
-    public int getId(){
+    public int getId() {
         return id;
     }
 
@@ -76,17 +76,26 @@ public abstract class Player {
 
     // -- setters
 
-    public void setTuz(int holeNumber) {
+    public boolean setTuz(int holeNumber) {
+        return setTuz(holeNumber, true);
+    }
+
+    public boolean setTuz(int holeNumber, boolean tuzFlag) {
         Player opponent = board.getOpponentOf(id);
         if (holeNumber == -1) {
-            for (Hole hole : holes) {
-                hole.setTuz(false);
+            if (!tuzFlag) {
+                for (Hole hole : holes) {
+                    hole.setTuz(false);
+                }
+                return true;
             }
         } else {
-            if (holeNumber != 8 && !hasTuz() && opponent.getTuzIndex() != holeNumber) {
-                holes[holeNumber].setTuz(true);
+            if (holeNumber != 8 && tuzFlag != hasTuz() && opponent.getTuzIndex() != holeNumber) {
+                holes[holeNumber].setTuz(tuzFlag);
+                return true;
             }
         }
+        return false;
     }
 
     public void setKazanCount(int count) {
@@ -164,7 +173,7 @@ public abstract class Player {
         int korgoolsInLastHole = board.getOpponentHoleKorgoolCount(holeNumber - 2);
         if (korgools == 0 && korgoolsInLastHole == 3) {
             if (!board.opponentHasTuz()) {
-                board.setOpponentTuz(holeNumber - 2);
+                board.setOpponentTuz(holeNumber - 2, true);
                 board.clearOpponentHole(holeNumber - 2);
                 kazan.add(korgoolsInLastHole);
             }
