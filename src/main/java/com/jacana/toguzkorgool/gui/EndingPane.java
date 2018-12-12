@@ -10,60 +10,57 @@ import java.awt.Font;
 
 public class EndingPane extends JPanel {
 
-    private JButton restart;
-    private JButton quit;
-    private JLabel message;
-    private JPanel buttons;
+    private JButton btnRestart;
+    private JButton btnQuit;
+    private JLabel lblMessage;
 
-    public EndingPane(){
+    public EndingPane() {
         super();
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        buttons = new JPanel();
-        buttons.setLayout(new BoxLayout(buttons, BoxLayout.Y_AXIS));
-       // this.setBorder(new EmptyBorder(5, 5, 5, 5));
-        initializeComponents();
 
+        initializeComponents();
     }
 
-    private void initializeComponents(){
+    private void initializeComponents() {
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
 
-        restart = new JButton("New Game");
-        restart.setName("ButtonNewGame");
-        restart.setHorizontalAlignment(JButton.CENTER);
-        quit = new JButton("Quit");
-        quit.setName("ButtonQuit");
-        quit.setHorizontalAlignment(JButton.CENTER);
-        message = new JLabel();
-        message.setHorizontalAlignment(JLabel.CENTER);
-        //message.setVerticalAlignment(JLabel.CENTER);
-        message.setFont(new Font("Serif", Font.PLAIN, 32));
-        buttons.add(restart);
-        buttons.add(quit);
-       // buttons.setBorder(new EmptyBorder(5,290,100,5));
+        btnRestart = new JButton("New Game");
+        btnRestart.setName("ButtonNewGame");
+        btnRestart.setHorizontalAlignment(JButton.CENTER);
+        btnQuit = new JButton("Quit");
+        btnQuit.setName("ButtonQuit");
+        btnQuit.setHorizontalAlignment(JButton.CENTER);
+        lblMessage = new JLabel();
+        lblMessage.setHorizontalAlignment(JLabel.CENTER);
+        lblMessage.setFont(new Font("Serif", Font.PLAIN, 32));
+
+        buttonsPanel.add(btnRestart);
+        buttonsPanel.add(btnQuit);
 
         this.add(Box.createVerticalGlue());
 
-        this.add(message);
+        this.add(lblMessage);
         this.add(Box.createRigidArea(new Dimension(230, 10)));
 
-        this.add(restart);
-        this.add(quit);
+        this.add(buttonsPanel);
         this.add(Box.createVerticalGlue());
     }
 
     public JButton getQuitButton() {
-        return quit;
+        return btnQuit;
     }
 
     public JButton getRestartButton() {
-        return restart;
+        return btnRestart;
     }
 
-    public void setWin(){
-        message.setText("Congratulations! You win!");
+    public void setWin() {
+        lblMessage.setText("Congratulations! You win!");
     }
-    public void setLose(){
-        message.setText("Game Over");
+
+    public void setLose() {
+        lblMessage.setText("Game Over");
     }
 
 }
