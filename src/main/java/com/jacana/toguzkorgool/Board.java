@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class stores the back-end information of the game.
+ * This class provides methods to change the information relative to each player.
+ */
 public class Board {
 
     private Map<Integer, Player> players = new HashMap<>();
