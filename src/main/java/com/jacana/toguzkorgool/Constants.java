@@ -5,11 +5,12 @@ package com.jacana.toguzkorgool;
  */
 public class Constants {
     // Core rules
+    public final static int CONSTRAINT_PLAYER_COUNT = 2;
     public final static int CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE = 9;
     public final static int CONSTRAINT_HOLES_PER_PLAYER = 9;
     // Board constraints
-    public final static int CONSTRAINT_TOTAL_KORGOOLS = GameController.getBoard().getPlayerCount() * CONSTRAINT_HOLES_PER_PLAYER * CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE;
-    public final static int CONSTRAINT_MAX_KORGOOLS_PER_HOLES = CONSTRAINT_TOTAL_KORGOOLS - (GameController.getBoard().getPlayerCount() - 1);
+    public final static int CONSTRAINT_TOTAL_KORGOOLS = CONSTRAINT_PLAYER_COUNT * CONSTRAINT_HOLES_PER_PLAYER * CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE;
+    public final static int CONSTRAINT_MAX_KORGOOLS_PER_HOLES = CONSTRAINT_TOTAL_KORGOOLS - (CONSTRAINT_PLAYER_COUNT - 1);
     public final static int CONSTRAINT_MIN_KORGOOLS_PER_HOLES = 1;
 
     // Error messages
