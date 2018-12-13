@@ -563,9 +563,15 @@ public class CustomGameDialog extends JDialog {
 
     public static String validateBoard(final Board board) {
         if (board == null) return "Board is null";
+        int previousTuzIndex = -1;
         for (Player player : board.getPlayers()) {
             String playerValidation = validateUser(player);
             if (playerValidation != null) return playerValidation;
+            int playerTuzIndex = player.getTuzIndex();
+            if (playerTuzIndex != -1 && playerTuzIndex == previousTuzIndex) {
+                return "There cannot be a player with the same hole as their opponent marked as a tuz";
+            }
+            previousTuzIndex = playerTuzIndex;
         }
         return null;
     }
