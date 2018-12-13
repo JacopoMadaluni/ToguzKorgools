@@ -561,7 +561,7 @@ public class CustomGameDialog extends JDialog {
         return sb.toString();
     }
 
-    private static String validateBoard(final Board board) {
+    public static String validateBoard(final Board board) {
         if (board == null) return "Board is null";
         for (Player player : board.getPlayers()) {
             String playerValidation = validateUser(player);
@@ -577,20 +577,20 @@ public class CustomGameDialog extends JDialog {
             Hole hole = player.getHole(i);
             if (hole.getKorgools() < 0) {
                 return "Hole " + (i + 1) + " cannot have less than 0 korgools for " + name;
-            } else if (hole.getKorgools() > 162) {
-                return "Hole " + (i + 1) + " cannot have more than 162 korgools for " + name;
+            } else if (hole.getKorgools() > Constants.CONSTRAINT_TOTAL_KORGOOLS) {
+                return "Hole " + (i + 1) + " cannot have more than " + Constants.CONSTRAINT_TOTAL_KORGOOLS + " korgools for " + name;
             }
             if (hole.isTuz()) {
                 if (tuzId != -1)
                     return "More than one tuz found for " + name;
                 if (i == 9 - 1) return "Hole 9 cannot be a tuz for " + name;
-                tuzId = (i);
+                tuzId = i;
             }
         }
         if (player.getKazan().getKorgools() < 0) {
             return name + " cannot have a kazan with less than 0 korgools.";
-        } else if (player.getKazan().getKorgools() > 162) {
-            return name + " cannot have a kazan with more than 162 korgools.";
+        } else if (player.getKazan().getKorgools() > Constants.CONSTRAINT_TOTAL_KORGOOLS) {
+            return name + " cannot have a kazan with more than " + Constants.CONSTRAINT_TOTAL_KORGOOLS + " korgools.";
         }
         return null;
     }
