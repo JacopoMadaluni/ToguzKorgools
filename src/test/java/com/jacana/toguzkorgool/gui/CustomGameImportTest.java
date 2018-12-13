@@ -80,6 +80,14 @@ public class CustomGameImportTest {
     }
 
     @Test
+    public void testValidateBoardSameTuz() {
+        Board invalidBoard = new Board();
+        invalidBoard.setTuz(0, 1);
+        invalidBoard.setTuz(1, 1);
+        assertNotNull(CustomGameDialog.validateBoard(invalidBoard));
+    }
+
+    @Test
     public void testValidateBoardInvalidKazan() {
         Board invalidBoard = new Board();
         invalidBoard.setKorgoolsInKazan(0, -1);
