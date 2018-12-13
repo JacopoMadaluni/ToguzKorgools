@@ -61,8 +61,7 @@ public class BoardDeserializer implements JsonDeserializer<Board> {
         if (korgoolCount < 0 || korgoolCount > Constants.CONSTRAINT_TOTAL_KORGOOLS) {
             throw new IllegalArgumentException("Number of korgools is too large (" + korgoolCount + ")");
         }
-        hole.clear();
-        hole.add(korgoolCount);
+        hole.setKorgools(korgoolCount);
         if (jsonHole.has("tuz")) {
             if (holeId == 9) throw new IllegalArgumentException("Hole 9 can't be a tuz!");
             if (tuzId != -1) throw new IllegalArgumentException("More than one tuz has been found! Tuz ID: " + tuzId);

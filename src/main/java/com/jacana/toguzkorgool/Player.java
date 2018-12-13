@@ -153,8 +153,7 @@ public abstract class Player {
      * @param korgools The number of korgools
      */
     public void setKazanCount(int korgools) {
-        kazan.clear();
-        kazan.add(korgools);
+        kazan.setKorgools(korgools);
     }
 
     /* General methods */
@@ -197,8 +196,7 @@ public abstract class Player {
     public void resetPlayer() {
         kazan.clear();
         for (int i = 0; i < holes.length; ++i) {
-            holes[i].clear();
-            holes[i].add(Constants.CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE);
+            holes[i].setKorgools(Constants.CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE);
             holes[i].setTuz(false);
         }
     }

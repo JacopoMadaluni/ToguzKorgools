@@ -27,4 +27,12 @@ public class KazanTest {
         assertEquals(0, kazan.getKorgools());
     }
 
+    @Test
+    public void testSetKorgools() {
+        Kazan kazan = new Kazan();
+        kazan.add(1);
+        kazan.setKorgools(3);
+        assertEquals(3, kazan.getKorgools());
+    }
+
 }
