@@ -40,9 +40,6 @@ public class GamePane extends JPanel {
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
         this.setBackground(Color.black);
 
-        this.playerColours.put(0, Color.lightGray);
-        this.playerColours.put(1, Color.darkGray);
-
         this.populatePane();
     }
 
@@ -113,15 +110,15 @@ public class GamePane extends JPanel {
         panel.setBackground(playerColours.getOrDefault(player.getId(), panel.getBackground()));
 
         holes.clear();
-        for (int i = 0; i < player.getHoleCount(); ++i) {
-            int k = player.getId() == 0 ? i : player.getHoleCount() - 1 - i;
+        for (int i = 0; i < player.getNumberOfHoles(); ++i) {
+            int k = player.getId() == 0 ? i : player.getNumberOfHoles() - 1 - i;
             JHole holePanel = new JHole(player.getHole(k));
             holePanel.setName("Player" + player.getId() + "Hole" + i);
             holePanel.setBackground(playerColours.getOrDefault(player.getId(), holePanel.getBackground()));
             addToComponentMap(holePanel);
 
             panel.add(holePanel);
-            if (i != player.getHoleCount() - 1) {
+            if (i != player.getNumberOfHoles() - 1) {
                 panel.add(Box.createRigidArea(new Dimension(5, 0)));
             }
             holes.add(holePanel);
@@ -137,6 +134,17 @@ public class GamePane extends JPanel {
         kazan.setBackground(playerColours.getOrDefault(player.getId(), kazan.getBackground()));
 
         addToComponentMap(kazan);
+    }
+
+    public void initialiseColour(int playerId, Color color) {
+        this.playerColours.put(playerId, color);
+
+        JPanel panel = playersPanel.get(playerId);
+        if (panel != null) panel.setBackground(color);
+        List<JHole> holes = playersHoles.get(playerId);
+        if (holes != null) {
+            for (JHole hole : holes) hole.setBackground(color);
+        }
     }
 
     public void updateHoles(int playerId) {

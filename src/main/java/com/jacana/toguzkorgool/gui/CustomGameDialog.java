@@ -31,6 +31,9 @@ public class CustomGameDialog extends JDialog {
     private Map<String, Component> componentMap = new HashMap<>();
     private JPanel contentPane;
 
+    private JFileChooser importFileChooser = null;
+    private JFileChooser exportFileChooser = null;
+
     private CustomGameDialog() {
         setResizable(false);
         setModal(true);
@@ -111,7 +114,7 @@ public class CustomGameDialog extends JDialog {
     public JPanel constructAndGetSidePanel(int playerId) {
         final String playerName = "Player " + (playerId + 1);
 
-        int kazanKorgoolCount = GameController.getBoard().getKazanCount(playerId);
+        int kazanKorgoolCount = GameController.getBoard().getKorgoolsInKazan(playerId);
         int tuzIndex = GameController.getBoard().getTuzIndex(playerId);
 
         //make the panel a vertical box layout
@@ -126,15 +129,15 @@ public class CustomGameDialog extends JDialog {
         addHorizontalSeparator(sidePanel);
 
         //HOLE SPINNERS--------------------------------------------------
-        // create 9 numerical spinners with names and labels, each within a
-        // flow layout
-        for (int i = 0; i < 9; i++) {
+        // Create numerical spinners with names and labels, each within a
+        // Flow layout
+        for (int i = 0; i < Constants.CONSTRAINT_HOLES_PER_PLAYER; i++) {
             JPanel holeSpinnerPanel = new JPanel();
 
             SpinnerNumberModel spinnerHoleModel = new SpinnerNumberModel(0, 0, 161, 1);
             JSpinner holeSpinner = new JSpinner(spinnerHoleModel);
             holeSpinner.setName("Player" + playerId + "Hole" + i);
-            holeSpinner.setValue(GameController.getBoard().getHoleKorgoolCount(playerId, i));
+            holeSpinner.setValue(GameController.getBoard().getKorgoolsInHole(playerId, i));
 
             JLabel newSpinnerLabel = new JLabel("Hole " + (i + 1) + ":");
 
@@ -181,7 +184,7 @@ public class CustomGameDialog extends JDialog {
 
         tuzComboBox.setSelectedIndex(tuzIndex + 1);
 
-        //add to the side panel.
+        // Add to the side panel
         tuzPanel.add(tuzLabel);
         tuzPanel.add(Box.createRigidArea(new Dimension(10, 0)));
         tuzPanel.add(tuzComboBox);
@@ -189,7 +192,6 @@ public class CustomGameDialog extends JDialog {
 
         sidePanel.add(tuzPanel);
 
-        //done
         return sidePanel;
     }
 
@@ -198,40 +200,46 @@ public class CustomGameDialog extends JDialog {
 
         // File menu
         JMenu fileMenu = new JMenu("File");
+        fileMenu.setName("fileMenu");
 
         JMenuItem exportMenuItem = new JMenuItem("Export Board", KeyEvent.VK_E);
+        exportMenuItem.setName("exportMenuItem");
         exportMenuItem.getAccessibleContext().setAccessibleDescription("Export board state to a file");
         fileMenu.add(exportMenuItem);
 
         JMenuItem importMenuItem = new JMenuItem("Import Board", KeyEvent.VK_I);
+        importMenuItem.setName("importMenuItem");
         importMenuItem.getAccessibleContext().setAccessibleDescription("Import board state from a file");
         fileMenu.add(importMenuItem);
 
         exportMenuItem.addActionListener(e ->
                 EventQueue.invokeLater(() -> {
-                    JFileChooser fileChooser = new JFileChooser();
-                    fileChooser.setDialogTitle("Choose a location to save to");
-                    fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
-                    fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                    int returnVal = fileChooser.showSaveDialog(this);
+                    exportFileChooser = new JFileChooser();
+                    exportFileChooser.setDialogTitle("Choose a location to save to");
+                    exportFileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
+                    exportFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                    int returnVal = exportFileChooser.showSaveDialog(this);
                     if (returnVal == JFileChooser.APPROVE_OPTION) {
                         try {
-                            File selectedFile = fileChooser.getSelectedFile();
+                            File selectedFile = exportFileChooser.getSelectedFile();
                             if (!selectedFile.getName().toLowerCase().endsWith(".json")) {
                                 selectedFile = new File(selectedFile.getParentFile(), selectedFile.getName() + ".json");
                             }
                             if (selectedFile.exists()) {
                                 int response = JOptionPane.showConfirmDialog(this, "A file with that name already exists. Do you want to replace the file?");
                                 if (response != JOptionPane.YES_OPTION) {
+                                    exportFileChooser = null;
                                     return;
                                 } else {
                                     try {
                                         if (!selectedFile.delete()) {
+                                            exportFileChooser = null;
                                             JOptionPane.showMessageDialog(this, "Failed to delete the previous file.");
                                             return;
                                         }
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
+                                        exportFileChooser = null;
                                         JOptionPane.showMessageDialog(this, "Failed to delete the previous file.");
                                         return;
                                     }
@@ -246,24 +254,28 @@ public class CustomGameDialog extends JDialog {
                             try (FileWriter writer = new FileWriter(selectedFile)) {
                                 writer.write(serializedBoard);
                             }
+                            exportFileChooser = null;
                             JOptionPane.showMessageDialog(this, "Successfully saved custom board to '" + selectedFile.getName() + "'.");
                         } catch (Exception ex) {
                             ex.printStackTrace();
+                            exportFileChooser = null;
                             JOptionPane.showMessageDialog(this, "An error occurred!");
                         }
+                    } else {
+                        exportFileChooser = null;
                     }
                 })
         );
         importMenuItem.addActionListener(e -> {
             EventQueue.invokeLater(() -> {
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setDialogTitle("Choose a Toguz Korgool board JSON file.");
-                fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
-                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                int returnVal = fileChooser.showOpenDialog(this);
+                importFileChooser = new JFileChooser();
+                importFileChooser.setDialogTitle("Choose a Toguz Korgool board JSON file.");
+                importFileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
+                importFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                int returnVal = importFileChooser.showOpenDialog(this);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     try {
-                        File selectedFile = fileChooser.getSelectedFile();
+                        File selectedFile = importFileChooser.getSelectedFile();
                         if (!selectedFile.getName().toLowerCase().endsWith(".json")) {
                             selectedFile = new File(selectedFile.getParentFile(), selectedFile.getName() + ".json");
                         }
@@ -280,20 +292,27 @@ public class CustomGameDialog extends JDialog {
                             if (error == null) {
                                 loadUser(deserializedBoard.getPlayer(0));
                                 loadUser(deserializedBoard.getPlayer(1));
+                                importFileChooser = null;
                                 JOptionPane.showMessageDialog(this, "Loaded in '" + selectedFile.getName() + "'!");
                             } else {
+                                importFileChooser = null;
                                 JOptionPane.showMessageDialog(this, "Cannot load in '" + selectedFile.getName() + "': " + error);
                             }
                         } catch (IllegalArgumentException ex) {
                             ex.printStackTrace();
+                            importFileChooser = null;
                             JOptionPane.showMessageDialog(this, "An error occurred: " + ex.getLocalizedMessage());
                         }
                     } catch (FileNotFoundException ex) {
+                        importFileChooser = null;
                         JOptionPane.showMessageDialog(this, "Error: " + ex.getLocalizedMessage());
                     } catch (Exception ex) {
                         ex.printStackTrace();
+                        importFileChooser = null;
                         JOptionPane.showMessageDialog(this, "An error occurred!");
                     }
+                } else {
+                    importFileChooser = null;
                 }
             });
         });
@@ -400,41 +419,51 @@ public class CustomGameDialog extends JDialog {
 
         // Reset the kazan
         for (int playerId = 0; playerId < board.getPlayerCount(); playerId++) {
-            board.setKazanCount(playerId, 0);
+            board.setKorgoolsInKazan(playerId, 0);
         }
 
         // Update holes and kazan.
         for (int playerId = 0; playerId < board.getPlayerCount(); playerId++) {
             // Set number of korgools in hole
-            for (int i = 0; i < 9; i++) {
+            for (int i = 0; i < Constants.CONSTRAINT_HOLES_PER_PLAYER; i++) {
                 int holeCount = (int) ((JSpinner) getComponentByName("Player" + playerId + "Hole" + i)).getValue();
-                board.setHoleCount(playerId, i, holeCount);
+                board.setKorgoolsInHole(playerId, i, holeCount);
             }
 
             // Set number of korgools in kazan
-            int kazanCount = board.getKazanCount(playerId);
-            board.setKazanCount(playerId, kazanCount + (int) ((JSpinner) getComponentByName("Player" + playerId + "Kazan")).getValue());
+            int kazanCount = board.getKorgoolsInKazan(playerId);
+            board.setKorgoolsInKazan(playerId, kazanCount + (int) ((JSpinner) getComponentByName("Player" + playerId + "Kazan")).getValue());
 
             // Set tuz index
             int tuzIndex = ((JComboBox) getComponentByName("Player" + playerId + "Tuz")).getSelectedIndex() - 1;
             if (tuzIndex >= 0) {
                 board.setTuz(playerId, tuzIndex);
 
-                int holeCount = board.getHoleKorgoolCount(playerId, tuzIndex);
-                board.setHoleCount(playerId, tuzIndex, 0);
+                int holeCount = board.getKorgoolsInHole(playerId, tuzIndex);
+                board.setKorgoolsInHole(playerId, tuzIndex, 0);
 
                 int opponentId = board.getOpponentOf(playerId).getId();
-                int opponentKazanCount = board.getKazanCount(opponentId);
-                board.setKazanCount(opponentId, opponentKazanCount + holeCount);
+                int opponentKazanCount = board.getKorgoolsInKazan(opponentId);
+                board.setKorgoolsInKazan(opponentId, opponentKazanCount + holeCount);
             }
         }
 
         for (int playerId = 0; playerId < board.getPlayerCount(); playerId++) {
-            if (board.playerHasWon(playerId)) {
+            if (board.hasPlayerWon(playerId)) {
                 GameController.getInstance().onWin(playerId);
                 break;
             }
         }
+    }
+
+    /* Getters */
+
+    public JFileChooser getExportFileChooser() {
+        return exportFileChooser;
+    }
+
+    public JFileChooser getImportFileChooser() {
+        return importFileChooser;
     }
 
     /* Action methods */
@@ -482,9 +511,9 @@ public class CustomGameDialog extends JDialog {
 
     /* Loading and saving methods */
 
-    private void loadUser(final Player player) {
+    void loadUser(final Player player) {
         int tuzIndex = -1;
-        for (int i = 0; i < player.getHoleCount(); i++) {
+        for (int i = 0; i < player.getNumberOfHoles(); i++) {
             Hole hole = player.getHole(i);
             JSpinner holeSpinner = (JSpinner) componentMap.get("Player" + player.getId() + "Hole" + i);
             holeSpinner.setValue(hole.getKorgools());
@@ -496,11 +525,11 @@ public class CustomGameDialog extends JDialog {
         tuzComboBox.setSelectedIndex(tuzIndex + 1);
 
         JSpinner kazanSpinner = (JSpinner) componentMap.get("Player" + player.getId() + "Kazan");
-        kazanSpinner.setValue(player.getKazanCount());
+        kazanSpinner.setValue(player.getKorgoolsInKazan());
     }
 
-    private void saveUser(final Player player) {
-        for (int i = 0; i < player.getHoleCount(); i++) {
+    void saveUser(final Player player) {
+        for (int i = 0; i < player.getNumberOfHoles(); i++) {
             JSpinner holeSpinner = (JSpinner) componentMap.get("Player" + player.getId() + "Hole" + i);
             if (holeSpinner == null) return;
             player.clearHole(i);
@@ -511,7 +540,7 @@ public class CustomGameDialog extends JDialog {
         JComboBox<String> tuzComboBox = (JComboBox<String>) componentMap.get("Player" + player.getId() + "Tuz");
         if (tuzComboBox != null) {
             if (tuzComboBox.getSelectedIndex() > 0) {
-                player.setTuz(Math.max(Math.min(tuzComboBox.getSelectedIndex() - 1, player.getHoleCount() - 1), 0));
+                player.setTuz(Math.max(Math.min(tuzComboBox.getSelectedIndex() - 1, player.getNumberOfHoles() - 1), 0));
             }
         }
 
@@ -544,7 +573,7 @@ public class CustomGameDialog extends JDialog {
     private static String validateUser(final Player player) {
         String name = "player " + (player.getId() + 1);
         int tuzId = -1;
-        for (int i = 0; i < player.getHoleCount(); i++) {
+        for (int i = 0; i < player.getNumberOfHoles(); i++) {
             Hole hole = player.getHole(i);
             if (hole.getKorgools() < 0) {
                 return "Hole " + (i + 1) + " cannot have less than 0 korgools for " + name;

@@ -31,7 +31,7 @@ public class CustomGameDialogTest {
         // Create the swinger
         Swinger.setDEFAULT(com.athaydes.automaton.Speed.VERY_FAST);
         Swinger.forSwingWindow().pause(250);
-        swinger = Swinger.getUserWith(GameController.getInstance().getGUI());
+        swinger = Swinger.getUserWith(GameController.getGUI());
 
         // Open the custom game dialog
         swinger.clickOn("name:fileMenu")
@@ -93,10 +93,10 @@ public class CustomGameDialogTest {
         for (int j = 0; j < params.length; j++) {
             int[] sideParam = params[j];
             for (int i = 0; i < sideParam.length - 2; i++) {
-                int boardValue = board.getHoleKorgoolCount(j, i);
+                int boardValue = board.getKorgoolsInHole(j, i);
                 assertThat(boardValue, is(equalTo(sideParam[i])));
             }
-            assertThat(board.getKazanCount(j), is(equalTo(sideParam[sideParam.length - 2])));
+            assertThat(board.getKorgoolsInKazan(j), is(equalTo(sideParam[sideParam.length - 2])));
             assertThat(board.getTuzIndex(j), is(equalTo(sideParam[sideParam.length - 1])));
         }
     }

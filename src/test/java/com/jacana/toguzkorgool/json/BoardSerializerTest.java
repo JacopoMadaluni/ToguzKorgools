@@ -37,7 +37,7 @@ public class BoardSerializerTest {
             assertTrue(jsonPlayer.has("holes"));
             assertTrue(jsonPlayer.has("kazan"));
             JsonObject jsonHoles = jsonPlayer.getAsJsonObject("holes");
-            for (int holeId = 1; holeId <= player.getHoleCount(); holeId++) {
+            for (int holeId = 1; holeId <= player.getNumberOfHoles(); holeId++) {
                 assertTrue(jsonHoles.has(String.valueOf(holeId)));
                 JsonObject jsonHole = jsonHoles.getAsJsonObject(String.valueOf(holeId));
                 assertTrue(jsonHole.has("korgools"));
@@ -51,7 +51,7 @@ public class BoardSerializerTest {
         for (Player player : this.board.getPlayers()) {
             JsonObject jsonPlayer = serializedBoard.getAsJsonObject(String.valueOf(player.getId()));
             JsonObject jsonHoles = jsonPlayer.getAsJsonObject("holes");
-            for (int holeId = 1; holeId <= player.getHoleCount(); holeId++) {
+            for (int holeId = 1; holeId <= player.getNumberOfHoles(); holeId++) {
                 JsonObject jsonHole = jsonHoles.getAsJsonObject(String.valueOf(holeId));
                 assertEquals(9, jsonHole.getAsJsonPrimitive("korgools").getAsInt());
             }
@@ -64,7 +64,7 @@ public class BoardSerializerTest {
         for (Player player : this.board.getPlayers()) {
             JsonObject jsonPlayer = serializedBoard.getAsJsonObject(String.valueOf(player.getId()));
             JsonObject jsonHoles = jsonPlayer.getAsJsonObject("holes");
-            for (int holeId = 1; holeId <= player.getHoleCount(); holeId++) {
+            for (int holeId = 1; holeId <= player.getNumberOfHoles(); holeId++) {
                 JsonObject jsonHole = jsonHoles.getAsJsonObject(String.valueOf(holeId));
                 assertFalse(jsonHole.has("tuz"));
             }
@@ -78,7 +78,7 @@ public class BoardSerializerTest {
         for (Player player : this.board.getPlayers()) {
             JsonObject jsonPlayer = serializedBoard.getAsJsonObject(String.valueOf(player.getId()));
             JsonObject jsonHoles = jsonPlayer.getAsJsonObject("holes");
-            for (int holeId = 1; holeId <= player.getHoleCount(); holeId++) {
+            for (int holeId = 1; holeId <= player.getNumberOfHoles(); holeId++) {
                 JsonObject jsonHole = jsonHoles.getAsJsonObject(String.valueOf(holeId));
                 if (player.getId() == 0 && holeId == 1) {
                     assertTrue(jsonHole.has("tuz"));

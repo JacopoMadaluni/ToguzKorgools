@@ -28,6 +28,14 @@ public class HoleTest {
     }
 
     @Test
+    public void testSetKorgools() {
+        Hole hole = new Hole();
+        hole.add(1);
+        hole.setKorgools(3);
+        assertEquals(3, hole.getKorgools());
+    }
+
+    @Test
     public void testTuz() {
         Hole hole = new Hole();
         hole.setTuz(true);

@@ -23,12 +23,12 @@ public class BoardSerializer implements JsonSerializer<Board> {
 
     private static JsonObject serializeUser(final Player player) {
         JsonObject jsonUserHoles = new JsonObject();
-        for (int i = 0; i < player.getHoleCount(); i++) {
+        for (int i = 0; i < player.getNumberOfHoles(); i++) {
             jsonUserHoles.add(String.valueOf(i + 1), serializeHole(player.getHole(i)));
         }
         JsonObject jsonUser = new JsonObject();
         jsonUser.add("holes", jsonUserHoles);
-        jsonUser.addProperty("kazan", player.getKazanCount());
+        jsonUser.addProperty("kazan", player.getKorgoolsInKazan());
         return jsonUser;
     }
 

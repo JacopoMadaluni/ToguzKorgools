@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.jacana.toguzkorgool.Board;
+import com.jacana.toguzkorgool.Constants;
 import com.jacana.toguzkorgool.Hole;
 import com.jacana.toguzkorgool.Player;
 import com.jacana.toguzkorgool.Utilities;
@@ -37,7 +38,7 @@ public class BoardDeserializer implements JsonDeserializer<Board> {
     private static void updateUser(JsonObject jsonUser, final Player player) {
         JsonObject jsonUserHoles = jsonUser.getAsJsonObject("holes");
         int tuzId = -1;
-        for (int i = 0; i < player.getHoleCount(); i++) {
+        for (int i = 0; i < player.getNumberOfHoles(); i++) {
             String strHoleId = String.valueOf(i + 1);
             if (jsonUserHoles.has(strHoleId)) {
                 JsonElement jsonHole = jsonUserHoles.get(strHoleId);
@@ -57,11 +58,10 @@ public class BoardDeserializer implements JsonDeserializer<Board> {
 
     private static void updateHole(JsonObject jsonHole, final Hole hole, int holeId, final int tuzId) {
         int korgoolCount = jsonHole.get("korgools").getAsInt();
-        if (korgoolCount < 0 || korgoolCount > 9 * 9 * 2) {
+        if (korgoolCount < 0 || korgoolCount > Constants.CONSTRAINT_TOTAL_KORGOOLS) {
             throw new IllegalArgumentException("Number of korgools is too large (" + korgoolCount + ")");
         }
-        hole.clear();
-        hole.add(korgoolCount);
+        hole.setKorgools(korgoolCount);
         if (jsonHole.has("tuz")) {
             if (holeId == 9) throw new IllegalArgumentException("Hole 9 can't be a tuz!");
             if (tuzId != -1) throw new IllegalArgumentException("More than one tuz has been found! Tuz ID: " + tuzId);

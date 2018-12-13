@@ -4,15 +4,15 @@ import java.util.Random;
 
 public class BotPlayer extends Player {
 
-    private Random random;
+    private Random random = new Random();
 
     public BotPlayer(Board board, int id) {
         super(board, id);
-        this.random = new Random();
     }
 
     public void act() {
-        int randomIndex = random.nextInt(9) + 1;
+        int randomIndex = random.nextInt(holes.length);
         super.makeMove(randomIndex);
     }
+
 }
