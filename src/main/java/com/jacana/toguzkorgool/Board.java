@@ -103,7 +103,7 @@ public class Board {
      * @return The number of korgools in the player's kazan
      */
     public int getKorgoolsInKazan(int playerId) {
-        return players.get(playerId).getKazanCount();
+        return players.get(playerId).getKorgoolsInKazan();
     }
 
     /**

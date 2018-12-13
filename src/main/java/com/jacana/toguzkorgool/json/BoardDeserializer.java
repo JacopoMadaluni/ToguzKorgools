@@ -38,7 +38,7 @@ public class BoardDeserializer implements JsonDeserializer<Board> {
     private static void updateUser(JsonObject jsonUser, final Player player) {
         JsonObject jsonUserHoles = jsonUser.getAsJsonObject("holes");
         int tuzId = -1;
-        for (int i = 0; i < player.getHoleCount(); i++) {
+        for (int i = 0; i < player.getNumberOfHoles(); i++) {
             String strHoleId = String.valueOf(i + 1);
             if (jsonUserHoles.has(strHoleId)) {
                 JsonElement jsonHole = jsonUserHoles.get(strHoleId);

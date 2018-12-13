@@ -20,7 +20,7 @@ public class PlayerTest {
         for (int i = 0; i < 9; ++i) {
             assertEquals(9, aPlayer.getHole(i).getKorgools());
         }
-        assertEquals(0, aPlayer.getKazanCount());
+        assertEquals(0, aPlayer.getKorgoolsInKazan());
     }
 
     @Test
@@ -70,8 +70,8 @@ public class PlayerTest {
             // Bot holes 2 to 9 have 9 korgools each
             assertEquals(9, bot.getHole(i).getKorgools());
         }
-        assertEquals(10, player.getKazanCount());
-        assertEquals(0, bot.getKazanCount());
+        assertEquals(10, player.getKorgoolsInKazan());
+        assertEquals(0, bot.getKorgoolsInKazan());
     }
 
     @Test
@@ -92,8 +92,8 @@ public class PlayerTest {
             // Bot holes 1 to 9 have 9 korgools each
             assertEquals(9, bot.getHole(i).getKorgools());
         }
-        assertEquals(0, player.getKazanCount());
-        assertEquals(0, bot.getKazanCount());
+        assertEquals(0, player.getKorgoolsInKazan());
+        assertEquals(0, bot.getKorgoolsInKazan());
     }
 
     @Test
@@ -108,14 +108,14 @@ public class PlayerTest {
         player.makeMove(6);
         assertEquals(0, player.getHole(6).getKorgools());
         assertEquals(0, player.getHole(7).getKorgools());
-        assertEquals(1, bot.getKazanCount());
+        assertEquals(1, bot.getKorgoolsInKazan());
         for (int i = 0; i < 9; ++i) {
             assertEquals(9, bot.getHole(i).getKorgools());
         }
         for (int i = 0; i < 9; ++i) {
             if (i != 6 && i != 7) assertEquals(9, player.getHole(i).getKorgools());
         }
-        assertEquals(0, player.getKazanCount());
+        assertEquals(0, player.getKorgoolsInKazan());
     }
 
     @Test
@@ -133,8 +133,8 @@ public class PlayerTest {
             // Bot holes 1 to 9 have 9 korgools each
             assertEquals(9, bot.getHole(i).getKorgools());
         }
-        assertEquals(0, player.getKazanCount());
-        assertEquals(0, bot.getKazanCount());
+        assertEquals(0, player.getKorgoolsInKazan());
+        assertEquals(0, bot.getKorgoolsInKazan());
     }
 
     @Test
@@ -150,8 +150,8 @@ public class PlayerTest {
             else if (i == 5) assertEquals(0, player.getHole(i).getKorgools());
             else assertEquals(10, player.getHole(i).getKorgools());
         }
-        assertEquals(0, player.getKazanCount());
-        assertEquals(1, bot.getKazanCount());
+        assertEquals(0, player.getKorgoolsInKazan());
+        assertEquals(1, bot.getKorgoolsInKazan());
     }
 
     @Test
@@ -177,8 +177,8 @@ public class PlayerTest {
         }
         assertTrue(bot.hasTuz());
         assertFalse(player.hasTuz());
-        assertEquals(11, player.getKazanCount());
-        assertEquals(0, bot.getKazanCount());
+        assertEquals(11, player.getKorgoolsInKazan());
+        assertEquals(0, bot.getKorgoolsInKazan());
     }
 
     @Test
@@ -203,8 +203,8 @@ public class PlayerTest {
         }
         assertFalse(bot.hasTuz());
         assertFalse(player.hasTuz());
-        assertEquals(4, player.getKazanCount());
-        assertEquals(0, bot.getKazanCount());
+        assertEquals(4, player.getKorgoolsInKazan());
+        assertEquals(0, bot.getKorgoolsInKazan());
     }
 
     @Test
@@ -229,8 +229,8 @@ public class PlayerTest {
         }
         assertFalse(bot.hasTuz());
         assertFalse(player.hasTuz());
-        assertEquals(0, player.getKazanCount());
-        assertEquals(0, bot.getKazanCount());
+        assertEquals(0, player.getKorgoolsInKazan());
+        assertEquals(0, bot.getKorgoolsInKazan());
     }
 
     @Test
@@ -253,8 +253,8 @@ public class PlayerTest {
         for (int i = 2; i < 9; ++i) {
             assertEquals(9, bot.getHole(i).getKorgools());
         }
-        assertEquals(3, player.getKazanCount());
-        assertEquals(0, bot.getKazanCount());
+        assertEquals(3, player.getKorgoolsInKazan());
+        assertEquals(0, bot.getKorgoolsInKazan());
         assertTrue(bot.getHole(1).isTuz());
     }
 
@@ -281,8 +281,8 @@ public class PlayerTest {
         for (int i = 3; i < 9; ++i) {
             assertEquals(9, bot.getHole(i).getKorgools());
         }
-        assertEquals(0, player.getKazanCount());
-        assertEquals(0, bot.getKazanCount());
+        assertEquals(0, player.getKorgoolsInKazan());
+        assertEquals(0, bot.getKorgoolsInKazan());
         assertFalse(bot.getHole(1).isTuz());
         assertTrue(bot.getHole(2).isTuz());
     }
@@ -302,8 +302,8 @@ public class PlayerTest {
             assertEquals(9, player.getHole(i).getKorgools());
         }
         assertEquals(1, player.getHole(8).getKorgools());
-        assertEquals(0, player.getKazanCount());
-        assertEquals(0, bot.getKazanCount());
+        assertEquals(0, player.getKorgoolsInKazan());
+        assertEquals(0, bot.getKorgoolsInKazan());
         assertFalse(bot.hasTuz());
         assertFalse(player.hasTuz());
     }
@@ -322,7 +322,7 @@ public class PlayerTest {
         Board board = new Board();
         Player player = board.getCurrentPlayer();
         Player bot = board.getCurrentOpponent();
-        player.addToKazan(player.getHoleCount() * player.getHoleCount() + 1);
+        player.addToKazan(player.getNumberOfHoles() * player.getNumberOfHoles() + 1);
         assertTrue(player.hasWon());
         assertFalse(bot.hasWon());
     }
@@ -336,7 +336,7 @@ public class PlayerTest {
             assertEquals(10, player.getHole(i).getKorgools());
         }
         player.addToKazan(1);
-        assertEquals(1, player.getKazanCount());
+        assertEquals(1, player.getKorgoolsInKazan());
         player.setTuz(3);
         assertTrue(player.hasTuz());
         assertEquals(3, player.getTuzIndex());
@@ -345,6 +345,6 @@ public class PlayerTest {
             assertEquals(9, player.getHole(i).getKorgools());
         }
         assertFalse(player.hasTuz());
-        assertEquals(0, player.getKazanCount());
+        assertEquals(0, player.getKorgoolsInKazan());
     }
 }

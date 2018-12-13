@@ -61,7 +61,7 @@ public class GameController {
     }
 
     private void initialiseHoles() {
-        for (int j = 0; j < board.getCurrentPlayer().getHoleCount(); j++) {
+        for (int j = 0; j < board.getCurrentPlayer().getNumberOfHoles(); j++) {
             int finalJ = j;
             final JHole currentJHole = gui.getGamePane().getHoles(board.getCurrentPlayer().getId()).get(j);
             currentJHole.addMouseListener(new MouseAdapter() {

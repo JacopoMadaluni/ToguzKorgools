@@ -110,15 +110,15 @@ public class GamePane extends JPanel {
         panel.setBackground(playerColours.getOrDefault(player.getId(), panel.getBackground()));
 
         holes.clear();
-        for (int i = 0; i < player.getHoleCount(); ++i) {
-            int k = player.getId() == 0 ? i : player.getHoleCount() - 1 - i;
+        for (int i = 0; i < player.getNumberOfHoles(); ++i) {
+            int k = player.getId() == 0 ? i : player.getNumberOfHoles() - 1 - i;
             JHole holePanel = new JHole(player.getHole(k));
             holePanel.setName("Player" + player.getId() + "Hole" + i);
             holePanel.setBackground(playerColours.getOrDefault(player.getId(), holePanel.getBackground()));
             addToComponentMap(holePanel);
 
             panel.add(holePanel);
-            if (i != player.getHoleCount() - 1) {
+            if (i != player.getNumberOfHoles() - 1) {
                 panel.add(Box.createRigidArea(new Dimension(5, 0)));
             }
             holes.add(holePanel);

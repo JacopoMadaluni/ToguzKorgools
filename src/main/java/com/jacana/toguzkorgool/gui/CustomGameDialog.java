@@ -513,7 +513,7 @@ public class CustomGameDialog extends JDialog {
 
     void loadUser(final Player player) {
         int tuzIndex = -1;
-        for (int i = 0; i < player.getHoleCount(); i++) {
+        for (int i = 0; i < player.getNumberOfHoles(); i++) {
             Hole hole = player.getHole(i);
             JSpinner holeSpinner = (JSpinner) componentMap.get("Player" + player.getId() + "Hole" + i);
             holeSpinner.setValue(hole.getKorgools());
@@ -525,11 +525,11 @@ public class CustomGameDialog extends JDialog {
         tuzComboBox.setSelectedIndex(tuzIndex + 1);
 
         JSpinner kazanSpinner = (JSpinner) componentMap.get("Player" + player.getId() + "Kazan");
-        kazanSpinner.setValue(player.getKazanCount());
+        kazanSpinner.setValue(player.getKorgoolsInKazan());
     }
 
     void saveUser(final Player player) {
-        for (int i = 0; i < player.getHoleCount(); i++) {
+        for (int i = 0; i < player.getNumberOfHoles(); i++) {
             JSpinner holeSpinner = (JSpinner) componentMap.get("Player" + player.getId() + "Hole" + i);
             if (holeSpinner == null) return;
             player.clearHole(i);
@@ -540,7 +540,7 @@ public class CustomGameDialog extends JDialog {
         JComboBox<String> tuzComboBox = (JComboBox<String>) componentMap.get("Player" + player.getId() + "Tuz");
         if (tuzComboBox != null) {
             if (tuzComboBox.getSelectedIndex() > 0) {
-                player.setTuz(Math.max(Math.min(tuzComboBox.getSelectedIndex() - 1, player.getHoleCount() - 1), 0));
+                player.setTuz(Math.max(Math.min(tuzComboBox.getSelectedIndex() - 1, player.getNumberOfHoles() - 1), 0));
             }
         }
 
@@ -573,7 +573,7 @@ public class CustomGameDialog extends JDialog {
     private static String validateUser(final Player player) {
         String name = "player " + (player.getId() + 1);
         int tuzId = -1;
-        for (int i = 0; i < player.getHoleCount(); i++) {
+        for (int i = 0; i < player.getNumberOfHoles(); i++) {
             Hole hole = player.getHole(i);
             if (hole.getKorgools() < 0) {
                 return "Hole " + (i + 1) + " cannot have less than 0 korgools for " + name;
