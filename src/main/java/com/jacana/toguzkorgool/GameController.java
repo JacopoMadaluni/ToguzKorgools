@@ -41,8 +41,10 @@ public class GameController {
     public static void destroyInstance() {
         CustomGameDialog.destroyInstance();
 
-        gui.dispose();
-        gui = null;
+        if (gui != null) {
+            gui.dispose();
+            gui = null;
+        }
 
         board = null;
         instance = null;
