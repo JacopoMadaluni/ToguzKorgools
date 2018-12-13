@@ -531,7 +531,7 @@ public class CustomGameDialog extends JDialog {
     void saveUser(final Player player) {
         for (int i = 0; i < player.getNumberOfHoles(); i++) {
             JSpinner holeSpinner = (JSpinner) componentMap.get("Player" + player.getId() + "Hole" + i);
-            if (holeSpinner == null) return;
+            if (holeSpinner == null) break;
             player.clearHole(i);
             player.addToHole(i, (Integer) holeSpinner.getValue());
         }
