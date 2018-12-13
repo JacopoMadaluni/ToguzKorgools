@@ -70,7 +70,7 @@ public class GameController {
      */
     private void initializeEnding() {
         gui.getEndPane().getRestartButton().addActionListener(e -> restartGame());
-        gui.getEndPane().getQuitButton().addActionListener(e -> gui.dispose());
+        gui.getEndPane().getQuitButton().addActionListener(e -> destroyInstance());
     }
 
     /**
