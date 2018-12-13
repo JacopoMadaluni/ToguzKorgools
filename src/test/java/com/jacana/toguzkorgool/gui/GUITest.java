@@ -38,19 +38,19 @@ public class GUITest {
     @Test
     public void testWin() {
         GameController.getInstance().onWin(0);
-        this.swinger.clickOn("name:ButtonQuit");
+        this.swinger.clickOn("name:ButtonQuit").pause(250);
     }
 
     @Test
     public void testLose() {
         GameController.getInstance().onWin(1);
-        this.swinger.clickOn("name:ButtonQuit");
+        this.swinger.clickOn("name:ButtonQuit").pause(250);
     }
 
     @Test(expected = GuiItemNotFound.class)
     public void testWinUnknownPlayer() {
         GameController.getInstance().onWin(-1);
-        this.swinger.clickOn("name:ButtonQuit");
+        this.swinger.clickOn("name:ButtonQuit").pause(250);
     }
 
     @Test
