@@ -6,6 +6,7 @@ import com.jacana.toguzkorgool.Board;
 import com.jacana.toguzkorgool.GameController;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.swing.JComboBox;
@@ -15,6 +16,7 @@ import java.awt.Component;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+
 
 public class CustomGameDialogTest {
 
@@ -100,15 +102,21 @@ public class CustomGameDialogTest {
             assertThat(board.getTuzIndex(j), is(equalTo(sideParam[sideParam.length - 1])));
         }
     }
-
-    private void performTest(int[][] params, Runnable controlAction, Runnable testsAction) {
-        inputParams(params);
-
+    
+    private void performTest(int[][] frontParams, int[][] backParams, Runnable controlAction, Runnable testsAction, boolean checkBackend) {
+        inputParams(frontParams);
+        
         controlAction.run();
         testsAction.run();
-
+        
         // Check that the back-end is intact.
-        checkBackend(params);
+        if (checkBackend){
+            checkBackend(backParams);
+        }
+    }
+    
+    private void performTest(int[][] params, Runnable controlAction, Runnable testsAction, boolean checkBackend) {
+        performTest( params,  params,  controlAction,  testsAction,  checkBackend);
     }
 
     /**
@@ -138,14 +146,46 @@ public class CustomGameDialogTest {
         swinger.pause(250);
     }
 
-    /**
-     * Test a set of valid inputs that the user could possibly select in the custom game GUI.
-     */
     @Test(expected = GuiItemNotFound.class)
-    public void testValidInput() {
-        int[][] params = {{12, 12, 4, 13, 1, 2, 12, 3, 13, 14, -1},  // Player 1 parameters
-                {13, 2, 11, 11, 2, 12, 0, 12, 1, 12, -1}}; // Player 2 parameters
-        performTest(params, applyAction, () -> swinger.clickOn("text:OK"));
+    public void testValidInputShouldNotRaiseErrors() {
+        int[][] params = {{12, 12, 4, 13, 1, 2, 12, 3, 13, 14, 2},  // Player 1 parameters
+                          {13, 2, 11, 11, 2, 12, 0, 12, 1, 12, 3}}; // Player 2 parameters
+        performTest(params, applyAction, () -> swinger.clickOn("text:OK"), true);
+    }
+    
+    @Test(expected = GuiItemNotFound.class)
+    public void testValidInputButCanceledShouldNotChangeBackEnd() {
+        int[][] frontParams = {{12, 12, 4, 13, 1, 2, 12, 3, 13, 14, 2},  // Player 1 parameters
+                          {13, 2, 11, 11, 2, 12, 0, 12, 1, 12, 3}}; // Player 2 parameters
+    
+        // Default parameters
+        int[][] backParams = {{9, 9, 9, 9, 9, 9, 9, 9, 9, 0, -1},
+                                {9, 9, 9, 9, 9, 9, 9, 9, 9, 0, -1}};
+        performTest(frontParams, backParams, cancelAction, () -> swinger.clickOn("text:OK"), true);
+    }
+    
+    @Test
+    public void testKorgoolBoardCountShouldBeConstant() {
+        //total 163 Korgools
+        int[][] params = {{13, 12, 4, 13, 1, 2, 12, 3, 13, 14, 2},  // Player 1 parameters
+                          {13, 2, 11, 11, 2, 12, 0, 12, 1, 12, 3}}; // Player 2 parameters
+        
+        performTest(params, applyAction, () -> swinger.clickOn("text:OK"), false);
+    }
+    
+    @Test
+    public void testInvalidTooManyOrTooFewKorgoolsPerSide() {
+        int[][] params = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},           // Player 1 parameters
+                          {18, 18, 18, 18, 18, 18, 18, 18, 18, 0, -1}}; // Player 2 parameters
+        
+        performTest(params, applyAction, () -> swinger.clickOn("text:OK"), false);
+    }
+    
+    @Test
+    public void testBothTuzShouldNotBeInTheSameIndex() {
+        int[][] params = {{12, 12, 4, 13, 1, 2, 12, 3, 13, 14, 1},  // Player 1 parameters
+                          {13, 2, 11, 11, 2, 12, 0, 12, 1, 12, 1}}; // Player 2 parameters
+        performTest(params, applyAction, () -> swinger.clickOn("text:OK"), false);
     }
 
     private static Component getComponent(String name) {

@@ -7,6 +7,7 @@ import com.jacana.toguzkorgool.GameController;
 import com.jacana.toguzkorgool.gui.components.JHole;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.awt.Component;
@@ -16,6 +17,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
+
 public class GUITest {
 
     private Swinger swinger = null;
@@ -23,10 +25,9 @@ public class GUITest {
     @Before
     public void setUp() {
         GameController.getInstance();
-        Swinger.forSwingWindow().pause(250);
 
         Swinger.setDEFAULT(com.athaydes.automaton.Speed.VERY_FAST);
-        this.swinger = Swinger.getUserWith(GameController.getGUI());
+        this.swinger = Swinger.getUserWith(GameController.getGUI()).pause(250);
     }
 
     @After
