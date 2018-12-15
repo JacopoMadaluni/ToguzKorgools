@@ -100,6 +100,7 @@ public class GUI extends JFrame {
         contentPane.add(this.gamePane, BorderLayout.CENTER);
     }
 
+    private JMenuItem customGameMenuItem;
     private JMenuItem restartMenuItem;
 
     /**
@@ -119,16 +120,18 @@ public class GUI extends JFrame {
         restartMenuItem.getAccessibleContext().setAccessibleDescription("Restart the game");
         fileMenu.add(restartMenuItem);
 
-        JMenuItem customGameMenuItem = new JMenuItem("Custom", KeyEvent.VK_C);
+        customGameMenuItem = new JMenuItem("Custom", KeyEvent.VK_C);
         customGameMenuItem.setName("customGameMenuItem");
         customGameMenuItem.getAccessibleContext().setAccessibleDescription("Create custom game");
         fileMenu.add(customGameMenuItem);
 
-        customGameMenuItem.addActionListener(e -> CustomGameDialog.showCustomGameDialog());
-
         menuBar.add(fileMenu);
 
         return menuBar;
+    }
+
+    public JMenuItem getCustomGameMenuItem() {
+        return customGameMenuItem;
     }
 
     public JMenuItem getRestartMenuItem() {

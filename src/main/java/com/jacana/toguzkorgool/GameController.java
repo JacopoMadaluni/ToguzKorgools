@@ -5,8 +5,10 @@ import com.jacana.toguzkorgool.gui.GUI;
 import com.jacana.toguzkorgool.gui.components.JHole;
 
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Random;
 
 /**
  * This class functions as "middle man" between back-end and front-end (board and GUI)
@@ -16,6 +18,8 @@ public class GameController {
     private static GameController instance = null;
     private static GUI gui = null;
     private static Board board = null;
+
+    private Thread botThread = null;
 
     private GameController() {
         board = new Board();
@@ -40,6 +44,12 @@ public class GameController {
      */
     public static void destroyInstance() {
         CustomGameDialog.destroyInstance();
+
+        if (instance != null) {
+            if (instance.getBotThread() != null) {
+                instance.getBotThread().interrupt();
+            }
+        }
 
         if (gui != null) {
             gui.dispose();
@@ -77,6 +87,9 @@ public class GameController {
      * Initialize the menu action listeners.
      */
     private void initialiseMenuItems() {
+        gui.getCustomGameMenuItem().addActionListener(e -> {
+            if (botThread == null) CustomGameDialog.showCustomGameDialog();
+        });
         gui.getRestartMenuItem().addActionListener(e -> restartGame());
     }
 
@@ -90,6 +103,7 @@ public class GameController {
             currentJHole.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseReleased(MouseEvent e) {
+                    if (botThread != null) return;
                     if (board.getKorgoolsInHole(board.getCurrentPlayer().getId(), finalJ) > 0) {
                         board.getCurrentPlayer().makeMove(finalJ);
                         if (board.hasCurrentPlayerWon()) {
@@ -106,13 +120,26 @@ public class GameController {
                     }
                     board.changePlayer();
                     if (board.getCurrentPlayer() instanceof BotPlayer) {
-                        ((BotPlayer) board.getCurrentPlayer()).act();
-                        if (board.hasCurrentPlayerWon()) {
-                            onWin(board.getCurrentPlayer().getId());
-                            return;
-                        }
-                        board.changePlayer();
                         gui.getGamePane().updateGamePane();
+                        botThread = new Thread(() -> {
+                            try {
+                                Thread.sleep(500L + (new Random().nextInt(500) + 1));
+                            } catch (InterruptedException ignored) {
+                                botThread = null;
+                                return;
+                            }
+                            EventQueue.invokeLater(() -> {
+                                botThread = null;
+                                ((BotPlayer) board.getCurrentPlayer()).act();
+                                if (board.hasCurrentPlayerWon()) {
+                                    onWin(board.getCurrentPlayer().getId());
+                                    return;
+                                }
+                                board.changePlayer();
+                                gui.getGamePane().updateGamePane();
+                            });
+                        });
+                        botThread.start();
                     }
                 }
             });
@@ -135,6 +162,10 @@ public class GameController {
         gui.getGamePane().initialiseColour(1, Color.darkGray);
     }
 
+    public Thread getBotThread() {
+        return this.botThread;
+    }
+
     /**
      * Display the victory/defeat screen to the player depending on the winner.
      *
@@ -152,21 +183,20 @@ public class GameController {
      * Starts a new game, resetting the state of the board and GUI.
      */
     public void restartGame() {
+        if (this.botThread != null) {
+            this.botThread.interrupt();
+            this.botThread = null;
+        }
+
         board.resetBoard();
         gui.getGamePane().updateGamePane();
         gui.restart();
     }
 
-    /**
-     * @return The game board
-     */
     public static Board getBoard() {
         return board;
     }
 
-    /**
-     * @return The game GUI
-     */
     public static GUI getGUI() {
         return gui;
     }
