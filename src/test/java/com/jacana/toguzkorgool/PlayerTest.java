@@ -347,4 +347,14 @@ public class PlayerTest {
         assertFalse(player.hasTuz());
         assertEquals(0, player.getKorgoolsInKazan());
     }
+
+    @Test
+    public void testClearTuz() {
+        Board board = new Board();
+        Player player = board.getCurrentPlayer();
+        player.setTuz(1);
+        player.setTuz(-1, false);
+        assertEquals(-1, player.getTuzIndex());
+    }
+
 }
