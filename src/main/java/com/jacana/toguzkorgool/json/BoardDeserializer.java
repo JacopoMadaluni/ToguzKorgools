@@ -14,6 +14,9 @@ import com.jacana.toguzkorgool.Utilities;
 import java.lang.reflect.Type;
 import java.util.OptionalInt;
 
+/**
+ * A class that handles the deserialization of a JsonObject (a serialized board) into a Board.
+ */
 public class BoardDeserializer implements JsonDeserializer<Board> {
 
     @Override

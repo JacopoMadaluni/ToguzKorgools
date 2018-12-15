@@ -51,7 +51,7 @@ public class GameController {
     }
 
     /**
-     * Initialize the main gui components.
+     * Initialize the main GUI components.
      */
     private void initialiseGUI() {
         for (Player player : board.getPlayers()) {
@@ -81,7 +81,7 @@ public class GameController {
     }
 
     /**
-     * Initialize the holes and links them to back-end.
+     * Initialize the holes and link them to the back-end.
      */
     private void initialiseHoles() {
         for (int j = 0; j < board.getCurrentPlayer().getNumberOfHoles(); j++) {
@@ -120,7 +120,7 @@ public class GameController {
     }
 
     /**
-     * Initialize players' kazans.
+     * Initialize each players' kazan.
      */
     private void initialiseKazans() {
         gui.getGamePane().initialiseKazan(board.getCurrentPlayer());
@@ -128,7 +128,7 @@ public class GameController {
     }
 
     /**
-     * Initialize the color for each side of the board.
+     * Initialize the colour for each side of the board.
      */
     private void initialiseColours() {
         gui.getGamePane().initialiseColour(0, Color.lightGray);
@@ -136,9 +136,9 @@ public class GameController {
     }
 
     /**
-     * This method get's called when one of the player's wins.
+     * Display the victory/defeat screen to the player depending on the winner.
      *
-     * @param playerId The id of the current player.
+     * @param playerId The player ID of the winner.
      */
     public void onWin(int playerId) {
         if (playerId == 0) {
@@ -149,7 +149,7 @@ public class GameController {
     }
 
     /**
-     * Starts a brand new game.
+     * Starts a new game, resetting the state of the board and GUI.
      */
     public void restartGame() {
         board.resetBoard();
@@ -158,21 +158,21 @@ public class GameController {
     }
 
     /**
-     * @return The game board.
+     * @return The game board
      */
     public static Board getBoard() {
         return board;
     }
 
     /**
-     * @return The game GUI.
+     * @return The game GUI
      */
     public static GUI getGUI() {
         return gui;
     }
 
     /**
-     * Update GUI components.
+     * Update/refresh the GUI components.
      */
     public static void updateGUI() {
         gui.update(board.getPlayerCount() - 1);

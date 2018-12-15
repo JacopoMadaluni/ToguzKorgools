@@ -4,6 +4,7 @@ package com.jacana.toguzkorgool;
  * This class defines useful constants for the rest of the project.
  */
 public class Constants {
+
     // Core rules
     public final static int CONSTRAINT_PLAYER_COUNT = 2;
     public final static int CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE = 9;
