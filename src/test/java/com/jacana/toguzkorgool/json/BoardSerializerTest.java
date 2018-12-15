@@ -28,6 +28,9 @@ public class BoardSerializerTest {
         this.board = null;
     }
 
+    /**
+     * Ensure serializing a simple (newly constructed) board results in a JsonObject containing the correct fields.
+     */
     @Test
     public void testSimpleBoard() {
         JsonObject serializedBoard = (JsonObject) this.boardSerializer.serialize(this.board, JsonObject.class, null);
@@ -45,6 +48,9 @@ public class BoardSerializerTest {
         }
     }
 
+    /**
+     * Ensure serializing a simple board results in a JsonObject containing the correct data for the number of korgools in a hole.
+     */
     @Test
     public void testSimpleBoardHoles() {
         JsonObject serializedBoard = (JsonObject) this.boardSerializer.serialize(this.board, JsonObject.class, null);
@@ -58,6 +64,9 @@ public class BoardSerializerTest {
         }
     }
 
+    /**
+     * Ensure serializing a simple board results in a JsonObject not containing the "tuz" field in any hole.
+     */
     @Test
     public void testSimpleBoardWithoutTuz() {
         JsonObject serializedBoard = (JsonObject) this.boardSerializer.serialize(this.board, JsonObject.class, null);
@@ -71,6 +80,9 @@ public class BoardSerializerTest {
         }
     }
 
+    /**
+     * Ensure serializing a simple board with a hole marked as a tuz results in a JsonObject containing the "tuz" field in that hole.
+     */
     @Test
     public void testSimpleBoardWithTuz() {
         this.board.setTuz(0, 0);
@@ -87,6 +99,9 @@ public class BoardSerializerTest {
         }
     }
 
+    /**
+     * Ensure serializing a simple board results in a JsonObject containing the correct data for the number of korgools in a kazan.
+     */
     @Test
     public void testSimpleBoardKazan() {
         JsonObject serializedBoard = (JsonObject) this.boardSerializer.serialize(this.board, JsonObject.class, null);
@@ -96,6 +111,9 @@ public class BoardSerializerTest {
         }
     }
 
+    /**
+     * Ensure serializing a board with a custom number of korgools in the kazan and each hole results in a JsonObject containing the correct data.
+     */
     @Test
     public void testComplexBoard() {
         for (int holeIndex = 0; holeIndex < 9; holeIndex++) {

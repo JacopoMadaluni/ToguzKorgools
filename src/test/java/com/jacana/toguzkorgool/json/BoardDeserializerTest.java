@@ -28,6 +28,13 @@ public class BoardDeserializerTest {
         this.boardDeserializer = null;
     }
 
+    /**
+     * Create a serialized board.
+     *
+     * @param playersHolesKorgools A mapping of each player to a mapping of each hole ID to the number of korgools
+     * @param korgoolsInKazan The number of korgools in the kazan
+     * @return A serialized board with the inputted data
+     */
     private JsonObject createBoard(Map<Integer, Map<Integer, Integer>> playersHolesKorgools, int korgoolsInKazan) {
         JsonObject jsonBoard = new JsonObject();
         for (int playerId = 0; playerId < 2; playerId++) {
@@ -36,6 +43,13 @@ public class BoardDeserializerTest {
         return jsonBoard;
     }
 
+    /**
+     * Create a serialized player.
+     *
+     * @param korgoolsInHoles A mapping of hole ID to the number of korgools in that hole
+     * @param korgoolsInKazan The number of korgools in the kazan
+     * @return A serialized player with the inputted data
+     */
     private JsonObject createDefaultPlayer(Map<Integer, Integer> korgoolsInHoles, int korgoolsInKazan) {
         JsonObject jsonHoles = new JsonObject();
         for (int holeId = 1; holeId <= 9; holeId++) {
@@ -48,12 +62,21 @@ public class BoardDeserializerTest {
         return jsonPlayer;
     }
 
+    /**
+     * Create a serialized hole.
+     *
+     * @param korgoolsInHole The number of korgools in the hole
+     * @return A serialized hole with the inputted data
+     */
     private JsonObject createDefaultHole(int korgoolsInHole) {
         JsonObject jsonHole = new JsonObject();
         jsonHole.addProperty("korgools", korgoolsInHole);
         return jsonHole;
     }
 
+    /**
+     * Ensure deserializing a serialized simple (newly constructed) board results in the correct number of korgools in the kazan and each hole.
+     */
     @Test
     public void testSimpleBoard() {
         JsonObject serializedBoard = this.createBoard(new HashMap<>(), 0);
@@ -69,6 +92,9 @@ public class BoardDeserializerTest {
         assertFalse(resultingBoard.getPlayer(1).hasTuz());
     }
 
+    /**
+     * Ensure deserializing a serialized simple board with a hole marked as a tuz results in a Board with a Hole marked as a tuz.
+     */
     @Test
     public void testTuz() {
         JsonObject serializedBoard = this.createBoard(new HashMap<>(), 0);
@@ -86,6 +112,9 @@ public class BoardDeserializerTest {
         assertFalse(resultingBoard.getPlayer(1).hasTuz());
     }
 
+    /**
+     * Ensure deserializing a serialized simple board with 2 holes marked as a tuz results in an {@link IllegalArgumentException} being thrown.
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testMultipleTuz() {
         JsonObject serializedBoard = this.createBoard(new HashMap<>(), 0);
@@ -95,6 +124,9 @@ public class BoardDeserializerTest {
         this.boardDeserializer.deserialize(serializedBoard, Board.class, null);
     }
 
+    /**
+     * Ensure deserializing a serialized simple board with hole 9 marked as a tuz results in an {@link IllegalArgumentException} being thrown.
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testHole9Tuz() {
         JsonObject serializedBoard = this.createBoard(new HashMap<>(), 0);
@@ -103,6 +135,9 @@ public class BoardDeserializerTest {
         this.boardDeserializer.deserialize(serializedBoard, Board.class, null);
     }
 
+    /**
+     * Ensure deserializing a serialized complex board with a custom number of korgools in each hole results in a Board with the correct data.
+     */
     @Test
     public void testComplexBoard() {
         Map<Integer, Map<Integer, Integer>> holesKorgools = new HashMap<Integer, Map<Integer, Integer>>() {{
@@ -130,14 +165,20 @@ public class BoardDeserializerTest {
         assertFalse(resultingBoard.getPlayer(1).hasTuz());
     }
 
+    /**
+     * Ensure deserializing a serialized board with too many korgools in a hole results in an {@link IllegalArgumentException} being thrown.
+     */
     @Test(expected = IllegalArgumentException.class)
-    public void testManyKorgools() {
+    public void testTooManyKorgools() {
         JsonObject serializedBoard = this.createBoard(new HashMap<>(), -1);
 
         serializedBoard.getAsJsonObject("0").getAsJsonObject("holes").getAsJsonObject("1").addProperty("korgools", 163);
         this.boardDeserializer.deserialize(serializedBoard, Board.class, null);
     }
 
+    /**
+     * Ensure deserializing a serialized board with a negative number of korgools in a hole results in an {@link IllegalArgumentException} being thrown.
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testNegativeKorgools() {
         JsonObject serializedBoard = this.createBoard(new HashMap<>(), -1);
@@ -146,6 +187,9 @@ public class BoardDeserializerTest {
         this.boardDeserializer.deserialize(serializedBoard, Board.class, null);
     }
 
+    /**
+     * Ensure deserializing a serialized board with a negative number of korgools in a kazan results in an {@link IllegalArgumentException} being thrown.
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testNegativeKazan() {
         JsonObject serializedBoard = this.createBoard(new HashMap<>(), -1);
@@ -153,6 +197,9 @@ public class BoardDeserializerTest {
         this.boardDeserializer.deserialize(serializedBoard, Board.class, null);
     }
 
+    /**
+     * Ensure deserializing a serialized board without a hole results in the default number of korgools in that hole.
+     */
     @Test
     public void testMissingHole() {
         JsonObject serializedBoard = this.createBoard(new HashMap<Integer, Map<Integer, Integer>>() {{
@@ -169,6 +216,9 @@ public class BoardDeserializerTest {
         assertEquals(9, deserializedBoard.getKorgoolsInHole(0, 2));
     }
 
+    /**
+     * Ensure deserializing a serialized board with a hole incorrectly serialized results in the default number of korgools in that hole.
+     */
     @Test
     public void testCorruptHole() {
         JsonObject serializedBoard = this.createBoard(new HashMap<Integer, Map<Integer, Integer>>() {{
@@ -186,6 +236,9 @@ public class BoardDeserializerTest {
         assertEquals(9, deserializedBoard.getKorgoolsInHole(0, 2));
     }
 
+    /**
+     * Ensure deserializing a serialized board with custom input and an unknown player ID results in a board with the correct data with no errors.
+     */
     @Test
     public void testUnknownPlayerID() {
         JsonObject serializedBoard = this.createBoard(new HashMap<Integer, Map<Integer, Integer>>() {{
@@ -204,6 +257,9 @@ public class BoardDeserializerTest {
         assertEquals(9, deserializedBoard.getKorgoolsInHole(0, 0));
     }
 
+    /**
+     * Ensure deserializing a serialized board with custom input and an invalid player ID results in a board with the correct data with no errors.
+     */
     @Test
     public void testInvalidPlayerID() {
         JsonObject serializedBoard = this.createBoard(new HashMap<Integer, Map<Integer, Integer>>() {{
@@ -222,6 +278,9 @@ public class BoardDeserializerTest {
         assertEquals(9, deserializedBoard.getKorgoolsInHole(0, 0));
     }
 
+    /**
+     * Ensure deserializing a serialized board with a player incorrectly serialized results in the default data for that player.
+     */
     @Test
     public void testCorruptPlayer() {
         JsonObject serializedBoard = this.createBoard(new HashMap<Integer, Map<Integer, Integer>>() {{

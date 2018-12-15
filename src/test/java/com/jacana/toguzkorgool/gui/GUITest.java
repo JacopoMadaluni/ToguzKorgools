@@ -24,9 +24,10 @@ public class GUITest {
     @Before
     public void setUp() {
         GameController.getInstance();
+        Swinger.forSwingWindow().pause(250);
 
         Swinger.setDEFAULT(com.athaydes.automaton.Speed.VERY_FAST);
-        this.swinger = Swinger.getUserWith(GameController.getGUI()).pause(250);
+        this.swinger = Swinger.getUserWith(GameController.getGUI());
     }
 
     @After

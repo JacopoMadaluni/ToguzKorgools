@@ -7,8 +7,10 @@ import org.junit.Test;
 
 import java.awt.Component;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class CustomGameExportTest extends AbstractCustomGameTest {
 
@@ -18,9 +20,9 @@ public class CustomGameExportTest extends AbstractCustomGameTest {
                 .pause(250)
                 .clickOn("name:exportMenuItem")
                 .pause(750);
-        assertNotNull(CustomGameDialog.getInstance().getExportFileChooser());
+        assertThat(CustomGameDialog.getInstance().getExportFileChooser(), is(notNullValue()));
         Component fileDialog = getFileDialog(CustomGameDialog.getInstance().getExportFileChooser());
-        assertNotNull(fileDialog);
+        assertThat(fileDialog, is(notNullValue()));
         this.swinger.setRoot(fileDialog);
         this.swinger.clickOn("text:Cancel").pause(250);
     }
@@ -33,10 +35,10 @@ public class CustomGameExportTest extends AbstractCustomGameTest {
         }
         for (Player player : customBoard.getPlayers()) {
             for (int i = 0; i < player.getNumberOfHoles(); i++) {
-                assertEquals(Constants.CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE, player.getKorgoolsInHole(i));
+                assertThat(player.getKorgoolsInHole(i), is(equalTo(Constants.CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE)));
             }
-            assertEquals(0, player.getKorgoolsInKazan());
-            assertEquals(-1, player.getTuzIndex());
+            assertThat(player.getKorgoolsInKazan(), is(equalTo(0)));
+            assertThat(player.getTuzIndex(), is(equalTo(-1)));
         }
     }
 
@@ -53,11 +55,11 @@ public class CustomGameExportTest extends AbstractCustomGameTest {
             CustomGameDialog.getInstance().saveUser(player);
         }
 
-        assertEquals(Constants.CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE, customBoard.getPlayer(0).getKorgoolsInHole(0));
-        assertEquals(Constants.CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE + 1, customBoard.getPlayer(0).getKorgoolsInHole(1));
-        assertEquals(Constants.CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE - 1, customBoard.getPlayer(0).getKorgoolsInHole(2));
-        assertEquals(Constants.CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE + 1, customBoard.getPlayer(1).getKorgoolsInHole(3));
-        assertEquals(Constants.CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE - 1, customBoard.getPlayer(1).getKorgoolsInHole(4));
+        assertThat(customBoard.getPlayer(0).getKorgoolsInHole(0), is(equalTo(Constants.CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE)));
+        assertThat(customBoard.getPlayer(0).getKorgoolsInHole(1), is(equalTo(Constants.CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE + 1)));
+        assertThat(customBoard.getPlayer(0).getKorgoolsInHole(2), is(equalTo(Constants.CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE - 1)));
+        assertThat(customBoard.getPlayer(1).getKorgoolsInHole(3), is(equalTo(Constants.CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE + 1)));
+        assertThat(customBoard.getPlayer(1).getKorgoolsInHole(4), is(equalTo(Constants.CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE - 1)));
     }
 
     @Test
@@ -70,8 +72,8 @@ public class CustomGameExportTest extends AbstractCustomGameTest {
             CustomGameDialog.getInstance().saveUser(player);
         }
 
-        assertEquals(0, customBoard.getTuzIndex(0));
-        assertEquals(1, customBoard.getTuzIndex(1));
+        assertThat(customBoard.getTuzIndex(0), is(equalTo(0)));
+        assertThat(customBoard.getTuzIndex(1), is(equalTo(1)));
     }
 
     @Test
@@ -84,8 +86,8 @@ public class CustomGameExportTest extends AbstractCustomGameTest {
             CustomGameDialog.getInstance().saveUser(player);
         }
 
-        assertEquals(2, customBoard.getKorgoolsInKazan(0));
-        assertEquals(0, customBoard.getKorgoolsInKazan(1));
+        assertThat(customBoard.getKorgoolsInKazan(0), is(equalTo(2)));
+        assertThat(customBoard.getKorgoolsInKazan(1), is(equalTo(0)));
     }
 
     @Test
@@ -112,7 +114,7 @@ public class CustomGameExportTest extends AbstractCustomGameTest {
 
         for (int playerId = 0; playerId < playerKorgools.length; playerId++) {
             for (int holeIndex = 0; holeIndex < playerKorgools[playerId].length; holeIndex++) {
-                assertEquals(playerKorgools[playerId][holeIndex], customBoard.getKorgoolsInHole(playerId, holeIndex));
+                assertThat(customBoard.getKorgoolsInHole(playerId, holeIndex), is(equalTo(playerKorgools[playerId][holeIndex])));
             }
         }
     }
