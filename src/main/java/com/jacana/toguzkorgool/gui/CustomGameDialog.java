@@ -231,14 +231,14 @@ public class CustomGameDialog extends JDialog {
                                     exportFileChooser = null;
                                     return;
                                 } else {
+                                    boolean deleted = true;
                                     try {
-                                        if (!selectedFile.delete()) {
-                                            exportFileChooser = null;
-                                            JOptionPane.showMessageDialog(this, "Failed to delete the previous file.");
-                                            return;
-                                        }
+                                        deleted = selectedFile.delete();
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
+                                        deleted = false;
+                                    }
+                                    if (!deleted) {
                                         exportFileChooser = null;
                                         JOptionPane.showMessageDialog(this, "Failed to delete the previous file.");
                                         return;
