@@ -1,12 +1,17 @@
 # ToguzKorgool
-# King's College London - 5CCS2SEG - Agile Project - Team Jacana.
+King's College London
 
-David Simon Tetruashvili
+5CCS2SEG
 
-Michael Jacob 
+Agile Project
 
-Alexander Bass 
+## Team Jacana
+Members
+* David Simon Tetruashvili
+* Michael Jacob
+* Alexander Bass
+* Faris Rehman
+* Jacopo Madaluni
 
-Faris Rehman 
-
-Jacopo Madaluni 
+## APIs
+Gson API has been used for the ability to serialize and deserialize a board state to and from a JSON format.
