@@ -9,6 +9,7 @@ public abstract class KorgoolContainer {
 
     /**
      * Adds up korgools in the container.
+     *
      * @param korgoolsIn The number of korgools to be added.
      */
     public void add(int korgoolsIn) {
@@ -31,6 +32,7 @@ public abstract class KorgoolContainer {
 
     /**
      * Sets a new number of korgools for the container.
+     *
      * @param korgools The new number of korgools.
      */
     public void setKorgools(int korgools) {

@@ -1,8 +1,16 @@
 package com.jacana.toguzkorgool.gui;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 
 /**
@@ -32,14 +40,14 @@ public class GUI extends JFrame {
         populatePane();
     }
 
-    public void restart(){
+    public void restart() {
         JPanel contentPane = (JPanel) getContentPane();
         contentPane.remove(endPane);
         contentPane.add(this.gamePane);
         contentPane.updateUI();
     }
 
-    public void loadVictoryScreen(){
+    public void loadVictoryScreen() {
         JPanel contentPane = (JPanel) getContentPane();
 
         endPane.setWin();
@@ -48,20 +56,20 @@ public class GUI extends JFrame {
         contentPane.updateUI();
     }
 
-    public void loadDefeatScreen(){
+    public void loadDefeatScreen() {
         JPanel contentPane = (JPanel) getContentPane();
         endPane.setLose();
         contentPane.remove(this.gamePane);
         contentPane.add(endPane);
         contentPane.updateUI();
     }
-    
+
     public void update(int highestPlayerId) {
         gamePane.updateGamePane(highestPlayerId);
         JPanel contentPane = (JPanel) getContentPane();
         contentPane.updateUI();
     }
-    
+
     /**
      * Encapsulation method for populating the main frame with its components.
      */
@@ -86,7 +94,7 @@ public class GUI extends JFrame {
      */
     private JMenuBar constructMenuBar() {
         JMenuBar menuBar = new JMenuBar();
-        
+
         // File menu
         JMenu fileMenu = new JMenu("File");
         fileMenu.setName("fileMenu");
@@ -100,9 +108,9 @@ public class GUI extends JFrame {
         customGameMenuItem.setName("customGameMenuItem");
         customGameMenuItem.getAccessibleContext().setAccessibleDescription("Create custom game");
         fileMenu.add(customGameMenuItem);
-        
+
         customGameMenuItem.addActionListener(e -> CustomGameDialog.showCustomGameDialog());
-        
+
         menuBar.add(fileMenu);
 
         return menuBar;
