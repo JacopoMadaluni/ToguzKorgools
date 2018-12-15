@@ -9,12 +9,18 @@ import static org.junit.Assert.assertNull;
 
 public class CustomGameValidation {
 
+    /**
+     * Test validating a valid default (newly constructed) board.
+     */
     @Test
     public void testValidateBoardValid() {
         Board validBoard = new Board();
         assertNull(CustomGameDialog.validateBoard(validBoard));
     }
 
+    /**
+     * Test validating a default board with an invalid number of korgools in a hole resulting in an error.
+     */
     @Test
     public void testValidateBoardInvalidHole() {
         Board invalidBoard = new Board();
@@ -24,6 +30,9 @@ public class CustomGameValidation {
         assertNotNull(CustomGameDialog.validateBoard(invalidBoard));
     }
 
+    /**
+     * Test validating a default board with a player having 2 holes marked as a tuz resulting in an error.
+     */
     @Test
     public void testValidateBoardMultipleTuz() {
         Board invalidBoard = new Board();
@@ -32,6 +41,9 @@ public class CustomGameValidation {
         assertNotNull(CustomGameDialog.validateBoard(invalidBoard));
     }
 
+    /**
+     * Test validating a default board with a player having hole 9 marked as a tuz resulting in an error.
+     */
     @Test
     public void testValidateBoardTuzHole9() {
         Board invalidBoard = new Board();
@@ -39,6 +51,9 @@ public class CustomGameValidation {
         assertNotNull(CustomGameDialog.validateBoard(invalidBoard));
     }
 
+    /**
+     * Test validating a default board with 2 players having the same hole marked as a tuz resulting in an error.
+     */
     @Test
     public void testValidateBoardSameTuz() {
         Board invalidBoard = new Board();
@@ -47,6 +62,9 @@ public class CustomGameValidation {
         assertNotNull(CustomGameDialog.validateBoard(invalidBoard));
     }
 
+    /**
+     * Test validating a default board with an invalid number of korgools in a kazan resulting in an error.
+     */
     @Test
     public void testValidateBoardInvalidKazan() {
         Board invalidBoard = new Board();

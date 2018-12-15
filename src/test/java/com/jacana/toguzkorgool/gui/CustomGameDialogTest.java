@@ -145,15 +145,21 @@ public class CustomGameDialogTest {
         swinger.pause(250);
     }
 
+    /**
+     * Test that ensures saving a custom game with valid data does not throw errors.
+     */
     @Test(expected = GuiItemNotFound.class)
-    public void testValidInputShouldNotRaiseErrors() {
+    public void testValidInput() {
         int[][] params = {{12, 12, 4, 13, 1, 2, 12, 3, 13, 14, 2},  // Player 1 parameters
                 {13, 2, 11, 11, 2, 12, 0, 12, 1, 12, 3}}; // Player 2 parameters
         performTest(params, applyAction, () -> swinger.clickOn("text:OK"), true);
     }
 
+    /**
+     * Test that ensures cancelling a custom game with valid data does not change back-end.
+     */
     @Test(expected = GuiItemNotFound.class)
-    public void testValidInputButCanceledShouldNotChangeBackEnd() {
+    public void testValidInputButCancel() {
         int[][] frontParams = {{12, 12, 4, 13, 1, 2, 12, 3, 13, 14, 2},  // Player 1 parameters
                 {13, 2, 11, 11, 2, 12, 0, 12, 1, 12, 3}}; // Player 2 parameters
 
@@ -165,13 +171,16 @@ public class CustomGameDialogTest {
 
     @Test
     public void testKorgoolBoardCountShouldBeConstant() {
-        //total 163 Korgools
+        // Total 163 Korgools
         int[][] params = {{13, 12, 4, 13, 1, 2, 12, 3, 13, 14, 2},  // Player 1 parameters
                 {13, 2, 11, 11, 2, 12, 0, 12, 1, 12, 3}}; // Player 2 parameters
 
         performTest(params, applyAction, () -> swinger.clickOn("text:OK"), false);
     }
 
+    /**
+     * Test that ensures an error pops up if there is an invalid number of korgools in total.
+     */
     @Test
     public void testInvalidTooManyOrTooFewKorgoolsPerSide() {
         int[][] params = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},           // Player 1 parameters
@@ -180,6 +189,9 @@ public class CustomGameDialogTest {
         performTest(params, applyAction, () -> swinger.clickOn("text:OK"), false);
     }
 
+    /**
+     * Test that ensures an error pops up if a hole is marked as a tuz on both players sides.
+     */
     @Test
     public void testBothTuzShouldNotBeInTheSameIndex() {
         int[][] params = {{12, 12, 4, 13, 1, 2, 12, 3, 13, 14, 1},  // Player 1 parameters
