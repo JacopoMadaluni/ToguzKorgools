@@ -93,7 +93,7 @@ public class GameController {
                     if (board.getKorgoolsInHole(board.getCurrentPlayer().getId(), finalJ) > 0) {
                         board.getCurrentPlayer().makeMove(finalJ);
                         if (board.hasCurrentPlayerWon()) {
-                            gui.getGamePane().updateGamePane(board.getPlayerCount() - 1);
+                            gui.getGamePane().updateGamePane();
                             onWin(board.getCurrentPlayer().getId());
                             return;
                         }
@@ -112,7 +112,7 @@ public class GameController {
                             return;
                         }
                         board.changePlayer();
-                        gui.getGamePane().updateGamePane(board.getPlayerCount() - 1);
+                        gui.getGamePane().updateGamePane();
                     }
                 }
             });
@@ -153,7 +153,7 @@ public class GameController {
      */
     public void restartGame() {
         board.resetBoard();
-        gui.getGamePane().updateGamePane(board.getPlayerCount() - 1);
+        gui.getGamePane().updateGamePane();
         gui.restart();
     }
 
@@ -175,7 +175,7 @@ public class GameController {
      * Update/refresh the GUI components.
      */
     public static void updateGUI() {
-        gui.update(board.getPlayerCount() - 1);
+        gui.update();
     }
 
 }

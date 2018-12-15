@@ -8,19 +8,28 @@ import javax.swing.JPanel;
 import java.awt.Dimension;
 import java.awt.Font;
 
+/**
+ * This class represents a panel that displays when a player has won.
+ */
 public class EndingPane extends JPanel {
 
     private JButton btnRestart;
     private JButton btnQuit;
     private JLabel lblMessage;
 
+    /**
+     * Create a new EndingPane
+     */
     public EndingPane() {
         super();
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        initializeComponents();
+        this.initializeComponents();
     }
 
+    /**
+     * Initialise the components and populate the content pane.
+     */
     private void initializeComponents() {
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
@@ -55,10 +64,16 @@ public class EndingPane extends JPanel {
         return btnRestart;
     }
 
+    /**
+     * Set the message displayed to the win message.
+     */
     public void setWin() {
         lblMessage.setText("Congratulations! You win!");
     }
 
+    /**
+     * Set the message displayed to the lose message.
+     */
     public void setLose() {
         lblMessage.setText("Game Over");
     }

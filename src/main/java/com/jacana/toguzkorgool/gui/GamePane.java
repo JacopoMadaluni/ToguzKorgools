@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * GamePane is the custom GUI representation of a Toguz Korgool game board.
+ * GamePane is the GUI representation of a Toguz Korgool game board.
  * It contains 4 distinct fields: a Kazan and a Hole field for each of the
  * two players on the board.
  */
@@ -26,13 +26,13 @@ public class GamePane extends JPanel {
     private Map<String, Component> componentMap = new HashMap<>();
 
     private Map<Integer, Color> playerColours = new HashMap<>();
-    // The opposite sides of the board
     private Map<Integer, JPanel> playersPanel = new HashMap<>();
     private Map<Integer, JKazan> playersKazan = new HashMap<>();
-
-    // mapping of player IDs to a list of object references to the GUI hole components
     private Map<Integer, List<JHole>> playersHoles = new HashMap<>();
 
+    /**
+     * Create a game panel.
+     */
     public GamePane() {
         super();
 
@@ -44,7 +44,7 @@ public class GamePane extends JPanel {
     }
 
     /**
-     * Function which encapsulates the creation of GamePane's components.
+     * Populate the content pane
      */
     private void populatePane() {
         playersHoles.clear();
@@ -72,14 +72,29 @@ public class GamePane extends JPanel {
         add(player1Panel);
     }
 
+    /**
+     * Add a component to the map of component names to components.
+     *
+     * @param component The component
+     */
     private void addToComponentMap(Component component) {
         this.componentMap.put(component.getName(), component);
     }
 
+    /**
+     * Create a default kazan panel.
+     *
+     * @return The created kazan panel
+     */
     private JKazan createKazanPanel() {
         return new JKazan(null);
     }
 
+    /**
+     * Create a default player panel
+     *
+     * @return The created player panel
+     */
     private JPanel createPlayerPanel() {
         JPanel playerPanel = new JPanel();
         playerPanel.setLayout(new BoxLayout(playerPanel, BoxLayout.X_AXIS));
@@ -88,10 +103,20 @@ public class GamePane extends JPanel {
         return playerPanel;
     }
 
+    /**
+     * Get a GUI component by its name.
+     *
+     * @param name The name of the component
+     * @return The component with the inputted name. Returns null if the component does not exist.
+     */
     public Component getComponentByName(String name) {
         return componentMap.get(name);
     }
 
+    /**
+     * @param playerId The player ID
+     * @return A list of hole panels for a player
+     */
     public List<JHole> getHoles(int playerId) {
         return playersHoles.get(playerId);
     }
@@ -126,6 +151,11 @@ public class GamePane extends JPanel {
         playersHoles.put(player.getId(), holes);
     }
 
+    /**
+     * Initialise the kazan, linking the front-end kazan panel to the back-end kazan.
+     *
+     * @param player The player
+     */
     public void initialiseKazan(Player player) {
         JKazan kazan = playersKazan.get(player.getId());
         if (kazan == null) return;
@@ -136,17 +166,29 @@ public class GamePane extends JPanel {
         addToComponentMap(kazan);
     }
 
-    public void initialiseColour(int playerId, Color color) {
-        this.playerColours.put(playerId, color);
+    /**
+     * Set the colour that represents a player and update the hole panels' backgrounds.
+     *
+     * @param playerId The player ID
+     * @param colour The colour
+     */
+    public void initialiseColour(int playerId, Color colour) {
+        this.playerColours.put(playerId, colour);
 
         JPanel panel = playersPanel.get(playerId);
-        if (panel != null) panel.setBackground(color);
+        if (panel != null) panel.setBackground(colour);
         List<JHole> holes = playersHoles.get(playerId);
         if (holes != null) {
-            for (JHole hole : holes) hole.setBackground(color);
+            for (JHole hole : holes) hole.setBackground(colour);
         }
     }
 
+    /**
+     * Update all hole panels belonging to the player, reflecting the correct number of korgools in each hole.
+     * <p>
+     * Refresh the UI to display these changes.
+     * @param playerId The player
+     */
     public void updateHoles(int playerId) {
         List<JHole> holePanels = playersHoles.get(playerId);
         if (holePanels == null) return;
@@ -156,16 +198,27 @@ public class GamePane extends JPanel {
         playersPanel.get(playerId).updateUI();
     }
 
+    /**
+     * Update all the kazan panel belonging to the player, reflecting the correct number of korgools in the kazan.
+     * <p>
+     * Refresh the UI of the panel to display these changes.
+     * @param playerId The player
+     */
     public void updateKazan(int playerId) {
         JKazan kazan = playersKazan.get(playerId);
         if (kazan == null) return;
         kazan.updateKazan();
     }
 
-    public void updateGamePane(int highestPlayerId) {
-        for (int i = 0; i <= highestPlayerId; i++) {
-            updateHoles(i);
-            updateKazan(i);
+    /**
+     * Update all players hole panels and kazan panels.
+     * <p>
+     * Refresh the UI of the GUI to display these changes.
+     */
+    public void updateGamePane() {
+        for (int playerId : this.playersPanel.keySet()) {
+            updateHoles(playerId);
+            updateKazan(playerId);
         }
     }
 

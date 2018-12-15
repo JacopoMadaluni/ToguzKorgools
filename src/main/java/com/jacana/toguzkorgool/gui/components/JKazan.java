@@ -9,10 +9,12 @@ import java.awt.GridLayout;
 
 /**
  * JKazan is a graphical representation of a kazan on a Toguz Korgool board.
- * It is responsible of displaying the Korgools that are stored in the
+ * <p>
+ * It is responsible for displaying the korgools that are stored in the
  * corresponding back-end Kazan object.
  */
 public class JKazan extends JPanel {
+
     private Kazan kazan;
     private int korgoolsInGui = 0;
 
@@ -31,13 +33,17 @@ public class JKazan extends JPanel {
         return kazan;
     }
 
+    /**
+     * Set the kazan that this GUI component represents
+     * @param kazan The kazan
+     */
     public void setKazan(Kazan kazan) {
         if (this.kazan != null) throw new IllegalArgumentException("kazan already set");
         this.kazan = kazan;
     }
 
     /**
-     * Update the display of Korgools after every move, in order to account
+     * Update the display of korgools after every move, in order to account
      * for possible changes to their number.
      */
     private void internalUpdate() {
@@ -66,7 +72,7 @@ public class JKazan extends JPanel {
     }
 
     /**
-     * Wrapper method to carryout the graphical update of the component.
+     * Wrapper method to carry out the graphical update of the component.
      */
     public void updateKazan() {
         internalUpdate();
