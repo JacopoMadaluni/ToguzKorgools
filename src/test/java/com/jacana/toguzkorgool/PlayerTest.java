@@ -8,6 +8,9 @@ import static org.junit.Assert.assertTrue;
 
 public class PlayerTest {
 
+    /**
+     * Ensure the Player instance initialises correctly with the expected number of korgools in the kazan and each hole.
+     */
     @Test
     public void testPlayerInitialisation() {
         Board expectedBoard = new Board();
@@ -23,6 +26,9 @@ public class PlayerTest {
         assertEquals(0, aPlayer.getKorgoolsInKazan());
     }
 
+    /**
+     * Ensure the hole marked as a tuz cannot be hole 9.
+     */
     @Test
     public void testSetTuzWhenHoleNumberIsEight() {
         Board board = new Board();
@@ -31,6 +37,9 @@ public class PlayerTest {
         assertFalse(player.hasTuz());
     }
 
+    /**
+     * Ensure more than one hole cannot be marked as a tuz.
+     */
     @Test
     public void testSetTuzWhenHasTuz() {
         Board board = new Board();
@@ -42,6 +51,9 @@ public class PlayerTest {
         assertEquals(5, player.getTuzIndex());
     }
 
+    /**
+     * Ensure the opponent player cannot have the same hole marked as a tuz as the current player.
+     */
     @Test
     public void testSetTuzWhenOpponentTuzIndexIsSame() {
         Board board = new Board();
@@ -52,6 +64,11 @@ public class PlayerTest {
         assertFalse(bot.hasTuz());
     }
 
+    /**
+     * <p>Ensure the following game rule holds true:</p>
+     * <br>
+     * <p>"If the last korgool in a move ends up in an opponent's hole, and the number of korgools in that hole is now even, then the player captures all the korgools in that hole. The korgools are moved into the player's kazan."</p>
+     */
     @Test
     public void testMoveOnHoleNineAndOneKorgool() {
         Board board = new Board();
@@ -74,6 +91,9 @@ public class PlayerTest {
         assertEquals(0, bot.getKorgoolsInKazan());
     }
 
+    /**
+     * Ensure making a normal move, on a hole with only 1 korgool, results in the correct number of korgools in each hole.
+     */
     @Test
     public void testMoveOnAnyHoleAndOneKorgoolNoTuz() {
         Board board = new Board();
@@ -96,6 +116,9 @@ public class PlayerTest {
         assertEquals(0, bot.getKorgoolsInKazan());
     }
 
+    /**
+     * Ensure making a normal move, with a hole marked as a tuz, on a hole marked before the tuz with only one korgool results in the correct number of korgools in each hole.
+     */
     @Test
     public void testMoveOnAnyHoleAndOneKorgoolAndTuz() {
         Board board = new Board();

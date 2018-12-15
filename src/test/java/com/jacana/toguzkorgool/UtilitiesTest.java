@@ -10,6 +10,9 @@ import static org.junit.Assert.assertTrue;
 
 public class UtilitiesTest {
 
+    /**
+     * Ensure parsing a positive integer as a String returns the positive integer.
+     */
     @Test
     public void testTryParseIntPositive() {
         OptionalInt parsedInt = Utilities.tryParseInt("1");
@@ -17,6 +20,9 @@ public class UtilitiesTest {
         assertEquals(parsedInt.getAsInt(), 1);
     }
 
+    /**
+     * Ensure parsing a negative integer as a String returns the positive negative.
+     */
     @Test
     public void testTryParseIntNegative() {
         OptionalInt parsedInt = Utilities.tryParseInt("-1");
@@ -24,12 +30,18 @@ public class UtilitiesTest {
         assertEquals(parsedInt.getAsInt(), -1);
     }
 
+    /**
+     * Ensure parsing a null String returns an empty OptionalInt.
+     */
     @Test
     public void testTryParseIntNull() {
         OptionalInt parsedInt = Utilities.tryParseInt(null);
         assertFalse(parsedInt.isPresent());
     }
 
+    /**
+     * Ensure parsing a non-numeric String returns an empty OptionalInt.
+     */
     @Test
     public void testTryParseIntNonNumeric() {
         OptionalInt parsedInt = Utilities.tryParseInt("Test");
