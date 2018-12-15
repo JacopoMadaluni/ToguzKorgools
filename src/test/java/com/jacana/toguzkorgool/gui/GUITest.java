@@ -7,7 +7,6 @@ import com.jacana.toguzkorgool.GameController;
 import com.jacana.toguzkorgool.gui.components.JHole;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.awt.Component;

@@ -5,10 +5,11 @@ package com.jacana.toguzkorgool;
  * errors are found.
  */
 public class BoardInputValidator {
-    
-    BoardInputValidator() {}
-    
+
+    BoardInputValidator() {
+    }
+
     public static void validateBoardInput() {
-    
+
     }
 }

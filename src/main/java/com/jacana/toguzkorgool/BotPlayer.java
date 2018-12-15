@@ -16,6 +16,7 @@ public class BotPlayer extends Player {
 
     /**
      * Creates a new bot.
+     *
      * @param board The board it's playing in.
      * @param id The id of the bot player.
      */

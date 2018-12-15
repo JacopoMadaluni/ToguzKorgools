@@ -9,7 +9,7 @@ import static org.junit.Assert.assertTrue;
 public class BoardTest {
 
     @Test
-    public void testChangePlayer(){
+    public void testChangePlayer() {
         Board board = new Board();
         Player player1 = board.getCurrentPlayer();
         Player bot = board.getCurrentOpponent();
@@ -20,7 +20,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testPlayer1IdInitialization(){
+    public void testPlayer1IdInitialization() {
         Board board = new Board();
         Player player1 = board.getCurrentPlayer();
         int actualId = player1.getId();
@@ -29,7 +29,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testPlayer2IdInitialization(){
+    public void testPlayer2IdInitialization() {
         Board board = new Board();
         Player player2 = board.getCurrentOpponent();
         int actualId = player2.getId();
@@ -38,22 +38,22 @@ public class BoardTest {
     }
 
     @Test
-    public void testGetHoleKorgoolCount(){
+    public void testGetHoleKorgoolCount() {
         Board board = new Board();
-        assertEquals(9, board.getKorgoolsInHole(0,0));
-        board.setKorgoolsInHole(0,0,3);
-        assertEquals(3, board.getKorgoolsInHole(0,0));
+        assertEquals(9, board.getKorgoolsInHole(0, 0));
+        board.setKorgoolsInHole(0, 0, 3);
+        assertEquals(3, board.getKorgoolsInHole(0, 0));
     }
 
     @Test
-    public void testGetHoleKorgoolCountWithInvalidPlayer(){
+    public void testGetHoleKorgoolCountWithInvalidPlayer() {
         Board board = new Board();
         int invalidId = 5;
         assertEquals(-1, board.getKorgoolsInHole(invalidId, 0));
     }
 
     @Test
-    public void testSetTuzWhenThereIsNoTuz(){
+    public void testSetTuzWhenThereIsNoTuz() {
         Board board = new Board();
         Player player1 = board.getCurrentPlayer();
         int id = player1.getId();
@@ -63,7 +63,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testSetTuzWhenThereIsTuzAlready(){
+    public void testSetTuzWhenThereIsTuzAlready() {
         Board board = new Board();
         Player player1 = board.getCurrentPlayer();
         int id = player1.getId();
@@ -75,7 +75,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testSetTuzWithInvalidPlayer(){
+    public void testSetTuzWithInvalidPlayer() {
         Board board = new Board();
         int invalidId = 4;
         board.setTuz(invalidId, 3);
@@ -84,7 +84,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testGetTuzIndexWhenThereIsNoTuz(){
+    public void testGetTuzIndexWhenThereIsNoTuz() {
         Board board = new Board();
         Player player1 = board.getCurrentPlayer();
         int id = player1.getId();
@@ -92,7 +92,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testGetTuzIndexWhereThereIsTuz(){
+    public void testGetTuzIndexWhereThereIsTuz() {
         Board board = new Board();
         Player player1 = board.getCurrentPlayer();
         int id = player1.getId();
@@ -102,7 +102,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testGetTuzIndexOfInvalidPlayer(){
+    public void testGetTuzIndexOfInvalidPlayer() {
         Board board = new Board();
         int invalidId = 3;
         int actual = board.getTuzIndex(invalidId);
@@ -111,7 +111,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testGetKazanCountWhenEmpty(){
+    public void testGetKazanCountWhenEmpty() {
         Board board = new Board();
         Player player1 = board.getCurrentPlayer();
         int id = player1.getId();
@@ -121,7 +121,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testGetKazanCountWhenNotEmpty(){
+    public void testGetKazanCountWhenNotEmpty() {
         Board board = new Board();
         Player player1 = board.getCurrentPlayer();
         int expectedCount = 3;
@@ -132,7 +132,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testSetKazanCountWithInvalidPlayer(){
+    public void testSetKazanCountWithInvalidPlayer() {
         Board board = new Board();
         int invalidId = 10;
         board.setKorgoolsInKazan(invalidId, 30);
@@ -141,21 +141,21 @@ public class BoardTest {
     }
 
     @Test
-    public void testSetHoleCountWithInvalidPlayer(){
+    public void testSetHoleCountWithInvalidPlayer() {
         Board board = new Board();
         int invalidId = 10;
-        board.setKorgoolsInHole(invalidId, 3,30);
+        board.setKorgoolsInHole(invalidId, 3, 30);
         Player player1 = board.getPlayer(0);
         Player player2 = board.getPlayer(1);
 
-        for (int i = 0; i < 9; ++i){
+        for (int i = 0; i < 9; ++i) {
             assertEquals(9, player1.getHole(i).getKorgools());
             assertEquals(9, player2.getHole(i).getKorgools());
         }
     }
 
     @Test
-    public void testResetBoard(){
+    public void testResetBoard() {
         Board board = new Board();
         board.setKorgoolsInKazan(0, 30);
         board.setKorgoolsInHole(0, 3, 3);
@@ -170,27 +170,27 @@ public class BoardTest {
     }
 
     @Test
-    public void testCurrentPlayerHasWonWhenHasWon(){
+    public void testCurrentPlayerHasWonWhenHasWon() {
         Board board = new Board();
         board.setKorgoolsInKazan(0, 82);
         assertTrue(board.hasCurrentPlayerWon());
     }
 
     @Test
-    public void testCurrentPlayerHasWonWhenHasNotWon(){
+    public void testCurrentPlayerHasWonWhenHasNotWon() {
         Board board = new Board();
         assertFalse(board.hasCurrentPlayerWon());
     }
 
     @Test
-    public void testPlayerHasWon(){
+    public void testPlayerHasWon() {
         Board board = new Board();
         board.setKorgoolsInKazan(1, 82);
         assertTrue(board.hasPlayerWon(1));
     }
 
     @Test
-    public void testPlayerHasWonWithInvalidPlayer(){
+    public void testPlayerHasWonWithInvalidPlayer() {
         Board board = new Board();
         int invalidId = 3;
         assertFalse(board.hasPlayerWon(invalidId));

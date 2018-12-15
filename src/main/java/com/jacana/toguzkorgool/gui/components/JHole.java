@@ -14,21 +14,21 @@ import java.awt.GridLayout;
  */
 public class JHole extends JPanel {
     private final Hole hole;
-    
+
     public JHole(Hole hole) {
         super();
         this.hole = hole;
-        
+
         setLayout(new GridLayout(3, 3));
         setBorder(new LineBorder(Color.black, 1, true));
-        
+
         internalUpdate();
     }
-    
+
     public Hole getHole() {
         return hole;
     }
-    
+
     /**
      * Update the display of Korgools after every move, in order to account
      * for possible changes to their number.
@@ -46,7 +46,7 @@ public class JHole extends JPanel {
         }
         this.setToolTipText("Korgools: " + numberOfKorgools);
     }
-    
+
     /**
      * Wrapper method to carryout the graphical update of the component.
      */

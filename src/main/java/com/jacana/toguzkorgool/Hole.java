@@ -3,7 +3,7 @@ package com.jacana.toguzkorgool;
 /**
  * This class represents a hole.
  */
-public class Hole extends KorgoolContainer{
+public class Hole extends KorgoolContainer {
 
     private boolean tuz = false;
 
@@ -21,6 +21,7 @@ public class Hole extends KorgoolContainer{
 
     /**
      * Sets the hole to be (or not to be) a tuz.
+     *
      * @param tuzValue True -> set to tuz. False -> set to normal hole.
      */
     public void setTuz(boolean tuzValue) {
