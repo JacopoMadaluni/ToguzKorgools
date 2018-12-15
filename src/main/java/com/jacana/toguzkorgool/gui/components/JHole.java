@@ -8,13 +8,19 @@ import java.awt.Color;
 import java.awt.GridLayout;
 
 /**
- * JHole is a graphical representation of a hole on a Teguz Korgool board.
- * It is responsible of displaying the Korgools that are stored in the
+ * JHole is a graphical representation of a hole on a Toguz Korgool board.
+ * <p>
+ * It is responsible for displaying the korgools that are stored in the
  * corresponding back-end Hole object.
  */
 public class JHole extends JPanel {
+
     private final Hole hole;
 
+    /**
+     * Create a JHole representing a hole
+     * @param hole The hole
+     */
     public JHole(Hole hole) {
         super();
         this.hole = hole;
@@ -30,7 +36,7 @@ public class JHole extends JPanel {
     }
 
     /**
-     * Update the display of Korgools after every move, in order to account
+     * Update the display of korgools after every move, in order to account
      * for possible changes to their number.
      */
     private void internalUpdate() {
@@ -48,7 +54,7 @@ public class JHole extends JPanel {
     }
 
     /**
-     * Wrapper method to carryout the graphical update of the component.
+     * Wrapper method to carry out the graphical update of the component.
      */
     public void updateHole() {
         removeAll();
@@ -61,4 +67,5 @@ public class JHole extends JPanel {
             setBorder(new LineBorder(Color.black, 1, border.getRoundedCorners()));
         }
     }
+
 }

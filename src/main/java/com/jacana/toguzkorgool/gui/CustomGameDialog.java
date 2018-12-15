@@ -101,6 +101,9 @@ public class CustomGameDialog extends JDialog {
         return instance;
     }
 
+    /**
+     * Dispose the custom game GUI if it is shown, and clear its instance.
+     */
     public static void destroyInstance() {
         if (instance != null) {
             if (instance.isVisible()) instance.dispose();
@@ -108,15 +111,14 @@ public class CustomGameDialog extends JDialog {
         }
     }
 
+    /**
+     * Show the custom game dialog.
+     */
     public static void showCustomGameDialog() {
         CustomGameDialog dialog = getInstance();
         dialog.pack();
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
-    }
-
-    public Map<String, Component> getComponentMap() {
-        return componentMap;
     }
 
     @Override
@@ -125,6 +127,9 @@ public class CustomGameDialog extends JDialog {
         super.dispose();
     }
 
+    /**
+     * Initialise the components and populate the content pane.
+     */
     private void setUpComponents() {
         setJMenuBar(constructAndGetMenuBar());
 
@@ -143,6 +148,12 @@ public class CustomGameDialog extends JDialog {
         contentPane.add(controlPanel, BorderLayout.PAGE_END);
     }
 
+    /**
+     * Create a new side panel representing a player on the board.
+     *
+     * @param playerId The player to represent's ID
+     * @return The created side panel
+     */
     public JPanel constructAndGetSidePanel(int playerId) {
         final String playerName = "Player " + (playerId + 1);
 
@@ -160,9 +171,8 @@ public class CustomGameDialog extends JDialog {
         sidePanel.add(sideLabelPanel);
         addHorizontalSeparator(sidePanel);
 
-        //HOLE SPINNERS--------------------------------------------------
-        // Create numerical spinners with names and labels, each within a
-        // Flow layout
+        // HOLE SPINNERS--------------------------------------------------
+        // Create numerical spinners with names and labels, each within a flow layout
         for (int i = 0; i < Constants.CONSTRAINT_HOLES_PER_PLAYER; i++) {
             JPanel holeSpinnerPanel = new JPanel();
 
@@ -183,7 +193,7 @@ public class CustomGameDialog extends JDialog {
         }
         addHorizontalSeparator(sidePanel);
 
-        //KAZAN SPINNER--------------------------------------------------
+        // KAZAN SPINNER--------------------------------------------------
 
         JPanel kazanPanel = new JPanel();
 
@@ -200,7 +210,7 @@ public class CustomGameDialog extends JDialog {
         sidePanel.add(kazanPanel);
         addHorizontalSeparator(sidePanel);
 
-        //TUZ COMBO BOX--------------------------------------------------
+        // TUZ COMBO BOX--------------------------------------------------
 
         JPanel tuzPanel = new JPanel();
 
@@ -227,6 +237,11 @@ public class CustomGameDialog extends JDialog {
         return sidePanel;
     }
 
+    /**
+     * Create the menu bar.
+     *
+     * @return The created menu bar
+     */
     private JMenuBar constructAndGetMenuBar() {
         JMenuBar menuBar = new JMenuBar();
 
@@ -354,6 +369,11 @@ public class CustomGameDialog extends JDialog {
         return menuBar;
     }
 
+    /**
+     * Create the control panel containing the action buttons.
+     *
+     * @return The created control panel
+     */
     private JPanel constructAndGetControlPanel() {
         // Make new panel
         JPanel controlPanel = new JPanel();
@@ -385,6 +405,12 @@ public class CustomGameDialog extends JDialog {
     }
 
     /* Data methods */
+
+    /**
+     * Check the custom game GUI input for errors/invalid data.
+     *
+     * @return A list of errors, if any.
+     */
     private List<String> checkInputForErrors() {
         List<String> errors = new ArrayList<>();
 
@@ -444,6 +470,9 @@ public class CustomGameDialog extends JDialog {
         return errors;
     }
 
+    /**
+     * Send the data in the custom game GUI to the back-end and update it.
+     */
     private void sendInputDataToBackEnd() {
         Board board = GameController.getBoard();
 
@@ -490,6 +519,10 @@ public class CustomGameDialog extends JDialog {
 
     /* Getters */
 
+    public Map<String, Component> getComponentMap() {
+        return componentMap;
+    }
+
     public JFileChooser getExportFileChooser() {
         return exportFileChooser;
     }
@@ -500,6 +533,9 @@ public class CustomGameDialog extends JDialog {
 
     /* Action methods */
 
+    /**
+     * Called when the apply button is clicked.
+     */
     private void onApply() {
         List<String> errors = checkInputForErrors();
         if (!errors.isEmpty()) { // The data is invalid
@@ -513,6 +549,9 @@ public class CustomGameDialog extends JDialog {
         }
     }
 
+    /**
+     * Called when cancelling the application of a custom game.
+     */
     private void onCancel() {
         dispose();
     }
@@ -543,6 +582,11 @@ public class CustomGameDialog extends JDialog {
 
     /* Loading and saving methods */
 
+    /**
+     * Load a player's data into the custom game GUI
+     *
+     * @param player The player
+     */
     void loadUser(final Player player) {
         int tuzIndex = -1;
         for (int i = 0; i < player.getNumberOfHoles(); i++) {
@@ -560,6 +604,11 @@ public class CustomGameDialog extends JDialog {
         kazanSpinner.setValue(player.getKorgoolsInKazan());
     }
 
+    /**
+     * Save the custom game GUI data for a player into the player instance
+     *
+     * @param player The player
+     */
     void saveUser(final Player player) {
         for (int i = 0; i < player.getNumberOfHoles(); i++) {
             JSpinner holeSpinner = (JSpinner) componentMap.get("Player" + player.getId() + "Hole" + i);
@@ -584,6 +633,12 @@ public class CustomGameDialog extends JDialog {
 
     /* Static helper methods */
 
+    /**
+     * Make the list of errors into a readable user-friendly string.
+     *
+     * @param errorList The list of errors
+     * @return A user-friendly error message
+     */
     private static String makeErrorString(List<String> errorList) {
         StringBuilder sb = new StringBuilder();
         String lineStart = "· ";
@@ -593,6 +648,12 @@ public class CustomGameDialog extends JDialog {
         return sb.toString();
     }
 
+    /**
+     * Check if a board's data is completely valid.
+     *
+     * @param board The board
+     * @return True if the board's data is valid
+     */
     public static String validateBoard(final Board board) {
         if (board == null) return "Board is null";
         int previousTuzIndex = -1;
@@ -608,6 +669,12 @@ public class CustomGameDialog extends JDialog {
         return null;
     }
 
+    /**
+     * Check if a player's data is completely valid.
+     *
+     * @param player The player
+     * @return True if the player's data is valid
+     */
     private static String validateUser(final Player player) {
         String name = "player " + (player.getId() + 1);
         int tuzId = -1;

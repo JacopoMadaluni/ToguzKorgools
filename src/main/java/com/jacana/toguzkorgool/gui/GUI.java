@@ -22,6 +22,9 @@ public class GUI extends JFrame {
     private GamePane gamePane;
     private EndingPane endPane;
 
+    /**
+     * Create a new GUI, initialising the frame and populating the content pane.
+     */
     public GUI() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -40,13 +43,19 @@ public class GUI extends JFrame {
         populatePane();
     }
 
+    /**
+     * Reload the UI, removing the end pane and adding the game pane back to the root content pane.
+     */
     public void restart() {
         JPanel contentPane = (JPanel) getContentPane();
-        contentPane.remove(endPane);
+        contentPane.remove(this.endPane);
         contentPane.add(this.gamePane);
         contentPane.updateUI();
     }
 
+    /**
+     * Display the victory screen, removing the game pane.
+     */
     public void loadVictoryScreen() {
         JPanel contentPane = (JPanel) getContentPane();
 
@@ -56,6 +65,9 @@ public class GUI extends JFrame {
         contentPane.updateUI();
     }
 
+    /**
+     * Display the defeat screen, removing the game pane.
+     */
     public void loadDefeatScreen() {
         JPanel contentPane = (JPanel) getContentPane();
         endPane.setLose();
@@ -64,8 +76,11 @@ public class GUI extends JFrame {
         contentPane.updateUI();
     }
 
-    public void update(int highestPlayerId) {
-        gamePane.updateGamePane(highestPlayerId);
+    /**
+     * Update the UI to show the correct number of korgools in the kazans and each hole, and display the state of each tuz.
+     */
+    public void update() {
+        gamePane.updateGamePane();
         JPanel contentPane = (JPanel) getContentPane();
         contentPane.updateUI();
     }
@@ -88,9 +103,9 @@ public class GUI extends JFrame {
     private JMenuItem restartMenuItem;
 
     /**
-     * Constructs the overarching menu bar for he GUI and returns it.
+     * Constructs the menu bar for the GUI.
      *
-     * @return the JMenuBar object constructed
+     * @return The menu bar constructed
      */
     private JMenuBar constructMenuBar() {
         JMenuBar menuBar = new JMenuBar();
