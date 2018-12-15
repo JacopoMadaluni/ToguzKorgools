@@ -36,24 +36,36 @@ public class GUITest {
         GameController.destroyInstance();
     }
 
+    /**
+     * Ensure the ending pane shows when player 1 wins.
+     */
     @Test
     public void testWin() {
         GameController.getInstance().onWin(0);
         this.swinger.clickOn("name:ButtonQuit").pause(250);
     }
 
+    /**
+     * Ensure the ending pane shows when player 1 loses.
+     */
     @Test
     public void testLose() {
         GameController.getInstance().onWin(1);
         this.swinger.clickOn("name:ButtonQuit").pause(250);
     }
 
+    /**
+     * Ensure the ending pane does not show when inputting an invalid player.
+     */
     @Test(expected = GuiItemNotFound.class)
     public void testWinUnknownPlayer() {
         GameController.getInstance().onWin(-1);
         this.swinger.clickOn("name:ButtonQuit").pause(250);
     }
 
+    /**
+     * Ensure interacting with a hole on the current player's side results in a change in the number of korgools in that hole.
+     */
     @Test
     public void testHoleInteraction() {
         String holeComponentName = "Player0Hole0";
@@ -62,6 +74,9 @@ public class GUITest {
         assertThat(holeTooltip, is(not(equalTo("Korgools: " + Constants.CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE))));
     }
 
+    /**
+     * Ensure interacting with a hole then clicking the restart menu item resets the displayed board to its default state.
+     */
     @Test
     public void testRestart() {
         String holeComponentName = "Player0Hole0";
@@ -74,6 +89,9 @@ public class GUITest {
         assertThat(holeTooltip, is(equalTo("Korgools: " + 9)));
     }
 
+    /**
+     * Ensure clicking new game on the ending pane displays the game with a default board.
+     */
     @Test
     public void testNewGameRestart() {
         GameController.getInstance().onWin(0);

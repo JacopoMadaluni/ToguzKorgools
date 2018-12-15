@@ -14,6 +14,9 @@ import static org.hamcrest.Matchers.notNullValue;
 
 public class CustomGameExportTest extends AbstractCustomGameTest {
 
+    /**
+     * Ensure the export dialog shows up when the menu item is interacted with.
+     */
     @Test
     public void testExportDialog() {
         this.swinger.clickOn("name:fileMenu")
@@ -27,6 +30,9 @@ public class CustomGameExportTest extends AbstractCustomGameTest {
         this.swinger.clickOn("text:Cancel").pause(250);
     }
 
+    /**
+     * Ensure exporting a basic custom game GUI board results in a board reflecting this data.
+     */
     @Test
     public void testExportBasic() {
         Board customBoard = new Board();
@@ -42,6 +48,9 @@ public class CustomGameExportTest extends AbstractCustomGameTest {
         }
     }
 
+    /**
+     * Ensure exporting a basic custom game GUI board with custom number of korgools in holes results in a board reflecting this data.
+     */
     @Test
     public void testExportCustomHoles() {
         this.swinger.doubleClickOn("name:Player0Hole1").pause(250).type(String.valueOf(Constants.CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE + 1)).pause(250);
@@ -62,6 +71,9 @@ public class CustomGameExportTest extends AbstractCustomGameTest {
         assertThat(customBoard.getPlayer(1).getKorgoolsInHole(4), is(equalTo(Constants.CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE - 1)));
     }
 
+    /**
+     * Ensure exporting a basic custom game GUI board with a hole marked as a tuz results in a board reflecting this data.
+     */
     @Test
     public void testExportCustomTuz() {
         this.swinger.clickOn("name:Player0Tuz").pause(250).clickOn("text:Hole 1").pause(250);
@@ -76,6 +88,9 @@ public class CustomGameExportTest extends AbstractCustomGameTest {
         assertThat(customBoard.getTuzIndex(1), is(equalTo(1)));
     }
 
+    /**
+     * Ensure exporting a basic custom game GUI board with a custom number of korgools in a kazan results in a board reflecting this data.
+     */
     @Test
     public void testExportCustomKazan() {
         this.swinger.doubleClickOn("name:Player0Kazan").pause(250).type("2").pause(250);
@@ -90,6 +105,9 @@ public class CustomGameExportTest extends AbstractCustomGameTest {
         assertThat(customBoard.getKorgoolsInKazan(1), is(equalTo(0)));
     }
 
+    /**
+     * Ensure exporting a complex custom game GUI board with custom data results in a board reflecting this data.
+     */
     @Test
     public void testExportComplex() {
         int[][] playerKorgools = new int[Constants.CONSTRAINT_PLAYER_COUNT][Constants.CONSTRAINT_HOLES_PER_PLAYER];

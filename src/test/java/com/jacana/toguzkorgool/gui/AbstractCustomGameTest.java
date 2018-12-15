@@ -9,6 +9,9 @@ import javax.swing.JFileChooser;
 import java.awt.Component;
 import java.lang.reflect.Field;
 
+/**
+ * An abstract class representing tests for the custom game GUI.
+ */
 public abstract class AbstractCustomGameTest {
 
     private static Field fieldDialog = null;
