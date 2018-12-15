@@ -7,8 +7,10 @@ import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import java.awt.Component;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class CustomGameImportTest extends AbstractCustomGameTest {
 
@@ -18,9 +20,9 @@ public class CustomGameImportTest extends AbstractCustomGameTest {
                 .pause(250)
                 .clickOn("name:importMenuItem")
                 .pause(750);
-        assertNotNull(CustomGameDialog.getInstance().getImportFileChooser());
+        assertThat(CustomGameDialog.getInstance().getImportFileChooser(), is(notNullValue()));
         Component fileDialog = getFileDialog(CustomGameDialog.getInstance().getImportFileChooser());
-        assertNotNull(fileDialog);
+        assertThat(fileDialog, is(notNullValue()));
         this.swinger.setRoot(fileDialog);
         this.swinger.clickOn("text:Cancel").pause(250);
     }
@@ -32,8 +34,8 @@ public class CustomGameImportTest extends AbstractCustomGameTest {
         basicBoard.setKorgoolsInHole(1, 0, 8);
         CustomGameDialog.getInstance().loadUser(basicBoard.getPlayer(0));
         CustomGameDialog.getInstance().loadUser(basicBoard.getPlayer(1));
-        assertEquals(12, ((JSpinner) getComponent("Player0Hole0")).getValue());
-        assertEquals(8, ((JSpinner) getComponent("Player1Hole0")).getValue());
+        assertThat(((JSpinner) getComponent("Player0Hole0")).getValue(), is(equalTo(12)));
+        assertThat(((JSpinner) getComponent("Player1Hole0")).getValue(), is(equalTo(8)));
     }
 
     @Test
@@ -44,8 +46,8 @@ public class CustomGameImportTest extends AbstractCustomGameTest {
         complexBoard.setTuz(0, 1);
         CustomGameDialog.getInstance().loadUser(complexBoard.getPlayer(0));
         CustomGameDialog.getInstance().loadUser(complexBoard.getPlayer(1));
-        assertEquals(2, ((JComboBox) getComponent("Player0Tuz")).getSelectedIndex());
-        assertEquals(0, ((JComboBox) getComponent("Player1Tuz")).getSelectedIndex());
+        assertThat(((JComboBox) getComponent("Player0Tuz")).getSelectedIndex(), is(equalTo(2)));
+        assertThat(((JComboBox) getComponent("Player1Tuz")).getSelectedIndex(), is(equalTo(0)));
     }
 
 }

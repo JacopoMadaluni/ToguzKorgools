@@ -44,10 +44,6 @@ public abstract class AbstractCustomGameTest {
         GameController.destroyInstance();
     }
 
-    protected static Field getFieldDialog() {
-        return fieldDialog;
-    }
-
     protected static Component getFileDialog(JFileChooser jFileChooser) {
         if (fieldDialog == null) return null;
         try {
