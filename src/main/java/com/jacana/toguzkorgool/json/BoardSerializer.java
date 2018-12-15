@@ -10,6 +10,9 @@ import com.jacana.toguzkorgool.Player;
 
 import java.lang.reflect.Type;
 
+/**
+ * A class that handles the serialization of a Board into a JsonObject.
+ */
 public class BoardSerializer implements JsonSerializer<Board> {
 
     @Override

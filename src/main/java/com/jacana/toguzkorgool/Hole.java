@@ -7,6 +7,9 @@ public class Hole extends KorgoolContainer {
 
     private boolean tuz = false;
 
+    /**
+     * Create a new hole with the default number of korgools in it.
+     */
     public Hole() {
         super();
         this.korgools = Constants.CONSTRAINT_INITIAL_KORGOOLS_PER_HOLE;

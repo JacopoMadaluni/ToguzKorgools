@@ -7,6 +7,9 @@ import com.jacana.toguzkorgool.json.BoardSerializer;
 
 import java.util.OptionalInt;
 
+/**
+ * A utility class containing static methods.
+ */
 public class Utilities {
 
     private static Gson gson = null;
@@ -14,6 +17,9 @@ public class Utilities {
     private Utilities() {
     }
 
+    /**
+     * @return The Gson instance
+     */
     public static Gson getGson() {
         if (gson == null) {
             gson = new GsonBuilder()
@@ -25,6 +31,12 @@ public class Utilities {
         return gson;
     }
 
+    /**
+     * Try to parse an integer represented as a String.
+     *
+     * @param strNumber The integer as a String
+     * @return An OptionalInt representing the parsed number. <p>If the string is an invalid integer (e.g. non-numeric), OptionalInt.empty() is returned.
+     */
     public static OptionalInt tryParseInt(String strNumber) {
         if (strNumber == null) return OptionalInt.empty();
         try {

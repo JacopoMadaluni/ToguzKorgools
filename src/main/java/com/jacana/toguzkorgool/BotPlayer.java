@@ -6,26 +6,24 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * This class represents a non human player.
- * It can be extended with a more advanced logic system behind the
- * bot moves.
+ * This class represents a non-human player.
  */
 public class BotPlayer extends Player {
 
     private Random random = new SecureRandom();
 
     /**
-     * Creates a new bot.
+     * Creates a new BotPlayer
      *
-     * @param board The board it's playing in.
-     * @param id The id of the bot player.
+     * @param board The board the bot is playing on
+     * @param id The ID of the bot
      */
     public BotPlayer(Board board, int id) {
         super(board, id);
     }
 
     /**
-     * The bot makes its move when this method is called.
+     * Make the bot choose and interact with a hole.
      */
     public void act() {
         List<Integer> nonEmptyHoles = new ArrayList<>();

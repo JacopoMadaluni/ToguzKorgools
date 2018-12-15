@@ -14,6 +14,9 @@ public class Board {
     private Map<Integer, Player> players = new HashMap<>();
     private Player currentPlayer = null;
 
+    /**
+     * Create a new Board
+     */
     public Board() {
         this.setupPlayers();
         this.currentPlayer = this.players.get(0);

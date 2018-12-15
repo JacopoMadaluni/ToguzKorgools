@@ -1,16 +1,16 @@
 package com.jacana.toguzkorgool;
 
 /**
- * This class is provides the template for a Korgool container.
+ * This class provides the template for a Korgool container.
  */
 public abstract class KorgoolContainer {
 
     protected int korgools = 0;
 
     /**
-     * Adds up korgools in the container.
+     * Add korgools to this container.
      *
-     * @param korgoolsIn The number of korgools to be added.
+     * @param korgoolsIn The number of korgools to be added
      */
     public void add(int korgoolsIn) {
         this.korgools += korgoolsIn;
@@ -31,9 +31,9 @@ public abstract class KorgoolContainer {
     }
 
     /**
-     * Sets a new number of korgools for the container.
+     * Sets a new number of korgools in this container.
      *
-     * @param korgools The new number of korgools.
+     * @param korgools The new number of korgools
      */
     public void setKorgools(int korgools) {
         this.korgools = korgools;

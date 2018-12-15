@@ -18,7 +18,7 @@ public abstract class Player {
     protected Hole[] holes;
 
     /**
-     * Construct a Player instance
+     * Create a new Player
      *
      * @param board The board the player is playing on
      * @param id The ID of the player
