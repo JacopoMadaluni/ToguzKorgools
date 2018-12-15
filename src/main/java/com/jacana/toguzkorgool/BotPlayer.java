@@ -1,5 +1,8 @@
 package com.jacana.toguzkorgool;
 
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -9,7 +12,7 @@ import java.util.Random;
  */
 public class BotPlayer extends Player {
 
-    private Random random = new Random();
+    private Random random = new SecureRandom();
 
     /**
      * Creates a new bot.
@@ -24,8 +27,16 @@ public class BotPlayer extends Player {
      * The bot makes its move when this method is called.
      */
     public void act() {
-        int randomIndex = random.nextInt(holes.length);
-        super.makeMove(randomIndex);
+        List<Integer> nonEmptyHoles = new ArrayList<>();
+        for (int holeIndex = 0; holeIndex < holes.length; holeIndex++) {
+            if (holes[holeIndex].getKorgools() > 0) {
+                nonEmptyHoles.add(holeIndex);
+            }
+        }
+        if (!nonEmptyHoles.isEmpty()) {
+            int randomIndex = nonEmptyHoles.get(random.nextInt(nonEmptyHoles.size()));
+            super.makeMove(randomIndex);
+        }
     }
 
 }

@@ -90,17 +90,26 @@ public class GameController {
             currentJHole.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseReleased(MouseEvent e) {
-                    board.getCurrentPlayer().makeMove(finalJ);
-                    if (board.hasCurrentPlayerWon()) {
-                        gui.getGamePane().updateGamePane(board.getPlayerCount() - 1);
-                        onWin(board.getCurrentPlayer().getId());
-                        return;
+                    if (board.getKorgoolsInHole(board.getCurrentPlayer().getId(), finalJ) > 0) {
+                        board.getCurrentPlayer().makeMove(finalJ);
+                        if (board.hasCurrentPlayerWon()) {
+                            gui.getGamePane().updateGamePane(board.getPlayerCount() - 1);
+                            onWin(board.getCurrentPlayer().getId());
+                            return;
+                        }
+                    } else {
+                        for (int holeIndex = 0; holeIndex < Constants.CONSTRAINT_HOLES_PER_PLAYER; holeIndex++) {
+                            if (board.getKorgoolsInHole(board.getCurrentPlayer().getId(), holeIndex) > 0) {
+                                return;
+                            }
+                        }
                     }
                     board.changePlayer();
                     if (board.getCurrentPlayer() instanceof BotPlayer) {
                         ((BotPlayer) board.getCurrentPlayer()).act();
                         if (board.hasCurrentPlayerWon()) {
                             onWin(board.getCurrentPlayer().getId());
+                            return;
                         }
                         board.changePlayer();
                         gui.getGamePane().updateGamePane(board.getPlayerCount() - 1);
@@ -111,7 +120,7 @@ public class GameController {
     }
 
     /**
-     * Initialize players kazans.
+     * Initialize players' kazans.
      */
     private void initialiseKazans() {
         gui.getGamePane().initialiseKazan(board.getCurrentPlayer());
@@ -128,6 +137,7 @@ public class GameController {
 
     /**
      * This method get's called when one of the player's wins.
+     *
      * @param playerId The id of the current player.
      */
     public void onWin(int playerId) {
