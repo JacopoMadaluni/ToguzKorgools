@@ -9,7 +9,7 @@ import javax.swing.JFileChooser;
 import java.awt.Component;
 import java.lang.reflect.Field;
 
-public class AbstractCustomGameTest {
+public abstract class AbstractCustomGameTest {
 
     private static Field fieldDialog = null;
 

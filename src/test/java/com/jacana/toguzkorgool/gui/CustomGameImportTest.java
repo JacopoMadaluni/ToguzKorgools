@@ -1,6 +1,9 @@
 package com.jacana.toguzkorgool.gui;
 
 import com.jacana.toguzkorgool.Board;
+import com.jacana.toguzkorgool.Constants;
+import com.jacana.toguzkorgool.GameController;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.swing.JComboBox;
