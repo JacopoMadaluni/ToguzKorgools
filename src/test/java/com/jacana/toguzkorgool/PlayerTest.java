@@ -65,9 +65,7 @@ public class PlayerTest {
     }
 
     /**
-     * <p>Ensure the following game rule holds true:</p>
-     * <br>
-     * <p>"If the last korgool in a move ends up in an opponent's hole, and the number of korgools in that hole is now even, then the player captures all the korgools in that hole. The korgools are moved into the player's kazan."</p>
+     * Ensure making a move on the player's last hole when it contains one korgool results in the correct number of korgools in each hole and kazan.
      */
     @Test
     public void testMoveOnHoleNineAndOneKorgool() {
@@ -92,7 +90,7 @@ public class PlayerTest {
     }
 
     /**
-     * Ensure making a normal move, on a hole with only 1 korgool, results in the correct number of korgools in each hole.
+     * Ensure making a move on a hole with one korgool that lands in a non-tuz hole on the player's side results in the correct number of korgools in each hole and kazan.
      */
     @Test
     public void testMoveOnAnyHoleAndOneKorgoolNoTuz() {
@@ -117,7 +115,7 @@ public class PlayerTest {
     }
 
     /**
-     * Ensure making a normal move, with a hole marked as a tuz, on a hole marked before the tuz with only one korgool results in the correct number of korgools in each hole.
+     * Ensure making a move on a hole with one korgool that lands in a tuz on the player's side results in correct number of korgools in each hole and kazan.
      */
     @Test
     public void testMoveOnAnyHoleAndOneKorgoolAndTuz() {
@@ -141,6 +139,9 @@ public class PlayerTest {
         assertEquals(0, player.getKorgoolsInKazan());
     }
 
+    /**
+     * Ensure making a move that doesn't spill over to the opponent's side on a hole with multiple korgools and no tuz set results in correct number of korgools in each hole and kazan.
+     */
     @Test
     public void testMoveWithMultipleKorgoolsOneSideNoTuz() {
         Board board = new Board();
@@ -160,6 +161,9 @@ public class PlayerTest {
         assertEquals(0, bot.getKorgoolsInKazan());
     }
 
+    /**
+     * Ensure making a move that doesn't spill over to the opponent's side on a hole with multiple korgools and passes over a tuz results in correct number of korgools in each hole and kazan.
+     */
     @Test
     public void testMoveWithMultipleKorgoolsOneSideWithTuz() {
         Board board = new Board();
@@ -177,6 +181,9 @@ public class PlayerTest {
         assertEquals(1, bot.getKorgoolsInKazan());
     }
 
+    /**
+     * Ensure making a move that spills over to the opponent's side and passes over a tuz results in correct number of korgools in each hole and kazan.
+     */
     @Test
     public void testMoveOnBothSidesAndPassesOverTuz() {
         // When moveOpponent() is called and korgool placement passes over a tuz
@@ -204,6 +211,9 @@ public class PlayerTest {
         assertEquals(0, bot.getKorgoolsInKazan());
     }
 
+    /**
+     * Ensure making a move that spills over to the opponent's side, where the last hole to have korgools placed contains even number of korgools, results in correct number of korgools in each hole and kazan.
+     */
     @Test
     public void testMoveOnBothSidesWithEvenLastHole() {
         // When moveOpponent() is called and last hole has an even number of korgools
@@ -230,6 +240,9 @@ public class PlayerTest {
         assertEquals(0, bot.getKorgoolsInKazan());
     }
 
+    /**
+     * Ensure making a move that spills over to the opponent's side, where the last hole to have korgools placed contains an odd number of korgools that isn't 3, results in correct number of korgools in each hole and kazan.
+     */
     @Test
     public void testMoveOnBothSidesWithOddLastHole() {
         // When moveOpponent() is called and last hole has an odd (not 3) number of korgools
@@ -256,6 +269,9 @@ public class PlayerTest {
         assertEquals(0, bot.getKorgoolsInKazan());
     }
 
+    /**
+     * Ensure making a move that spills over to the opponent's side, who doesn't have a tuz, where the last hole to have korgools placed contains 3 korgools, results in correct number of korgools in each hole and kazan and a correctly set tuz.
+     */
     @Test
     public void testMoveOnBothSidesWithThreeInLastHoleAndNoTuz() {
         // When moveOpponent() is called and last hole has 3 korgools and tuz is not set
@@ -281,6 +297,9 @@ public class PlayerTest {
         assertTrue(bot.getHole(1).isTuz());
     }
 
+    /**
+     * Ensure making a move that spills over to the opponent's side, who has a tuz, where the last hole to have korgools placed contains 3 korgools, results in correct number of korgools in each hole and kazan and there is no change in tuz position.
+     */
     @Test
     public void testMoveOnBothSidesWithThreeInLastHoleAndTuz() {
         // When moveOpponent() is called and last hole has 3 korgools but tuz is already set
@@ -310,6 +329,9 @@ public class PlayerTest {
         assertTrue(bot.getHole(2).isTuz());
     }
 
+    /**
+     * Ensure making a move that spills over to the opponent's side and back to the player's side results in correct number of korgools in each hole and kazan.
+     */
     @Test
     public void testMoveWhenKorgoolsSpillBackToPlayer() {
         Board board = new Board();
@@ -331,6 +353,9 @@ public class PlayerTest {
         assertFalse(player.hasTuz());
     }
 
+    /**
+     * Ensure hasWon returns false when the win condition is not met.
+     */
     @Test
     public void testHasWonWhenHasNotWon() {
         Board board = new Board();
@@ -340,6 +365,9 @@ public class PlayerTest {
         assertFalse(bot.hasWon());
     }
 
+    /**
+     * Ensure hasWon returns true when the win condition is met.
+     */
     @Test
     public void testHasWonWhenHasWon() {
         Board board = new Board();
@@ -350,6 +378,9 @@ public class PlayerTest {
         assertFalse(bot.hasWon());
     }
 
+    /**
+     * Ensure the player's holes are reset to their initialisation values, kazan is emptied and tuz removed.
+     */
     @Test
     public void testResetPlayer() {
         Board board = new Board();
@@ -371,6 +402,9 @@ public class PlayerTest {
         assertEquals(0, player.getKorgoolsInKazan());
     }
 
+    /**
+     * Ensure that when cleared, tuz is no longer set to one of the holes.
+     */
     @Test
     public void testClearTuz() {
         Board board = new Board();
