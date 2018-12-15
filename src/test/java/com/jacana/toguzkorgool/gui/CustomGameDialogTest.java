@@ -1,53 +1,21 @@
 package com.jacana.toguzkorgool.gui;
 
 import com.athaydes.automaton.GuiItemNotFound;
-import com.athaydes.automaton.Swinger;
 import com.jacana.toguzkorgool.Board;
 import com.jacana.toguzkorgool.GameController;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
-import java.awt.Component;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-
-public class CustomGameDialogTest {
-
-    private Swinger swinger;
+public class CustomGameDialogTest extends AbstractCustomGameTest {
 
     private final Runnable applyAction = this::clickApply;
     private final Runnable cancelAction = this::clickCancel;
-
-    @Before
-    public void setUp() {
-        // Open the application
-        GameController.getInstance();
-
-        // Create the swinger
-        Swinger.setDEFAULT(com.athaydes.automaton.Speed.VERY_FAST);
-        Swinger.forSwingWindow().pause(250);
-        swinger = Swinger.getUserWith(GameController.getGUI());
-
-        // Open the custom game dialog
-        swinger.clickOn("name:fileMenu")
-                .pause(250)
-                .clickOn("name:customGameMenuItem")
-                .pause(250);
-        // Set the custom game dialog to be the subject
-        swinger.setRoot(CustomGameDialog.getInstance());
-    }
-
-    @After
-    public void tearDown() {
-        GameController.destroyInstance();
-        swinger = null;
-    }
 
     private void pause() {
         swinger.pause(250);
@@ -197,10 +165,6 @@ public class CustomGameDialogTest {
         int[][] params = {{12, 12, 4, 13, 1, 2, 12, 3, 13, 14, 1},  // Player 1 parameters
                 {13, 2, 11, 11, 2, 12, 0, 12, 1, 12, 1}}; // Player 2 parameters
         performTest(params, applyAction, () -> swinger.clickOn("text:OK"), false);
-    }
-
-    private static Component getComponent(String name) {
-        return CustomGameDialog.getInstance().getComponentMap().get(name);
     }
 
 }
