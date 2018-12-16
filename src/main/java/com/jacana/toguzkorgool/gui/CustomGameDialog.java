@@ -641,7 +641,7 @@ public class CustomGameDialog extends JDialog {
      */
     private static String makeErrorString(List<String> errorList) {
         StringBuilder sb = new StringBuilder();
-        String lineStart = "· ";
+        String lineStart = "- ";
         for (String errorMessage : errorList) {
             sb.append(lineStart).append(errorMessage).append(System.lineSeparator());
         }
