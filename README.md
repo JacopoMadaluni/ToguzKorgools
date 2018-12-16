@@ -14,4 +14,6 @@ Members
 * Jacopo Madaluni
 
 ## APIs
-Gson API has been used for the ability to serialize and deserialize a board state to and from a JSON format.
+* Gson API has been used for the ability to serialize and deserialize a board state to and from a JSON format.
+* Hamcrest has been used to make test classes more readable.
+* Automaton has been used to test the GUI and interact with it in these tests.
